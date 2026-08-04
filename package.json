@@ -1,0 +1,17 @@
+{
+  "name": "ecg-website-vercel-backend",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vercel dev",
+    "start": "node",
+    "migrate": "node ./scripts/migrate.js"
+  },
+  "dependencies": {
+    "@google-cloud/text-to-speech": "^6.4.0",
+    "@vercel/postgres": "^0.8.0",
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.2"
+  }
+}

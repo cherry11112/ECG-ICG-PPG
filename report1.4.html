@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="dist/css/style.css">
+    <title>User Dashboard</title>
+</head>
+<body class="text-gray-800 font-inter">
+    
+    <div class="fixed left-0 top-0 w-64 h-full p-4 z-50 sidebar-menu transition-transform" 
+    style="background: url('img/picture11.png') no-repeat center center / cover;">
+        <a href="#" class="flex items-center pb-4 border-b border-b-gray-800">
+            <img src="img/fraunhofer-logo.jpg" alt="" class="w-8 h-8 rounded object-cover">
+            <span class="text-lg font-bold text-black ml-3"></span>
+        </a>
+        <ul class="mt-4">
+            <li class="mb-1 group">
+                <a href="patient1.html" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">
+                    <i class="ri-home-2-line mr-3 text-lg"></i>
+                    <span class="text-sm">Dashboard</span>
+                </a>
+            </li>
+            <li class="mb-1 group active">
+                <a href="#" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100 sidebar-dropdown-toggle">
+                    <i class="ri-file-info-line mr-3 text-lg"></i>
+                    <span class="text-white">Reports</span>
+                </a>
+            </li>
+            <li class="mb-1 group">
+                <a href="#" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">
+                    <i class="ri-settings-2-line mr-3 text-lg"></i>
+                    <span class="text-sm">Settings</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="fixed top-0 left-0 w-full h-full bg-black/50 z-40 md:hidden sidebar-overlay"></div>
+    <!-- end: Sidebar -->
+
+    <!-- start: Main -->
+    <main class="w-full md:w-[calc(100%-256px)] md:ml-64 bg-gray-50 min-h-screen transition-all main">
+        <div class="py-2 px-6 bg-white flex items-center shadow-md shadow-black/5 sticky top-0 left-0 z-30">
+            <button type="button" class="text-lg text-gray-600 sidebar-toggle">
+                <i class="ri-menu-line"></i>
+            </button>
+            <ul class="flex items-center text-sm ml-4">
+                <li class="mr-2">
+                    <a href="#" class="text-gray-400 hover:text-gray-600 font-medium">Dashboard</a>
+                </li>
+            </ul>
+            <ul class="ml-auto flex items-center">
+                <li class="mr-1 dropdown">
+                    <button type="button" class="dropdown-toggle text-gray-400 w-8 h-8 rounded flex items-center justify-center hover:bg-gray-50 hover:text-gray-600">
+                        <i class="ri-search-line"></i>
+                    </button>
+                    <div class="dropdown-menu shadow-md shadow-black/5 z-30 hidden max-w-xs w-full bg-white rounded-md border border-gray-100">
+                        <form action="" class="p-4 border-b border-b-gray-100">
+                            <div class="relative w-full">
+                                <input type="text" class="py-2 pr-4 pl-10 bg-gray-50 w-full outline-none border border-gray-100 rounded-md text-sm focus:border-blue-500" placeholder="Search...">
+                                <i class="ri-search-line absolute top-1/2 left-4 -translate-y-1/2 text-gray-400"></i>
+                            </div>
+                        </form>
+                    </div>
+                </li>
+                <li class="dropdown">
+                    <button type="button" class="dropdown-toggle text-gray-400 w-8 h-8 rounded flex items-center justify-center hover:bg-gray-50 hover:text-gray-600">
+                        <i class="ri-notification-3-line"></i>
+                    </button>
+                    <div class="dropdown-menu shadow-md shadow-black/5 z-30 hidden max-w-xs w-full bg-white rounded-md border border-gray-100">
+                        <div class="flex items-center px-4 pt-4 border-b border-b-gray-100 notification-tab">
+                            <button type="button" data-tab="notification" data-tab-page="notifications" class="text-gray-400 font-medium text-[13px] hover:text-gray-600 border-b-2 border-b-transparent mr-4 pb-1 active">Notifications</button>
+                            <button type="button" data-tab="notification" data-tab-page="messages" class="text-gray-400 font-medium text-[13px] hover:text-gray-600 border-b-2 border-b-transparent mr-4 pb-1">Messages</button>
+                        </div>
+                        <div class="my-2">
+                            <ul class="max-h-64 overflow-y-auto" data-tab-for="notification" data-page="notifications">
+                                <li>
+                            <ul class="max-h-64 overflow-y-auto hidden" data-tab-for="notification" data-page="messages">
+                                <li>
+                                    <a href="#" class="py-2 px-4 flex items-center hover:bg-gray-50 group">
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+                <li class="dropdown ml-3">
+                    <button type="button" class="dropdown-toggle flex items-center">
+                        <img src="img/user-profile-icon-free-vector.jpg" alt="" class="w-8 h-8 rounded-full block object-cover align-middle">
+                    </button>                   
+                    <ul class="dropdown-menu shadow-md shadow-black/5 z-30 hidden py-1.5 rounded-md bg-white border border-gray-100 w-full max-w-[140px]">
+                        <li>
+                            <a href="#" class="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-blue-500 hover:bg-gray-50">Profile</a>
+                        </li>
+                        <li>
+                            <a href="#" id="logoutBtn" class="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-blue-500 hover:bg-gray-50">Logout</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+
+<!------------------------------------------->
+        
+        <div class="p-6">
+            <div class="grid grid-cols-1 gap-6 mb-6">
+
+        <div class="p-6">
+            <div class="grid grid-cols-1 gap-6 mb-6">
+                <!-- Welcome Back Section -->
+                <div class="bg-white rounded-md border border-gray-100 p-6 shadow-md shadow-black/5">
+                    <div class="flex justify-between mb-6">
+                        <div class="w-full">
+                            <div class="text font-semibold mb-3" style="font-size: 2rem;">Informations</div>
+                            <div class="text-lg font-small text-gray-300" style="color: gray;">
+                                <span id="userName">Here's your report</span>
+                            </div>                       
+                        </div>
+                    </div>
+                </div>               
+                
+                <!------------------------------------------------->
+
+                <br>
+            
+        <div class="bg-white rounded-md border border-gray-100 p-6 shadow-md shadow-black/5">
+            <div class="flex justify-between mb-6">
+                <div>
+                    <div class="text-1xl font-semibold mb-1" style="margin-left: 1rem; font-size:30px; margin-bottom: -2rem;">Patient Data:</div>                    
+                </div>
+            </div>
+            <hr>
+            
+            <div class="p-6">
+                <div class="grid grid-cols-1 gap-6 mb-6">
+                <div class="text-2xl font-semibold mb-1" style="color: chocolate; margin-bottom: 1.5rem;">Patient Daily Feedback</div>
+                <div class="page-2">
+                    <p><strong>Dyspnea (shortness of breath) today:</strong> <span id="dyspnea">Loading...</span></p>
+                    <p><strong>Orthopnea last night:</strong> <span id="orthopnea">Loading...</span></p>
+                    <p><strong>Paroxysmal nocturnal dyspnea:</strong> <span id="paroxysmal_nocturnal_dyspnea">Loading...</span></p>
+                    <p><strong>Cyanosis noticed today:</strong> <span id="cyanosis">Loading...</span></p>
+                    <p><strong>Jugular venous distension today:</strong> <span id="jugular_venous_distension">Loading...</span></p>
+                    <p><strong>Night time urinary frequency:</strong> <span id="nighttime_urination_count">Loading...</span></p>
+                    <p><strong>Chest pain today:</strong> <span id="chest_pain">Loading...</span></p>
+                    <p><strong>Arm pain today:</strong> <span id="arm_pain">Loading...</span></p>
+                    <p><strong>Leg pain today:</strong> <span id="leg_pain">Loading...</span></p>
+                    <p><strong>Jaw pain today:</strong> <span id="jaw_pain">Loading...</span></p>
+                    <p><strong>Back pain today:</strong> <span id="back_pain">Loading...</span></p>
+                    <p><strong>Stomach / upper abdomen pain today:</strong> <span id="stomach_pain">Loading...</span></p>
+                    <p><strong>Headache today:</strong> <span id="headache">Loading...</span></p>
+                    <p><strong>Numb legs or arms today:</strong> <span id="numb_arms_legs">Loading...</span></p>
+                    <p><strong>Visual disturbances today:</strong> <span id="visual_disturbances">Loading...</span></p>
+                    <p><strong>Palpitations today:</strong> <span id="palpitations">Loading...</span></p>
+                    <p><strong>Sweating today:</strong> <span id="sweating">Loading...</span></p>
+                    <p><strong>Leg swelling today:</strong> <span id="leg_swelling">Loading...</span></p>
+                    <p><strong>Abdominal bloating today:</strong> <span id="abdominal_bloating">Loading...</span></p>
+                    <p><strong>Morning weight (kg):</strong> <span id="weight_kg">Loading...</span></p>
+                    <p><strong>6-Minute Walk Distance (m):</strong> <span id="walk_6min_distance_m">Loading...</span></p>
+                    <p><strong>Blood Pressure (mmHg):</strong> <span id="blood_pressure_systolic">Loading...</span>/<span id="blood_pressure_diastolic">Loading...</span></p>
+                    <p><strong>Fatigue level today (0–10):</strong> <span id="fatigue_level">Loading...</span></p>
+                    <p><strong>Sleep quality last night (0–10):</strong> <span id="sleep_quality">Loading...</span></p>
+                    <p><strong>Feeling anxious today:</strong> <span id="anxious">Loading...</span></p>
+                    <p><strong>Erectile dysfunction today (if relevant):</strong> <span id="erectile_dysfunction">Loading...</span></p>
+                    <p><strong>Additional Comments:</strong> <span id="free_comment">Loading...</span></p>
+                </div>  
+
+                <br>
+                   
+                <div class="grid grid-cols-1 gap-6 mb-6">
+                    <div class="text-2xl font-semibold mb-1" style="color: chocolate; margin-bottom: 1.5rem;">Echocardiography measurement results</div>
+                    <div class="page-2">
+                        
+                    <div class="echocardiography-section">
+                        <p><strong>A. Left ventricle - size & systolic function</strong><br>
+                            Overall LV size: <span id="lv-size">Loading...</span><br>
+                            LV end-diastolic volume (LVEDV): <span id="lvedv">Loading...</span><br>
+                            LV end-systolic volume (LVESV): <span id="lvesv">Loading...</span><br>
+                            LV ejection fraction (LVEF): <span id="lvef">Loading...</span><br>
+                            Fractional shortening (FS): <span id="fs">Loading...</span><br>
+                            Left ventricular mass: <span id="lv-mass">Loading...</span><br>
+                            LV mass index (LVMI): <span id="lv-mass-index">Loading...</span><br>
+                            Global longitudinal strain (GLS): <span id="gls">Loading...</span><br>
+                            Cardiomyopathy diagnosed on imaging (e.g. HCM, DCM, others): <span id="cd-on-imaging">Loading...</span><br>
+                            LV hypertrophy present: <span id="lv-hypertrophy">Loading...</span>
+                        </p>
+                    </div>
+
+
+                    <div class="echocardiography-section">
+                        <p><strong>B. Left ventricle - diastolic function & output</strong><br>
+                            E/E' ratio: <span id="e-e-prime-ratio">Loading...</span><br>
+                            Ejection time: <span id="ejection-time">Loading...</span><br>
+                            Cardiac output (echo-derived): <span id="cardiac-output">Loading...</span>
+                        </p>
+                    </div>
+
+                    <div class="echocardiography-section">
+                        <p><strong>C. Right ventricle - size & function</strong><br>
+                            RV size (qualitative): <span id="rv-size">Loading...</span><br>
+                            RV diameter: <span id="rv-diameter">Loading...</span><br>
+                            RV wall thickness: <span id="rv-wall-thickness">Loading...</span><br>
+                            Right ventricular ejection fraction (RVEF): <span id="rv-ejection-fraction">Loading...</span><br>
+                            TAPSE (tricuspid annular plane systolic excursion): <span id="rv-tapse">Loading...</span>
+                        </p>
+                    </div>
+
+                    <div class="echocardiography-section">
+                        <p><strong>D. Atria, aorta & vena cava</strong><br>
+                            Left atrial volume (LAV): <span id="left-atrial-volume">Loading...</span><br>
+                            Aortic root diameter: <span id="aortic-root-diameter">Loading...</span><br>
+                            Ascending aorta diameter: <span id="ascending-aorta-diameter">Loading...</span><br>
+                            Inferior vena cava (IVC) diameter: <span id="ivc-diameter">Loading...</span><br>
+                            IVC collapsibility index: <span id="ivc-collapsibility-index">Loading...</span>
+                        </p>
+                    </div>
+
+                    
+                    <div class="echocardiography-section">
+                        <p><strong>E. Wall motion & regional function</strong><br>
+                            Wall motion abnormalities: <span id="wall-motion-abnormalities">Loading...</span>
+                        </p>
+                    </div>
+
+                    <div class="echocardiography-section">
+                        <p><strong>F. Valvular function</strong><br>
+                            Any valvular dysfunction on echo (any valve): <span id="valvular-function">Loading...</span>
+                            If measured, document per most affected valve: <br>
+                            Valve area: <span id="valve-area">Loading...</span><br>
+                            Pressure gradients (peak / mean): <span id="pressure-peak">Loading...</span><br>
+                            Regurgitation volume / regurgitation fraction:<br>
+                            Volume:  <span id="volume">Loading...</span><br>                            
+                            Fraction:  <span id="fraction">Loading...</span><br>
+                            Valvular disease severity grading (e.g. mild / moderate / severe): <span id="valvular-disease-severity">Loading...</span>
+                        </p>
+                    </div>
+
+
+                </div>
+                
+                      
+                
+                                   <!-- Navigation Buttons -->
+                <div class="submit-button-container mt-6 flex justify-between">
+                <a href="report1.3.html" id="backButton">
+                    <button type="button" class="px-3 py-1 bg-white text-black border border-black rounded-sm text-sm">Back</button>
+                </a>
+                <a href="report1.5.html" id="nextButtonLink">
+                    <button type="button" id="nextButton" class="px-3 py-1 bg-white text-black border border-black rounded-sm text-sm">Next</button>
+                </a>
+            </div>
+
+            </div>
+        </div>
+      </div>
+
+     </main>
+
+        <script src="https://unpkg.com/@popperjs/core@2"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="dist/js/report.js"></script>
+
+        <script type="module">
+        </script>
+  
+      </body>
+      </html>
+
+

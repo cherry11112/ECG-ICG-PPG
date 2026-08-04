@@ -1,0 +1,1259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="dist/css/style.css">
+    <title>Patient Report</title>
+</head>
+<body class="text-gray-800 font-inter">
+    
+    <div class="fixed left-0 top-0 w-64 h-full p-4 z-50 sidebar-menu transition-transform" 
+    style="background: url('img/picture11.png') no-repeat center center / cover;">
+        <a href="#" class="flex items-center pb-4 border-b border-b-gray-800">
+            <img src="img/fraunhofer-logo.jpg" alt="" class="w-8 h-8 rounded object-cover">
+            <span class="text-lg font-bold text-black ml-3"></span>
+        </a>
+        <ul class="mt-4">
+            <li class="mb-1 group">
+                <a href="patient1.html" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">
+                    <i class="ri-home-2-line mr-3 text-lg"></i>
+                    <span class="text-sm">Dashboard</span>
+                </a>
+            </li>
+            <li class="mb-1 group active">
+                <a href="#" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100 sidebar-dropdown-toggle">
+                    <i class="ri-file-info-line mr-3 text-lg"></i>
+                    <span class="text-white">Reports</span>
+                </a>
+            </li>
+            <li class="mb-1 group">
+                <a href="#" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">
+                    <i class="ri-settings-2-line mr-3 text-lg"></i>
+                    <span class="text-sm">Settings</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="fixed top-0 left-0 w-full h-full bg-black/50 z-40 md:hidden sidebar-overlay"></div>
+    <!-- end: Sidebar -->
+
+    <!-- start: Main -->
+    <main class="w-full md:w-[calc(100%-256px)] md:ml-64 bg-gray-50 min-h-screen transition-all main">
+        <div class="py-2 px-6 bg-white flex items-center shadow-md shadow-black/5 sticky top-0 left-0 z-30">
+            <button type="button" class="text-lg text-gray-600 sidebar-toggle">
+                <i class="ri-menu-line"></i>
+            </button>
+            <ul class="flex items-center text-sm ml-4">
+                <li class="mr-2">
+                    <a href="#" class="text-gray-400 hover:text-gray-600 font-medium">Dashboard</a>
+                </li>
+            </ul>
+            <ul class="ml-auto flex items-center">
+                <li class="mr-1 dropdown">
+                    <button type="button" class="dropdown-toggle text-gray-400 w-8 h-8 rounded flex items-center justify-center hover:bg-gray-50 hover:text-gray-600">
+                        <i class="ri-search-line"></i>
+                    </button>
+                    <div class="dropdown-menu shadow-md shadow-black/5 z-30 hidden max-w-xs w-full bg-white rounded-md border border-gray-100">
+                        <form action="" class="p-4 border-b border-b-gray-100">
+                            <div class="relative w-full">
+                                <input type="text" class="py-2 pr-4 pl-10 bg-gray-50 w-full outline-none border border-gray-100 rounded-md text-sm focus:border-blue-500" placeholder="Search...">
+                                <i class="ri-search-line absolute top-1/2 left-4 -translate-y-1/2 text-gray-400"></i>
+                            </div>
+                        </form>
+                    </div>
+                </li>
+                <li class="dropdown">
+                    <button type="button" class="dropdown-toggle text-gray-400 w-8 h-8 rounded flex items-center justify-center hover:bg-gray-50 hover:text-gray-600">
+                        <i class="ri-notification-3-line"></i>
+                    </button>
+                    <div class="dropdown-menu shadow-md shadow-black/5 z-30 hidden max-w-xs w-full bg-white rounded-md border border-gray-100">
+                        <div class="flex items-center px-4 pt-4 border-b border-b-gray-100 notification-tab">
+                            <button type="button" data-tab="notification" data-tab-page="notifications" class="text-gray-400 font-medium text-[13px] hover:text-gray-600 border-b-2 border-b-transparent mr-4 pb-1 active">Notifications</button>
+                            <button type="button" data-tab="notification" data-tab-page="messages" class="text-gray-400 font-medium text-[13px] hover:text-gray-600 border-b-2 border-b-transparent mr-4 pb-1">Messages</button>
+                        </div>
+                        <div class="my-2">
+                            <ul class="max-h-64 overflow-y-auto" data-tab-for="notification" data-page="notifications">
+                                <li>
+                            <ul class="max-h-64 overflow-y-auto hidden" data-tab-for="notification" data-page="messages">
+                                <li>
+                                    <a href="#" class="py-2 px-4 flex items-center hover:bg-gray-50 group">
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+                <li class="dropdown ml-3">
+                    <button type="button" class="dropdown-toggle flex items-center">
+                        <img src="img/user-profile-icon-free-vector.jpg" alt="" class="w-8 h-8 rounded-full block object-cover align-middle">
+                    </button>                   
+                    <ul class="dropdown-menu shadow-md shadow-black/5 z-30 hidden py-1.5 rounded-md bg-white border border-gray-100 w-full max-w-[140px]">
+                        <li>
+                            <a href="#" class="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-blue-500 hover:bg-gray-50">Profile</a>
+                        </li>
+                        <li>
+                            <a href="index.html" id="logoutBtn" class="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-blue-500 hover:bg-gray-50">Logout</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+
+<!------------------------------------------->
+
+        <div class="p-6">
+            <div class="grid grid-cols-1 gap-6 mb-6">
+
+        <div class="p-6">
+            <div class="grid grid-cols-1 gap-6 mb-6">
+                <!-- Welcome Back Section -->
+                <div class="bg-white rounded-md border border-gray-100 p-6 shadow-md shadow-black/5">
+                    <div class="flex justify-between mb-6">
+                        <div class="w-full">
+                            <div class="text font-semibold mb-3" style="font-size: 2rem;">ECG Analysis Report</div>                  
+                        </div>
+                    </div>
+                </div>                  
+                
+                <!------------------------------------------------->
+
+                
+            
+        <div class="bg-white rounded-md border border-gray-100 p-6 shadow-md shadow-black/5">
+            <div class="flex justify-between mb-6">
+                <div>
+                    <div class="text-1xl font-semibold mb-1" style="margin-left: 1rem; font-size:30px; margin-bottom: -2rem;">Patient Data:</div>                    
+                </div>
+            </div>
+            <hr>
+            
+            <div class="p-6">
+                <div class="grid grid-cols-1 gap-6 mb-6">
+                <div class="text-2xl font-semibold mb-1" style="color: chocolate; margin-bottom: 1.5rem;">Cardiac Signal Analysis Results</div>
+                
+                <!-- Key Metrics -->
+                <div class="bg-gray-100 p-6 rounded-lg border border-gray-300">
+                    <div class="text-xl font-semibold mb-4" style="color: #333;">Key Cardiac Metrics</div>
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                        <div class="bg-white p-4 rounded border">
+                            <div class="text-gray-600 text-sm">SNR (dB)</div>
+                            <div id="snrValue" class="text-2xl font-bold text-blue-600">--</div>
+                        </div>
+                        <div class="bg-white p-4 rounded border">
+                            <div class="text-gray-600 text-sm">ECG Heart Rate (bpm)</div>
+                            <div id="heartRate" class="text-2xl font-bold text-red-600">--</div>
+                        </div>
+                        <div class="bg-white p-4 rounded border">
+                            <div class="text-gray-600 text-sm">PPG Heart Rate (bpm)</div>
+                            <div id="ppgHeartRateValue" class="text-2xl font-bold text-green-600">--</div>
+                        </div>
+                        <div class="bg-white p-4 rounded border">
+                            <div class="text-gray-600 text-sm">ICG Heart Rate (bpm)</div>
+                            <div id="icgHeartRateValue" class="text-2xl font-bold text-purple-600">--</div>
+                        </div>
+                        <div class="bg-white p-4 rounded border">
+                            <div class="text-gray-600 text-sm">ICG Cardiac Output (L/min)</div>
+                            <div id="icgCardiacOutputValue" class="text-2xl font-bold text-pink-600">--</div>
+                        </div>
+                        <div class="bg-white p-4 rounded border">
+                            <div class="text-gray-600 text-sm">PEP (ms)</div>
+                            <div id="pepValue" class="text-2xl font-bold text-cyan-600">--</div>
+                        </div>
+                        <div class="bg-white p-4 rounded border">
+                            <div class="text-gray-600 text-sm">ICG Stroke Volume (mL)</div>
+                            <div id="icgStrokeVolumeValue" class="text-2xl font-bold text-yellow-600">--</div>
+                        </div>
+                        <div class="bg-white p-4 rounded border">
+                            <div class="text-gray-600 text-sm">LVET (s)</div>
+                            <div id="lvetValue" class="text-2xl font-bold text-indigo-600">--</div>
+                        </div>
+                        <div class="bg-white p-4 rounded border">
+                            <div class="text-gray-600 text-sm">Total Systolic Time (s)</div>
+                            <div id="tstValue" class="text-2xl font-bold text-orange-600">--</div>
+                        </div>
+                        <div class="bg-white p-4 rounded border">
+                            <div class="text-gray-600 text-sm">Electromechanical Delay (ms)</div>
+                            <div id="emdValue" class="text-2xl font-bold text-teal-600">--</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Animated Signals (Hospital Monitor Style) -->
+                <div class="bg-gray-100 p-6 rounded-lg border border-gray-300">
+                    <div class="text-xl font-semibold mb-4" style="color: #333;">Real-time Signal Display (Filtered)</div>
+                    <p style="color: #666; font-size: 0.9em; margin-bottom: 1rem;">ECG, PPG, ICG, and Lungs signals</p>
+                    
+                    <!-- ECG Signal Chart -->
+                    <div style="margin-bottom: 2rem;">
+                        <h4 style="color: #555; margin-bottom: 0.5rem;">ECG Signal (0-40 Hz)</h4>
+                        <div style="background: #fff; border: 2px solid #84b0e2; padding: 10px; border-radius: 4px;">
+                            <canvas id="ecgChart" style="max-height: 200px;"></canvas>
+                        </div>
+                    </div>
+                    
+                    <!-- PPG Signal Chart -->
+                    <div style="margin-bottom: 2rem;">
+                        <h4 style="color: #555; margin-bottom: 0.5rem;">PPG Signal (0-20 Hz)</h4>
+                        <div style="background: #fff; border: 2px solid #84b0e2; padding: 10px; border-radius: 4px;">
+                            <canvas id="ppgChart" style="max-height: 200px;"></canvas>
+                        </div>
+                    </div>
+                    
+                    <!-- ICG Signal Chart -->
+                    <div>
+                        <h4 style="color: #555; margin-bottom: 0.5rem;">ICG Signal (0-16 Hz)</h4>
+                        <div style="background: #fff; border: 2px solid #84b0e2; padding: 10px; border-radius: 4px;">
+                            <canvas id="icgChart" style="max-height: 200px;"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Lungs Sound Waveform Chart -->
+                    <div style="margin-top: 2rem;">
+                        <h4 style="color: #555; margin-bottom: 0.5rem;">Lungs Sound</h4>
+                        <div style="background: #fff; border: 2px solid #84b0e2; padding: 10px; border-radius: 4px;">
+                            <canvas id="lungsSoundChart" style="max-height: 200px;"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Combined & Advanced Analysis -->
+                <div class="bg-gray-100 p-6 rounded-lg border border-gray-300">
+                    <div class="text-xl font-semibold mb-4" style="color: #333;">Combined & Advanced Analysis</div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="bg-white p-4 rounded border">
+                            <h3 class="font-semibold mb-3 text-center">ECG/ICG/PPG Heart Rate</h3>
+                            <img id="ecgFilteredPsdImg" src="" alt="ECG ICG PPG Heart Rate" class="w-full h-auto border rounded" style="min-height: 200px; background-color: #f5f5f5;">
+                        </div>
+                        <div class="bg-white p-4 rounded border">
+                            <h3 class="font-semibold mb-3 text-center">Multi-Lead ECG Report</h3>
+                            <!-- Image Container with Overlay Buttons -->
+                            <div id="multiLeadContainer" style="position: relative; display: inline-block; width: 100%;">
+                                <img id="multiLeadImg" src="" alt="Multi-Lead ECG" class="w-full h-auto border rounded" style="min-height: 200px; background-color: #f5f5f5; display: block;">
+                                
+                                <!-- Left Arrow (Previous) -->
+                                <button id="multiLeadPrevBtn" style="
+                                    position: absolute;
+                                    left: 1rem;
+                                    top: 50%;
+                                    transform: translateY(-50%);
+                                    width: 3rem;
+                                    height: 3rem;
+                                    border-radius: 50%;
+                                    background-color: rgba(51, 51, 51, 0.7);
+                                    color: white;
+                                    border: none;
+                                    font-size: 1.5rem;
+                                    cursor: pointer;
+                                    display: none;
+                                    align-items: center;
+                                    justify-content: center;
+                                    transition: all 0.3s ease;
+                                    z-index: 10;
+                                " disabled>&lt;</button>
+                                
+                                <!-- Right Arrow (Next) -->
+                                <button id="multiLeadNextBtn" style="
+                                    position: absolute;
+                                    right: 1rem;
+                                    top: 50%;
+                                    transform: translateY(-50%);
+                                    width: 3rem;
+                                    height: 3rem;
+                                    border-radius: 50%;
+                                    background-color: rgba(51, 51, 51, 0.7);
+                                    color: white;
+                                    border: none;
+                                    font-size: 1.5rem;
+                                    cursor: pointer;
+                                    display: none;
+                                    align-items: center;
+                                    justify-content: center;
+                                    transition: all 0.3s ease;
+                                    z-index: 10;
+                                ">&gt;</button>
+                                
+                                <!-- Page Info Overlay (bottom center) -->
+                                <div id="multiLeadPageInfo" style="
+                                    position: absolute;
+                                    bottom: 1rem;
+                                    left: 50%;
+                                    transform: translateX(-50%);
+                                    background-color: rgba(51, 51, 51, 0.7);
+                                    color: white;
+                                    padding: 0.5rem 1rem;
+                                    border-radius: 4px;
+                                    font-weight: bold;
+                                    font-size: 0.9rem;
+                                    z-index: 10;
+                                    display: none;
+                                ">Page 1 of 1</div>
+                            </div>
+                            
+                            <div id="multiLeadLoading" style="text-align: center; color: #666; margin-top: 1rem; font-weight: bold;">Loading ECG data...</div>
+                        </div>
+                        <div class="bg-white p-4 rounded border">
+                            <h3 class="font-semibold mb-3 text-center">DTW Alignment</h3>
+                            <img id="dtwImg" src="" alt="DTW Alignment" class="w-full h-auto border rounded" style="min-height: 200px; background-color: #f5f5f5;">
+                        </div>
+                    </div>
+                </div>
+
+                                <!-- ECG Plot -->
+                <div class="bg-gray-100 p-6 rounded-lg border border-gray-300">
+                    <div class="text-xl font-semibold mb-4" style="color: #333;">Electrocardiogram (ECG) Raw Signal</div>
+                    <div class="grid grid-cols-1 gap-4">
+                        <div class="bg-white p-4 rounded border">
+                            <h3 class="font-semibold mb-3 text-center">ECG Plot</h3>
+                            <img id="ecgPlotImg" src="" alt="ECG Plot" class="w-full h-auto border rounded" style="min-height: 200px; background-color: #f5f5f5;">
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Echocardiography Images -->
+                <div class="bg-gray-100 p-6 rounded-lg border border-gray-300">
+                    <div class="text-xl font-semibold mb-4" style="color: #333;">Echocardiography Images</div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="bg-white p-4 rounded border">
+                            <h3 class="font-semibold mb-3 text-center">Septal Wall View</h3>
+                            <img id="septalWallViewImg" src="" alt="Septal Wall view" class="w-full h-auto border rounded" style="min-height: 150px; background-color: #f5f5f5;">
+                        </div>
+                        <div class="bg-white p-4 rounded border">
+                            <h3 class="font-semibold mb-3 text-center">Lateral Wall View</h3>
+                            <img id="lateralWallViewImg" src="" alt="Lateral Wall view" class="w-full h-auto border rounded" style="min-height: 150px; background-color: #f5f5f5;">
+                        </div>
+                        <div class="bg-white p-4 rounded border">
+                            <h3 class="font-semibold mb-3 text-center">Spectral Doppler Echocardiography</h3>
+                            <img id="spectralDopplerImg" src="" alt="Spectral Doppler Echocardiography" class="w-full h-auto border rounded" style="min-height: 150px; background-color: #f5f5f5;">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Echocardiography Videos -->
+                <div class="bg-gray-100 p-6 rounded-lg border border-gray-300">
+                    <div class="text-xl font-semibold mb-4" style="color: #333;">Echocardiography Videos</div>
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; max-width: 100%; width: 100%;">
+                        <div class="bg-white p-4 rounded border">
+                            <h3 class="font-semibold mb-3 text-center">Cardiac IVC</h3>
+                            <video id="cardiacIvcVideo" width="100%" height="auto" controls style="background-color: #f5f5f5; border-radius: 4px; min-height: 200px;">
+                                Your browser does not support the video tag.
+                            </video>
+                        </div>
+                        <div class="bg-white p-4 rounded border">
+                            <h3 class="font-semibold mb-3 text-center">Cardiac PLAX</h3>
+                            <video id="cardiacPlaxVideo" width="100%" height="auto" controls style="background-color: #f5f5f5; border-radius: 4px; min-height: 200px;">
+                                Your browser does not support the video tag.
+                            </video>
+                        </div>
+                        <div class="bg-white p-4 rounded border">
+                            <h3 class="font-semibold mb-3 text-center">Abdominal Aorta</h3>
+                            <video id="abdominalAortaVideo" width="100%" height="auto" controls style="background-color: #f5f5f5; border-radius: 4px; min-height: 200px;">
+                                Your browser does not support the video tag.
+                            </video>
+                        </div>
+                        <div class="bg-white p-4 rounded border">
+                            <h3 class="font-semibold mb-3 text-center">Cardiac AP4</h3>
+                            <video id="cardiacAp4Video" width="100%" height="auto" controls style="background-color: #f5f5f5; border-radius: 4px; min-height: 200px;">
+                                Your browser does not support the video tag.
+                            </video>
+                        </div>
+                        <div class="bg-white p-4 rounded border">
+                            <h3 class="font-semibold mb-3 text-center">Carotid Linear</h3>
+                            <video id="carotidLinearVideo" width="100%" height="auto" controls style="background-color: #f5f5f5; border-radius: 4px; min-height: 200px;">
+                                Your browser does not support the video tag.
+                            </video>
+                        </div>
+                        <div class="bg-white p-4 rounded border">
+                            <h3 class="font-semibold mb-3 text-center">Cardiac Subcostal</h3>
+                            <video id="cardiacSubcostalVideo" width="100%" height="auto" controls style="background-color: #f5f5f5; border-radius: 4px; min-height: 200px;">
+                                Your browser does not support the video tag.
+                            </video>
+                        </div>
+                        <div class="bg-white p-4 rounded border">
+                            <h3 class="font-semibold mb-3 text-center">Cardiac PSAX</h3>
+                            <video id="cardiacPsaxVideo" width="100%" height="auto" controls style="background-color: #f5f5f5; border-radius: 4px; min-height: 200px;">
+                                Your browser does not support the video tag.
+                            </video>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lung Sound Analysis -->
+                <div class="bg-gray-100 p-6 rounded-lg border border-gray-300">
+                    <div class="text-xl font-semibold mb-4" style="color: #333;">Heart Sound Analysis</div>
+                    <div class="bg-white p-6 rounded border" style="text-align: center;">
+                        <p style="color: #666; margin-bottom: 1.5rem; font-size: 0.95em;">Listen to your heart sound recording</p>
+                        <audio id="heartSoundAudio" style="display: none;">
+                            Your browser does not support the audio tag.
+                        </audio>
+                        <button id="playHeartSoundBtn" type="button" style="
+                            padding: 12px 24px;
+                            background-color: #26c3cec8;
+                            color: white;
+                            border: none;
+                            border-radius: 6px;
+                            font-size: 1rem;
+                            font-weight: 600;
+                            cursor: pointer;
+                            transition: all 0.3s ease;
+                            display: inline-flex;
+                            align-items: center;
+                            gap: 8px;
+                        " onmouseover="this.style.backgroundColor='#059669'" onmouseout="this.style.backgroundColor='#10b981'">
+                            <span>▶ Play Heart Sound</span>
+                        </button>
+                        <div id="heartSoundStatus" style="margin-top: 1rem; font-size: 0.9em; color: #666; display: none;"></div>
+                    </div>
+                </div>
+                    
+                <!-- Navigation Buttons -->
+                <div class="submit-button-container mt-6 flex justify-between">
+                <a href="report1.4.html" id="backButton">
+                    <button type="button" class="px-3 py-1 bg-white text-black border border-black rounded-sm text-sm">Back</button>
+                </a>
+                <div>
+                    <a href="report1.6.html" style="margin-right: 0.5rem;">
+                        <button type="button" class="px-3 py-1 bg-white text-black border border-black rounded-sm text-sm">Next</button>
+                    </a>
+                </div>
+            </div>
+
+            </div>
+        </div>
+      </div>
+
+      </main>
+
+        <script src="https://unpkg.com/@popperjs/core@2"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="dist/js/report.js"></script>
+
+        <script type="module">
+          // ECG-13.py Results Loader with Animated Signal Display
+          // Loads cardiac analysis results and renders real-time waveforms
+          
+          const CLOUDFLARE_CONFIG = {
+            ACCOUNT_ID: '24ad4e1c9f5d25c491c5910d289a5ab1',
+            BUCKET_NAME: 'signals-result',
+            R2_BUCKET_URL: 'https://r2-cors-proxy.cherry1112.workers.dev',
+            R2_DIRECT_URL: 'https://pub-a0dd8794f43d447abb764c83ae332144.r2.dev',
+            DATA_PREFIX: 'data/',
+            IMAGES_PREFIX: 'images/'
+          };
+
+          let ecgChartInstance = null;
+          let ppgChartInstance = null;
+          let icgChartInstance = null;
+          let heartSoundChartInstance = null;
+          let animationFrameId = null;
+          let currentIndex = 0;
+          let ecgData = null;
+          let heartSoundData = null;
+
+          // Log initialization start
+          console.log('%c ECG-13 Report Loader Initialized', 'color: #22c55e; font-size: 14px; font-weight: bold');
+          console.log('Configuration:');
+          console.log(`  R2 Direct URL: ${CLOUDFLARE_CONFIG.R2_DIRECT_URL}`);
+          console.log(`  Images Prefix: ${CLOUDFLARE_CONFIG.IMAGES_PREFIX}`);
+          console.log('Waiting for DOM ready...');
+
+          function initializeChart(canvasId, label, borderColor, minValue, maxValue) {
+            const ctx = document.getElementById(canvasId);
+            if (!ctx) return null;
+            
+            // Calculate range with adaptive padding
+            let range = maxValue - minValue;
+            
+            // If range is very small (like ICG), use minimal padding
+            let paddingPercent = 10;
+            if (range < 0.1) {
+              paddingPercent = 2;  // Use 2% padding for very small signals
+            } else if (range < 0.5) {
+              paddingPercent = 5;  // Use 5% padding for small signals
+            }
+            
+            const padding = range * (paddingPercent / 100);
+            let yMin = minValue - padding;
+            let yMax = maxValue + padding;
+            
+            // Ensure minimum visible range
+            if (yMax - yMin < 0.01) {
+              const center = (yMax + yMin) / 2;
+              yMin = center - 0.005;
+              yMax = center + 0.005;
+            }
+            
+            console.log(`${label}: min=${yMin.toFixed(6)}, max=${yMax.toFixed(6)}, range=${(yMax-yMin).toFixed(6)}`);
+            
+            return new Chart(ctx, {
+              type: 'line',
+              data: {
+                labels: [],
+                datasets: [{
+                  label: label,
+                  data: [],
+                  borderColor: borderColor,
+                  backgroundColor: 'rgba(0,0,0,0)',
+                  borderWidth: 2,
+                  fill: false,
+                  tension: 0,
+                  pointRadius: 0,
+                  pointHoverRadius: 0
+                }]
+              },
+              options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                animation: false,
+                plugins: {
+                  legend: { display: false },
+                  tooltip: { enabled: false }
+                },
+                scales: {
+                  x: { display: false },
+                  y: {
+                    min: yMin,
+                    max: yMax,
+                    ticks: { color: '#666' },
+                    grid: { color: '#e0e0e0' }
+                  }
+                }
+              }
+            });
+          }
+
+          function animateSignals() {
+            if (!ecgData || !ecgData.signals || ecgData.signals.ecg_filtered.length === 0) {
+              console.warn('No signal data available');
+              return;
+            }
+
+            const signals = ecgData.signals;
+            const windowSize = 512;
+            const maxIndex = signals.ecg_filtered.length;
+
+            function animate() {
+              const startIdx = currentIndex;
+              const endIdx = Math.min(startIdx + windowSize, maxIndex);
+
+              const xLabels = Array.from({length: endIdx - startIdx}, (_, i) => 
+                ((startIdx + i) / 102).toFixed(2)
+              );
+              const ecgWindow = signals.ecg_filtered.slice(startIdx, endIdx);
+              const ppgWindow = signals.ppg_filtered.slice(startIdx, endIdx);
+              const icgWindow = signals.icg_filtered.slice(startIdx, endIdx);
+
+              if (ecgChartInstance) {
+                ecgChartInstance.data.labels = xLabels;
+                ecgChartInstance.data.datasets[0].data = ecgWindow;
+                ecgChartInstance.update('none');
+              }
+              if (ppgChartInstance) {
+                ppgChartInstance.data.labels = xLabels;
+                ppgChartInstance.data.datasets[0].data = ppgWindow;
+                ppgChartInstance.update('none');
+              }
+              if (icgChartInstance) {
+                icgChartInstance.data.labels = xLabels;
+                icgChartInstance.data.datasets[0].data = icgWindow;
+                icgChartInstance.update('none');
+              }
+
+              // Heart sound animation (if data loaded) - scrolls 5x faster than ECG/PPG/ICG
+              if (heartSoundChartInstance && heartSoundData && heartSoundData.length > 0) {
+                // Scale heart sound index to match ECG data window, but with 5x speed multiplier
+                const hsMaxIndex = heartSoundData.length;
+                const hsStartIdx = Math.floor((startIdx * 5 / signals.ecg_filtered.length) * hsMaxIndex);
+                
+                // Use massive window for lung sound (heavily zoomed out)
+                const hsWindowSize = 65536;  // 128x larger than ECG for complete pattern view
+                const hsEndIdx = Math.min(hsStartIdx + hsWindowSize, hsMaxIndex);
+                
+                const hsWindow = heartSoundData.slice(hsStartIdx, hsEndIdx);
+                
+                // Pad if needed to match window size
+                while (hsWindow.length < hsWindowSize) {
+                  hsWindow.push(0);
+                }
+                
+                // Create proper labels for the larger lung sound window
+                const hsLabels = Array.from({length: hsWindow.length}, (_, i) => 
+                  ((hsStartIdx + i) / 102).toFixed(2)
+                );
+                
+                heartSoundChartInstance.data.labels = hsLabels;
+                heartSoundChartInstance.data.datasets[0].data = hsWindow;
+                heartSoundChartInstance.update('none');
+              }
+
+              currentIndex += 3;  // Normal scroll speed for ECG, PPG, ICG
+              if (currentIndex >= maxIndex - windowSize) {
+                currentIndex = 0;
+              }
+
+              animationFrameId = requestAnimationFrame(animate);
+            }
+
+            animate();
+          }
+
+          // Multi-Lead ECG Pagination Handler
+          let multiLeadCurrentPage = 0;
+          let multiLeadTotalPages = 0;
+          let paginationEnabled = false;
+
+          async function initializeMultiLeadECGPagination() {
+            try {
+              console.log(' Checking for multi-lead ECG paginated pages...');
+              let metadata = null;
+              
+              // Try local metadata first
+              console.log(' Attempting to fetch local metadata...');
+              try {
+                const localResponse = await fetch('multi_lead_ecg_report_metadata.json', {
+                  method: 'GET'
+                });
+                
+                if (localResponse.ok) {
+                  metadata = await localResponse.json();
+                  console.log(' Local metadata found!');
+                }
+              } catch (e) {
+                console.log(' Local metadata not found, trying R2...');
+              }
+              
+              // If local metadata not found, try R2 with CORS workaround
+              if (!metadata) {
+                const r2MetadataUrl = `${CLOUDFLARE_CONFIG.R2_DIRECT_URL}/${CLOUDFLARE_CONFIG.IMAGES_PREFIX}multi_lead_ecg_report_metadata.json`;
+                console.log(` Attempting R2 fetch: ${r2MetadataUrl}`);
+                
+                try {
+                  // Try fetch with no specific CORS mode first (may work due to simple CORS rules)
+                  const r2Response = await fetch(r2MetadataUrl, {
+                    method: 'GET'
+                  });
+                  
+                  if (r2Response.ok) {
+                    metadata = await r2Response.json();
+                    console.log(' R2 metadata found!');
+                    console.log(' Metadata:', metadata);
+                  } else {
+                    console.warn(` R2 fetch failed with status ${r2Response.status}`);
+                  }
+                } catch (corsError) {
+                  console.warn(' R2 CORS fetch failed:', corsError.message);
+                  
+                  // Fallback: Try CORS proxy if available
+                  if (CLOUDFLARE_CONFIG.R2_BUCKET_URL) {
+                    const corsProxyUrl = `${CLOUDFLARE_CONFIG.R2_BUCKET_URL}/${CLOUDFLARE_CONFIG.IMAGES_PREFIX}multi_lead_ecg_report_metadata.json`;
+                    console.log(` Trying CORS proxy: ${corsProxyUrl}`);
+                    
+                    try {
+                      const proxyResponse = await fetch(corsProxyUrl, {
+                        method: 'GET'
+                      });
+                      
+                      if (proxyResponse.ok) {
+                        metadata = await proxyResponse.json();
+                        console.log(' CORS proxy metadata found!');
+                        console.log(' Metadata:', metadata);
+                      }
+                    } catch (proxyError) {
+                      console.warn(' CORS proxy also failed:', proxyError.message);
+                    }
+                  }
+                }
+              }
+              
+              // Check if metadata was successfully loaded
+              if (!metadata || !metadata.total_pages) {
+                throw new Error('No valid metadata found (missing total_pages). Checked: local file, R2 direct, and CORS proxy.');
+              }
+              
+              multiLeadTotalPages = parseInt(metadata.total_pages);
+              paginationEnabled = true;
+              
+              console.log(` Multi-lead ECG pagination enabled: ${multiLeadTotalPages} pages`);
+              console.log(`   Duration per page: ${metadata.duration_per_page || 'N/A'}s`);
+              console.log(`   Sample rate: ${metadata.sample_rate || 'N/A'}Hz`);
+              console.log(`   Num leads: ${metadata.num_leads || 'N/A'}`);
+              
+              // Setup container hover effects
+              const container = document.getElementById('multiLeadContainer');
+              const prevBtn = document.getElementById('multiLeadPrevBtn');
+              const nextBtn = document.getElementById('multiLeadNextBtn');
+              const pageInfo = document.getElementById('multiLeadPageInfo');
+              
+              if (container && prevBtn && nextBtn && pageInfo) {
+                // Show buttons and page info on hover
+                container.addEventListener('mouseenter', () => {
+                  if (multiLeadTotalPages > 1) {
+                    prevBtn.style.display = 'flex';
+                    nextBtn.style.display = 'flex';
+                    pageInfo.style.display = 'block';
+                  }
+                });
+                
+                // Hide buttons and page info when mouse leaves
+                container.addEventListener('mouseleave', () => {
+                  prevBtn.style.display = 'none';
+                  nextBtn.style.display = 'none';
+                  pageInfo.style.display = 'none';
+                });
+                
+                // Add hover effects to buttons
+                prevBtn.addEventListener('mouseenter', function() {
+                  this.style.backgroundColor = 'rgba(51, 51, 51, 0.95)';
+                  this.style.transform = 'translateY(-50%) scale(1.1)';
+                });
+                prevBtn.addEventListener('mouseleave', function() {
+                  if (!this.disabled) {
+                    this.style.backgroundColor = 'rgba(51, 51, 51, 0.7)';
+                    this.style.transform = 'translateY(-50%) scale(1)';
+                  }
+                });
+                
+                nextBtn.addEventListener('mouseenter', function() {
+                  this.style.backgroundColor = 'rgba(51, 51, 51, 0.95)';
+                  this.style.transform = 'translateY(-50%) scale(1.1)';
+                });
+                nextBtn.addEventListener('mouseleave', function() {
+                  if (!this.disabled) {
+                    this.style.backgroundColor = 'rgba(51, 51, 51, 0.7)';
+                    this.style.transform = 'translateY(-50%) scale(1)';
+                  }
+                });
+              }
+              
+              if (multiLeadTotalPages > 1) {
+                console.log(` Enabling pagination UI for ${multiLeadTotalPages} pages`);
+                document.getElementById('multiLeadLoading').textContent = `Loading page 1 of ${multiLeadTotalPages}...`;
+                document.getElementById('multiLeadLoading').style.display = 'block';
+              } else {
+                console.log(' Only 1 page available - pagination not needed');
+                document.getElementById('multiLeadLoading').style.display = 'none';
+              }
+              
+              // Setup button click handlers
+              if (prevBtn && nextBtn) {
+                prevBtn.addEventListener('click', () => {
+                  if (multiLeadCurrentPage > 0) {
+                    multiLeadCurrentPage--;
+                    console.log(` Going to page ${multiLeadCurrentPage}`);
+                    loadMultiLeadECGPage(multiLeadCurrentPage);
+                  }
+                });
+                
+                nextBtn.addEventListener('click', () => {
+                  if (multiLeadCurrentPage < multiLeadTotalPages - 1) {
+                    multiLeadCurrentPage++;
+                    console.log(` Going to page ${multiLeadCurrentPage}`);
+                    loadMultiLeadECGPage(multiLeadCurrentPage);
+                  }
+                });
+                
+                console.log(' Button handlers attached');
+              } else {
+                console.warn(' Could not find pagination buttons in DOM');
+              }
+              
+              // Load first page
+              console.log('Loading first page...');
+              loadMultiLeadECGPage(0);
+              
+            } catch (error) {
+              console.error(' Multi-lead ECG pagination initialization failed:');
+              console.error(`   Error: ${error.message}`);
+              if (error.stack) console.error(`   Stack: ${error.stack}`);
+              console.log(' Falling back to single legacy image...');
+              
+              paginationEnabled = false;
+              document.getElementById('multiLeadLoading').textContent = 'Loading ECG report...';
+              
+              // Try to load legacy single image from R2
+              const imageUrl = `${CLOUDFLARE_CONFIG.R2_DIRECT_URL}/${CLOUDFLARE_CONFIG.IMAGES_PREFIX}multi_lead_ecg_report.png`;
+              console.log(` Loading legacy single image: ${imageUrl}`);
+              
+              const img = document.getElementById('multiLeadImg');
+              if (img) {
+                img.onload = () => {
+                  document.getElementById('multiLeadLoading').style.display = 'none';
+                  console.log('Legacy single-image ECG loaded');
+                };
+                img.onerror = () => {
+                  document.getElementById('multiLeadLoading').innerHTML = ' Could not load ECG image. Please run ECG-13.py first and ensure images are uploaded to Cloudflare R2.';
+                  console.error('Legacy image also not found');
+                };
+                img.src = imageUrl;
+              }
+            }
+          }
+
+          function loadMultiLeadECGPage(pageNum) {
+            if (!paginationEnabled) {
+              console.warn(' Pagination not enabled, ignoring page load request');
+              return;
+            }
+            
+            const imageName = `multi_lead_ecg_report_page_${pageNum}.png`;
+            const imageUrl = `${CLOUDFLARE_CONFIG.R2_DIRECT_URL}/${CLOUDFLARE_CONFIG.IMAGES_PREFIX}${imageName}`;
+            console.log(` Loading page ${pageNum + 1}/${multiLeadTotalPages}: ${imageName}`);
+            console.log(`   URL: ${imageUrl}`);
+            
+            const img = document.getElementById('multiLeadImg');
+            if (!img) {
+              console.error(' multiLeadImg element not found in DOM');
+              return;
+            }
+            
+            img.onload = () => {
+              document.getElementById('multiLeadLoading').style.display = 'none';
+              console.log(` Successfully loaded page ${pageNum + 1}/${multiLeadTotalPages}`);
+            };
+            
+            img.onerror = () => {
+              console.error(` Failed to load page ${pageNum + 1}/${multiLeadTotalPages}`);
+              console.error(`   URL: ${imageUrl}`);
+              console.error(`   This usually means the image file is not yet on R2.`);
+              console.error(`   Make sure to run: python run_analysis.py`);
+              document.getElementById('multiLeadLoading').innerHTML = ` Error loading page ${pageNum + 1}. Ensure ECG-13.py was run and images uploaded to R2.`;
+            };
+            
+            // Show loading indicator
+            document.getElementById('multiLeadLoading').textContent = `Loading page ${pageNum + 1} of ${multiLeadTotalPages}...`;
+            document.getElementById('multiLeadLoading').style.display = 'block';
+            
+            // Set image source
+            img.src = imageUrl;
+            
+            // Update page info
+            document.getElementById('multiLeadPageInfo').textContent = `Page ${pageNum + 1} of ${multiLeadTotalPages}`;
+            
+            // Update button states
+            const prevBtn = document.getElementById('multiLeadPrevBtn');
+            const nextBtn = document.getElementById('multiLeadNextBtn');
+            if (prevBtn) {
+              prevBtn.disabled = pageNum === 0;
+              prevBtn.style.opacity = pageNum === 0 ? '0.4' : '1';
+              prevBtn.style.cursor = pageNum === 0 ? 'not-allowed' : 'pointer';
+            }
+            if (nextBtn) {
+              nextBtn.disabled = pageNum === multiLeadTotalPages - 1;
+              nextBtn.style.opacity = pageNum === multiLeadTotalPages - 1 ? '0.4' : '1';
+              nextBtn.style.cursor = pageNum === multiLeadTotalPages - 1 ? 'not-allowed' : 'pointer';
+            }
+          }
+
+          async function loadECGResults() {
+            console.log('%c Loading ECG Results', 'color: #3b82f6; font-size: 12px; font-weight: bold');
+            
+            const r2DataPath = `${CLOUDFLARE_CONFIG.DATA_PREFIX}ecg_results.json`;
+            const r2DataUrl = `${CLOUDFLARE_CONFIG.R2_BUCKET_URL}/${r2DataPath}`;
+            
+            try {
+              console.log(`📡 Attempting to load data from R2 CORS proxy: ${r2DataUrl}`);
+              const r2Response = await fetch(r2DataUrl, {
+                method: 'GET'
+              });
+              
+              if (!r2Response.ok) {
+                throw new Error(`HTTP ${r2Response.status}`);
+              }
+              
+              ecgData = await r2Response.json();
+              console.log(' Data loaded from Cloudflare R2 CORS proxy');
+            } catch (error) {
+              console.warn(` Could not load from R2 (${error.message}), trying local file...`);
+              try {
+                const localResponse = await fetch('ecg_results.json');
+                if (localResponse.ok) {
+                  ecgData = await localResponse.json();
+                  console.log(' Data loaded from local file');
+                } else {
+                  throw new Error(`Local file returned HTTP ${localResponse.status}`);
+                }
+              } catch (e) {
+                console.error(' Could not load data from anywhere:', e.message);
+                console.error('   Make sure ecg_results.json exists locally or on R2');
+                return;
+              }
+            }
+            
+            // Load metrics
+            if (ecgData && ecgData.metrics) {
+              const m = ecgData.metrics;
+              
+              // Calculate TST (Total Systolic Time) = PEP + LVET
+              const tst = (m.pep && m.lvet) ? (m.pep + m.lvet).toFixed(3) : 'N/A';
+              
+              // Calculate EMD (Electromechanical Delay) - typically ~60% of PEP
+              const emd = (m.pep) ? (m.pep * 1000 * 0.6).toFixed(0) : 'N/A';
+              
+              const updates = {
+                'snrValue': m.snr_db ? m.snr_db.toFixed(2) : 'N/A',
+                'heartRate': m.ecg_heart_rate || 'N/A',
+                'ppgHeartRateValue': m.ppg_heart_rate || 'N/A',
+                'icgHeartRateValue': m.icg_heart_rate || 'N/A',
+                'icgCardiacOutputValue': m.icg_cardiac_output || 'N/A',
+                'pepValue': m.pep || 'N/A',
+                'icgStrokeVolumeValue': m.icg_stroke_volume || 'N/A',
+                'lvetValue': m.lvet || 'N/A',
+                'tstValue': tst,
+                'emdValue': emd
+              };
+              Object.entries(updates).forEach(([id, value]) => {
+                const el = document.getElementById(id);
+                if (el) el.textContent = value;
+              });
+            }
+            
+            // Load images
+            if (ecgData && ecgData.images) {
+              const imageMapping = {
+                // Combined Analysis
+                'ecgFilteredPsdImg': 'ecgIcgPpgHeartRate',
+                // Multi-lead & Alignment
+                'multiLeadImg': 'multiLead',
+                'dtwImg': 'dtw',
+                // Main ECG plot
+                'ecgPlotImg': 'ecgPlot',
+                // Peak interval histograms (Part 1)
+                'pHistogramImg': 'pHistogram',
+                'pqHistogramImg': 'pqHistogram',
+                'prHistogramImg': 'prHistogram',
+                'ptHistogramImg': 'ptHistogram',
+                'qsHistogramImg': 'qsHistogram',
+                'qtHistogramImg': 'qtHistogram',
+                'tHistogramImg': 'tHistogram',
+                // Echocardiography images
+                'septalWallViewImg': 'septalWallView',
+                'lateralWallViewImg': 'lateralWallView',
+                'spectralDopplerImg': 'spectralDopplerEchocardiography'
+              };
+
+              Object.entries(imageMapping).forEach(([elementId, key]) => {
+                const element = document.getElementById(elementId);
+                if (element && ecgData.images[key]) {
+                  const fileName = ecgData.images[key];
+                  const encodedFileName = fileName.split('/').map(part => encodeURIComponent(part)).join('/');
+                  const imageUrl = `${CLOUDFLARE_CONFIG.R2_DIRECT_URL}/${CLOUDFLARE_CONFIG.IMAGES_PREFIX}${encodedFileName}`;
+                  element.src = imageUrl;
+                  element.addEventListener('click', () => window.open(imageUrl, '_blank'));
+                  element.onerror = () => {
+                    element.style.display = 'none';
+                    console.warn(`Failed to load: ${key} from ${imageUrl}`);
+                  };
+                }
+              });
+
+              // Load videos
+              const videoMapping = {
+                'cardiacIvcVideo': 'Cardiac IVC.mp4',
+                'cardiacPlaxVideo': 'Cardiac PLAX.mp4',
+                'abdominalAortaVideo': 'Abdominal Aorta.mp4',
+                'cardiacAp4Video': 'Cardiac _ AP4.mp4',
+                'carotidLinearVideo': 'Carotid linear.mp4',
+                'cardiacSubcostalVideo': 'Cardiac Subcostal - Trim.mp4',
+                'cardiacPsaxVideo': 'Cardiac PSAX.mp4'
+              };
+
+              Object.entries(videoMapping).forEach(([elementId, fileName]) => {
+                const element = document.getElementById(elementId);
+                if (element) {
+                  const encodedFileName = fileName.split('/').map(part => encodeURIComponent(part)).join('/');
+                  const videoUrl = `${CLOUDFLARE_CONFIG.R2_DIRECT_URL}/${CLOUDFLARE_CONFIG.IMAGES_PREFIX}${encodedFileName}`;
+                  const source = document.createElement('source');
+                  source.src = videoUrl;
+                  source.type = 'video/mp4';
+                  element.appendChild(source);
+                  element.onerror = () => {
+                    console.warn(`Failed to load video: ${fileName} from ${videoUrl}`);
+                  };
+                }
+              });
+            }
+
+            // Initialize multi-lead ECG pagination
+            console.log('%c Initializing Multi-Lead ECG Pagination', 'color: #f59e0b; font-size: 12px; font-weight: bold');
+            initializeMultiLeadECGPagination();
+
+            // Initialize animated signals
+            if (ecgData && ecgData.signals && ecgData.signals.ecg_filtered && ecgData.signals.ecg_filtered.length > 0) {
+              console.log('Initializing signal animation...');
+              
+              // Calculate min/max for each signal using loops to avoid spread operator limits
+              let ecgMin = ecgData.signals.ecg_filtered[0];
+              let ecgMax = ecgData.signals.ecg_filtered[0];
+              for (let i = 1; i < ecgData.signals.ecg_filtered.length; i++) {
+                if (ecgData.signals.ecg_filtered[i] < ecgMin) ecgMin = ecgData.signals.ecg_filtered[i];
+                if (ecgData.signals.ecg_filtered[i] > ecgMax) ecgMax = ecgData.signals.ecg_filtered[i];
+              }
+              
+              let ppgMin = ecgData.signals.ppg_filtered[0];
+              let ppgMax = ecgData.signals.ppg_filtered[0];
+              for (let i = 1; i < ecgData.signals.ppg_filtered.length; i++) {
+                if (ecgData.signals.ppg_filtered[i] < ppgMin) ppgMin = ecgData.signals.ppg_filtered[i];
+                if (ecgData.signals.ppg_filtered[i] > ppgMax) ppgMax = ecgData.signals.ppg_filtered[i];
+              }
+              
+              let icgMin = ecgData.signals.icg_filtered[0];
+              let icgMax = ecgData.signals.icg_filtered[0];
+              for (let i = 1; i < ecgData.signals.icg_filtered.length; i++) {
+                if (ecgData.signals.icg_filtered[i] < icgMin) icgMin = ecgData.signals.icg_filtered[i];
+                if (ecgData.signals.icg_filtered[i] > icgMax) icgMax = ecgData.signals.icg_filtered[i];
+              }
+              
+              console.log(`ECG range: ${ecgMin.toFixed(4)} to ${ecgMax.toFixed(4)}`);
+              console.log(`PPG range: ${ppgMin.toFixed(4)} to ${ppgMax.toFixed(4)}`);
+              console.log(`ICG range: ${icgMin.toFixed(4)} to ${icgMax.toFixed(4)}`);
+              
+              ecgChartInstance = initializeChart('ecgChart', 'ECG', '#1a73e8', ecgMin, ecgMax);
+              ppgChartInstance = initializeChart('ppgChart', 'PPG', '#1a73e8', ppgMin, ppgMax);
+              icgChartInstance = initializeChart('icgChart', 'ICG', '#1a73e8', icgMin, icgMax);
+              
+              // Load and initialize heart sound visualization
+              loadAndInitializeHeartSound();
+              
+              animateSignals();
+              console.log(' Signal animation started');
+            }
+
+            // Function to decode WAV file
+            function decodeWAV(arrayBuffer) {
+              const view = new DataView(arrayBuffer);
+              let index = 0;
+              
+              // Check RIFF header
+              if (view.getUint32(0, false) !== 0x52494646) {
+                throw new Error('Not a valid WAV file (missing RIFF header)');
+              }
+              
+              let sampleRate = 44100;
+              let numSamples = 0;
+              let dataStartIndex = 0;
+              let dataSize = 0;
+              
+              // Skip RIFF header and size
+              index = 8;
+              
+              // Skip "WAVE" header
+              if (view.getUint32(index, false) !== 0x57415645) {
+                throw new Error('Not a valid WAV file (missing WAVE header)');
+              }
+              index += 4;
+              
+              // Parse chunks
+              while (index < view.byteLength) {
+                const chunkID = view.getUint32(index, true);
+                index += 4;
+                const chunkSize = view.getUint32(index, true);
+                index += 4;
+                
+                if (chunkID === 0x666d7420) { // "fmt " chunk
+                  const audioFormat = view.getUint16(index, true);
+                  const numChannels = view.getUint16(index + 2, true);
+                  sampleRate = view.getUint32(index + 4, true);
+                  const bitsPerSample = view.getUint16(index + 14, true);
+                  console.log(`WAV format: ${numChannels} channels, ${sampleRate} Hz, ${bitsPerSample} bits`);
+                }
+                
+                if (chunkID === 0x61746164) { // "data" chunk
+                  dataStartIndex = index;
+                  dataSize = chunkSize;
+                  break;
+                }
+                
+                index += chunkSize;
+              }
+              
+              // Extract PCM samples
+              const samples = [];
+              let dataIndex = dataStartIndex;
+              
+              while (dataIndex < dataStartIndex + dataSize) {
+                const sample = view.getInt16(dataIndex, true) / 32768.0;
+                samples.push(sample);
+                dataIndex += 2;
+              }
+              
+              console.log(`Decoded ${samples.length} samples from WAV file`);
+              return samples;
+            }
+
+            // Load and initialize heart sound
+            async function loadAndInitializeHeartSound() {
+              try {
+                console.log('%c Loading Lung Sound Waveform...', 'color: #f59e0b; font-size: 12px');
+                
+                if (!ecgData || !ecgData.metrics || !ecgData.metrics.lung_sound_file) {
+                  console.warn('⚠ No lung_sound_file specified in ecg_results.json');
+                  return;
+                }
+                
+                let arrayBuffer;
+                
+                // Check if base64 data is available (embedded in JSON)
+                if (ecgData.metrics.lung_sound_base64) {
+                  console.log('%c Using embedded base64 lung sound data...', 'color: #10b981; font-size: 12px');
+                  
+                  try {
+                    // Extract base64 string from data URI
+                    let base64String = ecgData.metrics.lung_sound_base64;
+                    const parts = base64String.split(',');
+                    if (parts.length > 1) {
+                      base64String = parts[1];
+                    }
+                    
+                    console.log(`Base64 string length: ${base64String.length} characters`);
+                    
+                    // Decode base64 to binary - process in chunks to avoid stack overflow
+                    const binaryString = atob(base64String);
+                    console.log(`Binary data size: ${binaryString.length} bytes`);
+                    
+                    const bytes = new Uint8Array(binaryString.length);
+                    for (let i = 0; i < binaryString.length; i++) {
+                      bytes[i] = binaryString.charCodeAt(i);
+                    }
+                    arrayBuffer = bytes.buffer;
+                    console.log(`✓ Decoded ${arrayBuffer.byteLength} bytes from base64`);
+                  } catch (decodeErr) {
+                    console.error('Base64 decoding failed:', decodeErr);
+                    throw new Error(`Failed to decode base64 data: ${decodeErr.message}`);
+                  }
+                } else {
+                  // Fallback: fetch from R2
+                  console.log('%c Fetching lung sound from R2...', 'color: #3b82f6; font-size: 12px');
+                  
+                  const heartSoundFileName = ecgData.metrics.lung_sound_file;
+                  const encodedHeartSoundFileName = encodeURIComponent(heartSoundFileName);
+                  const heartSoundUrl = `${CLOUDFLARE_CONFIG.R2_BUCKET_URL}/${CLOUDFLARE_CONFIG.IMAGES_PREFIX}${encodedHeartSoundFileName}`;
+                  
+                  console.log(`Lung Sound URL: ${heartSoundUrl}`);
+                  const response = await fetch(heartSoundUrl);
+                  
+                  if (!response.ok) {
+                    throw new Error(`Failed to load lung sound: ${response.statusText}`);
+                  }
+                  
+                  arrayBuffer = await response.arrayBuffer();
+                }
+                
+                const audioSamples = decodeWAV(arrayBuffer);
+                
+                if (audioSamples && audioSamples.length > 0) {
+                  // Calculate RMS for better normalization
+                  const rms = Math.sqrt(audioSamples.reduce((sum, x) => sum + x*x, 0) / audioSamples.length);
+                  
+                  // Use loop-based min/max to avoid spread operator stack overflow with large arrays
+                  let rawMin = audioSamples[0];
+                  let rawMax = audioSamples[0];
+                  for (let i = 1; i < audioSamples.length; i++) {
+                    if (audioSamples[i] < rawMin) rawMin = audioSamples[i];
+                    if (audioSamples[i] > rawMax) rawMax = audioSamples[i];
+                  }
+                  
+                  console.log(`Lung Sound raw range: ${rawMin.toFixed(6)} to ${rawMax.toFixed(6)}`);
+                  console.log(`Lung Sound RMS: ${rms.toFixed(6)}`);
+                  
+                  // For lung sounds with small amplitudes, normalize by RMS for better visualization
+                  const targetRMS = 0.3;
+                  const scaleFactor = rms > 0 ? targetRMS / rms : 1;
+                  
+                  heartSoundData = audioSamples.map(x => x * scaleFactor);
+                  
+                  // Use loop-based min/max to avoid spread operator stack overflow
+                  let hsMin = heartSoundData[0];
+                  let hsMax = heartSoundData[0];
+                  for (let i = 1; i < heartSoundData.length; i++) {
+                    if (heartSoundData[i] < hsMin) hsMin = heartSoundData[i];
+                    if (heartSoundData[i] > hsMax) hsMax = heartSoundData[i];
+                  }
+                  
+                  console.log(`Lung Sound normalized range: ${hsMin.toFixed(6)} to ${hsMax.toFixed(6)}`);
+                  console.log(`Scale factor applied: ${scaleFactor.toFixed(4)}`);
+                  console.log(`✓ Lung sound loaded: ${audioSamples.length} samples`);
+                  
+                  heartSoundChartInstance = initializeChart('lungsSoundChart', 'Lung Sound', '#8b5cf6', hsMin, hsMax);
+                } else {
+                  console.warn('⚠ No audio samples decoded from WAV file');
+                }
+                
+                // Setup Heart Sound Player (moved here to ensure it runs after lung sound loads)
+                console.log('%c Setting up Heart Sound Player', 'color: #f59e0b; font-size: 12px; font-weight: bold');
+                const heartSoundAudio = document.getElementById('heartSoundAudio');
+                const playHeartSoundBtn = document.getElementById('playHeartSoundBtn');
+                const heartSoundStatus = document.getElementById('heartSoundStatus');
+
+                if (heartSoundAudio && playHeartSoundBtn) {
+                  // Set audio source from Cloudflare R2
+                  const heartSoundFileName = ecgData && ecgData.metrics && ecgData.metrics.heart_sound_file 
+                    ? ecgData.metrics.heart_sound_file 
+                    : 'healthy_heartsound.wav';
+                  const encodedHeartSoundFileName = encodeURIComponent(heartSoundFileName);
+                  const heartSoundUrl = `${CLOUDFLARE_CONFIG.R2_DIRECT_URL}/${CLOUDFLARE_CONFIG.IMAGES_PREFIX}${encodedHeartSoundFileName}`;
+                  const audioSource = document.createElement('source');
+                  audioSource.src = heartSoundUrl;
+                  audioSource.type = 'audio/wav';
+                  heartSoundAudio.appendChild(audioSource);
+
+                  console.log(`Heart sound URL: ${heartSoundUrl}`);
+
+                  // Button click handler
+                  playHeartSoundBtn.addEventListener('click', function() {
+                    if (heartSoundAudio.paused) {
+                      heartSoundAudio.play().then(() => {
+                        playHeartSoundBtn.style.backgroundColor = '#dc2626';
+                        playHeartSoundBtn.innerHTML = '<span>⏸ Stop</span>';
+                        heartSoundStatus.innerHTML = 'Playing...';
+                        heartSoundStatus.style.display = 'block';
+                        console.log('Heart sound playing');
+                      }).catch(err => {
+                        console.error('Error playing heart sound:', err);
+                        heartSoundStatus.innerHTML = 'Error loading audio file';
+                        heartSoundStatus.style.color = '#dc2626';
+                        heartSoundStatus.style.display = 'block';
+                      });
+                    } else {
+                      heartSoundAudio.pause();
+                      heartSoundAudio.currentTime = 0;
+                      playHeartSoundBtn.style.backgroundColor = '#10b981';
+                      playHeartSoundBtn.innerHTML = '<span>▶ Play Heart Sound</span>';
+                      heartSoundStatus.innerHTML = '';
+                      heartSoundStatus.style.display = 'none';
+                      console.log('Heart sound stopped');
+                    }
+                  });
+
+                  // Update button state when audio ends
+                  heartSoundAudio.addEventListener('ended', function() {
+                    playHeartSoundBtn.style.backgroundColor = '#10b981';
+                    playHeartSoundBtn.innerHTML = '<span>▶ Play Heart Sound</span>';
+                    heartSoundStatus.innerHTML = 'Playback complete';
+                    heartSoundStatus.style.color = '#666';
+                    heartSoundStatus.style.display = 'block';
+                    console.log('Heart sound playback complete');
+                  });
+
+                  console.log('Heart sound player initialized');
+                }
+              } catch (err) {
+                console.error('Error loading lung sound:', err);
+              }
+            }
+          }
+
+          if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', loadECGResults);
+          } else {
+            loadECGResults();
+          }
+        </script>
+  
+      </body>
+      </html>
+
+
+

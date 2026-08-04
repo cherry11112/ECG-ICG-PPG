@@ -1,0 +1,295 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="dist/css/style.css">
+    <title>User Dashboard</title>
+</head>
+<body class="text-gray-800 font-inter">
+    
+    <div class="fixed left-0 top-0 w-64 h-full p-4 z-50 sidebar-menu transition-transform" 
+    style="background: url('img/picture11.png') no-repeat center center / cover;">
+        <a href="#" class="flex items-center pb-4 border-b border-b-gray-800">
+            <img src="img/fraunhofer-logo.jpg" alt="" class="w-8 h-8 rounded object-cover">
+            <span class="text-lg font-bold text-black ml-3"></span>
+        </a>
+        <ul class="mt-4">
+            <li class="mb-1 group">
+                <a href="patient1.html" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">
+                    <i class="ri-home-2-line mr-3 text-lg"></i>
+                    <span class="text-sm">Dashboard</span>
+                </a>
+            </li>
+            <li class="mb-1 group active">
+                <a href="#" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100 sidebar-dropdown-toggle">
+                    <i class="ri-file-info-line mr-3 text-lg"></i>
+                    <span class="text-white">Reports</span>
+                </a>
+            </li>
+            <li class="mb-1 group">
+                <a href="#" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">
+                    <i class="ri-settings-2-line mr-3 text-lg"></i>
+                    <span class="text-sm">Settings</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="fixed top-0 left-0 w-full h-full bg-black/50 z-40 md:hidden sidebar-overlay"></div>
+    <!-- end: Sidebar -->
+
+    <!-- start: Main -->
+    <main class="w-full md:w-[calc(100%-256px)] md:ml-64 bg-gray-50 min-h-screen transition-all main">
+        <div class="py-2 px-6 bg-white flex items-center shadow-md shadow-black/5 sticky top-0 left-0 z-30">
+            <button type="button" class="text-lg text-gray-600 sidebar-toggle">
+                <i class="ri-menu-line"></i>
+            </button>
+            <ul class="flex items-center text-sm ml-4">
+                <li class="mr-2">
+                    <a href="#" class="text-gray-400 hover:text-gray-600 font-medium">Dashboard</a>
+                </li>
+            </ul>
+            <ul class="ml-auto flex items-center">
+                <li class="mr-1 dropdown">
+                    <button type="button" class="dropdown-toggle text-gray-400 w-8 h-8 rounded flex items-center justify-center hover:bg-gray-50 hover:text-gray-600">
+                        <i class="ri-search-line"></i>
+                    </button>
+                    <div class="dropdown-menu shadow-md shadow-black/5 z-30 hidden max-w-xs w-full bg-white rounded-md border border-gray-100">
+                        <form action="" class="p-4 border-b border-b-gray-100">
+                            <div class="relative w-full">
+                                <input type="text" class="py-2 pr-4 pl-10 bg-gray-50 w-full outline-none border border-gray-100 rounded-md text-sm focus:border-blue-500" placeholder="Search...">
+                                <i class="ri-search-line absolute top-1/2 left-4 -translate-y-1/2 text-gray-400"></i>
+                            </div>
+                        </form>
+                    </div>
+                </li>
+                <li class="dropdown">
+                    <button type="button" class="dropdown-toggle text-gray-400 w-8 h-8 rounded flex items-center justify-center hover:bg-gray-50 hover:text-gray-600">
+                        <i class="ri-notification-3-line"></i>
+                    </button>
+                    <div class="dropdown-menu shadow-md shadow-black/5 z-30 hidden max-w-xs w-full bg-white rounded-md border border-gray-100">
+                        <div class="flex items-center px-4 pt-4 border-b border-b-gray-100 notification-tab">
+                            <button type="button" data-tab="notification" data-tab-page="notifications" class="text-gray-400 font-medium text-[13px] hover:text-gray-600 border-b-2 border-b-transparent mr-4 pb-1 active">Notifications</button>
+                            <button type="button" data-tab="notification" data-tab-page="messages" class="text-gray-400 font-medium text-[13px] hover:text-gray-600 border-b-2 border-b-transparent mr-4 pb-1">Messages</button>
+                        </div>
+                        <div class="my-2">
+                            <ul class="max-h-64 overflow-y-auto" data-tab-for="notification" data-page="notifications">
+                                <li>
+                            <ul class="max-h-64 overflow-y-auto hidden" data-tab-for="notification" data-page="messages">
+                                <li>
+                                    <a href="#" class="py-2 px-4 flex items-center hover:bg-gray-50 group">
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+                <li class="dropdown ml-3">
+                    <button type="button" class="dropdown-toggle flex items-center">
+                        <img src="img/user-profile-icon-free-vector.jpg" alt="" class="w-8 h-8 rounded-full block object-cover align-middle">
+                    </button>                   
+                    <ul class="dropdown-menu shadow-md shadow-black/5 z-30 hidden py-1.5 rounded-md bg-white border border-gray-100 w-full max-w-[140px]">
+                        <li>
+                            <a href="#" class="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-blue-500 hover:bg-gray-50">Profile</a>
+                        </li>
+                        <li>
+                            <a href="#" id="logoutBtn" class="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-blue-500 hover:bg-gray-50">Logout</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+
+<!------------------------------------------->
+        
+        <div class="p-6">
+            <div class="grid grid-cols-1 gap-6 mb-6">
+
+        <div class="p-6">
+            <div class="grid grid-cols-1 gap-6 mb-6">
+                <!-- Welcome Back Section -->
+                <div class="bg-white rounded-md border border-gray-100 p-6 shadow-md shadow-black/5">
+                    <div class="flex justify-between mb-6">
+                        <div class="w-full">
+                            <div class="text font-semibold mb-3" style="font-size: 2rem;">Informations</div>
+                            <div class="text-lg font-small text-gray-300" style="color: gray;">
+                                <span id="userName">Here's your report</span>
+                            </div>                       
+                        </div>
+                    </div>
+                </div>               
+                
+                <!------------------------------------------------->
+
+                
+            
+        <div class="bg-white rounded-md border border-gray-100 p-6 shadow-md shadow-black/5">
+            <div class="flex justify-between mb-6">
+                <div>
+                    <div class="text-1xl font-semibold mb-1" style="margin-left: 1rem; font-size:30px; margin-bottom: -2rem;">Patient Data:</div>                    
+                </div>
+            </div>
+            <hr>
+            
+            <div class="p-6">
+			    <div class="grid grid-cols-1 gap-6 mb-6">
+                <div class="text-2xl font-semibold mb-1" style="color: chocolate; ">Patient existing non-cardiac diseases:</div>
+                   <div class="page-2">
+
+                    <div class="non-cardiac-section">
+                        <p><strong>A. Metabolic & Endocrine:</strong><br>
+                            Diabetes mellitus type 1: <span id="diabetes-type-1">Loading...</span><br>
+                            Diabetes mellitus type 2: <span id="diabetes-type-2">Loading...</span><br>
+                            Metabolic Syndrome: <span id="metabolic-syndrome">Loading...</span><br>   
+                            Dyslipidemia (elevated lipids): <span id="dyslipidemia">Loading...</span><br>
+                            Thyroid dysfunction: <span id="thyroid-dysfunction">Loading...</span>
+                        </p>
+                    </div>
+
+                    <div class="non-cardiac-section">
+                        <p><strong>B. Renal & hematologic:</strong><br>
+                            Significant kidney disease (e.g. CKD,nephrotic syndrome): <span id="significant-kidney-disease">Loading...</span><br>
+                            Currently on dialysis: <span id="on-dialysis">Loading...</span><br>
+                            Coagulation liver disease (inherited or acquired): <span id="coagulation-liver-disease">Loading...</span><br>   
+                            Anemia: <span id="anemia">Loading...</span>
+                        </p>
+                    </div>
+
+                    <div class="non-cardiac-section">
+                        <p><strong>C. Liver:</strong><br>
+                            Chronic liver disease (e.g. MASLD, hepatitis): <span id="chronic-liver-disease">Loading...</span>
+                        </p>
+                    </div>
+
+
+                    <div class="non-cardiac-section">
+                        <p><strong>D. Pulmonary & Sleep:</strong><br>
+                            Chronic Bronchial Obstruction (COPD, Asthma): <span id="chronic-bronchial">Loading...</span><br>
+                            Pulmonary Hypertension (non-cardiac cause): <span id="pulmonary-hypertension">Loading...</span><br>
+                            Sleep Apnea: <span id="sleep-apnea">Loading...</span>
+                        </p>
+                    </div>
+
+                    <div class="non-cardiac-section">
+                        <p><strong>E. Oncology & Immune:</strong><br>
+                            Primary Tumor / Malignancy (current or past): <span id="primary-tumor">Loading...</span><br>
+                            Autoimmune disease: <span id="autoimmune">Loading...</span>
+                        </p>
+                    </div>
+
+                    <div class="non-cardiac-section">
+                        <p><strong>F. Psychiatric:</strong><br>
+                            Depression or Anxiety Disorder: <span id="depression-anxiety">Loading...</span><br>
+                        </p>
+                    </div>
+                    
+                    <div class="non-cardiac-section">
+                        <p><strong>G. Female-Specific (only if female patient):</strong><br>
+                            History of Preeclampsia: <span id="preeclampsia">Loading...</span><br>
+                            History of HELLP Syndrome: <span id="hellp">Loading...</span>
+                        </p>
+                    </div>
+					
+                </div>
+		</div>
+
+				<br>
+			<div class="grid grid-cols-1 gap-6 mb-6">
+                    <div class="text-2xl font-semibold mb-1" style="color: chocolate; margin-top: 1rem;">Previous Cardiac Interventions and Surgeries:</div>
+                    <div class="page-2">
+                        
+                    <div class="cardiac-interventions-section">
+                        <p><strong>A. Coronoary Revascularization</strong><br>
+                            PCI/Angioplasty with or without stent: <span id="pci">Loading...</span><br>
+                            Coronary Artery Bypass Grafting: <span id="cabg">Loading...</span>
+                        </p>
+                    </div>
+                    
+                    <div class="cardiac-interventions-section">
+                        <p><strong>B. Valve and structural heart procedures</strong><br>
+                            Surgical valve repair/replacement: <span id="svr">Loading...</span><br>
+                            Transcatheter valve intervention (TAVI / other): <span id="tavi">Loading...</span><br>
+                            Septal myectomy: <span id="septal-myectomy-display">Loading...</span>
+                            <span id="myectomy-year-display" style="display:none;"></span>
+                        </p>
+                    </div>
+
+                    <div class="cardiac-interventions-section">
+                        <p><strong>C. Rhythm and device procedures</strong><br>
+                            Cardiac pacemaker implantation: <span id="cardiac-pacemaker-display">Loading...</span>
+                            <span id="cardiac-pacemaker-year-display" style="display:none;"></span><br>
+                            Implantable cardioverter defibrillator (ICD): <span id="cardiac-icd-display">Loading...</span>
+                            <span id="cardiac-icd-year-display" style="display:none;"></span><br>
+                            Cardiac resynchronization therapy (CRT-P / CRT-D): <span id="cardiac-crt-display">Loading...</span>
+                            <span id="cardiac-crt-year-display" style="display:none;"></span><br>
+                            Catheter ablation (e.g. for AF): <span id="cardiac-catheter-ablation-display">Loading...</span>
+                            <span id="cardiac-catheter-ablation-year-display" style="display:none;"></span><br>
+                            Maze procedure (surgical AF ablation): <span id="cardiac-maze-procedure-display">Loading...</span>
+                            <span id="cardiac-maze-procedure-year-display" style="display:none;"></span>
+                        </p>
+                    </div>
+
+                    <div class="cardiac-interventions-section">
+                        <p><strong>D. Advanced heart failure / pulmonary vascular surgery</strong><br>
+                            LV assist device (LVAD) implantation:<span id="lvad-implementation-display">Loading...</span>
+                            <span id="lvad-implementation-year-display" style="display:none;"></span><br>
+                            Heart Transplant:<span id="heart-transplant-display">Loading...</span>
+                            <span id="heart-transplant-year-display" style="display:none;"></span><br>
+                            Pulmonary thromboendarterectomy:<span id="pulmonary-thromboendarterectomy-display">Loading...</span>
+                            <span id="pulmonary-thromboendarterectomy-year-display" style="display:none;"></span>
+                        </p>
+                    </div>
+
+                    <div class="cardiac-interventions-section">
+                        <p><strong>E. Other major surgeries</strong><br>
+                            Aortic aneurysm / aortic surgery: <span id="aortic-aneurysm-display">-</span>
+                            <span id="aortic-aneurysm-year-display" style="display:none;"></span><br>
+                            Other major thoracic surgery: <span id="thoracic-surgery-display">-</span>
+                            <span id="thoracic-surgery-year-display" style="display:none;"></span><br>
+                            Major abdominal surgery: <span id="abdominal-surgeries-display">-</span>
+                            <span id="abdominal-surgeries-year-display" style="display:none;"></span>
+                        </p>
+                    </div>
+
+                </div>
+                    
+             </div>
+
+                <div class="last-cardio-section">
+                        <p><strong>Others:</strong><br>
+                            <span id="summary1">Loading...</span>
+                        </p>
+                </div>
+
+			</div> 
+       <!-- Navigation Buttons -->
+       <div class="submit-button-container mt-6 flex justify-between">
+        <a href="report1.html" id="backButton">
+            <button type="button" class="px-3 py-1 bg-white text-black border border-black rounded-sm text-sm">Back</button>
+        </a>
+        <a href="report1.3.html" id="nextButtonLink">
+            <button type="button" id="nextButton" class="px-3 py-1 bg-white text-black border border-black rounded-sm text-sm">Next</button>
+        </a>
+    </div>
+              
+                    
+            </div>
+        </div>
+      </div>
+
+     </main>
+
+        <script src="https://unpkg.com/@popperjs/core@2"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="dist/js/report.js"></script>
+
+        <script type="module">
+        </script>
+  
+      </body>
+
+      </html>

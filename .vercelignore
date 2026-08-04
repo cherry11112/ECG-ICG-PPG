@@ -1,0 +1,11 @@
+# Local biosignal fallback fixture (report1.5.html/report1.6.html use it only
+# when R2 is unreachable, for local/offline testing). It contains real biosignal
+# data (waveforms, an audio recording) with no auth in front of it if served as
+# a static file — must never ship to production. If report1.5/1.6 need a local
+# fallback in production too, that has to go through an authenticated API route
+# instead of a public static file.
+ecg_results.json
+
+# Python voice-agent backend — deployed separately to Railway, not part of the
+# Vercel static/serverless build.
+backend/

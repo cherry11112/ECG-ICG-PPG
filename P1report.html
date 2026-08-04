@@ -1,0 +1,2716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="dist/css/style.css">
+    <title>Patient Report</title>
+</head>
+<body class="text-gray-800 font-inter">
+    
+  <div class="fixed left-0 top-0 w-64 h-full p-4 z-50 sidebar-menu transition-transform" 
+  style="background: url('img/picture11.png') no-repeat center center / cover;">
+        <a href="#" class="flex items-center pb-4 border-b border-b-gray-800">
+            <img src="img/fraunhofer-logo.jpg" alt="" class="w-8 h-8 rounded object-cover">
+            <span class="text-lg font-bold text-black ml-3"></span>
+        </a>
+        <ul class="mt-4">
+            <li class="mb-1 group">
+                <a href="doctor.html" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">
+                    <i class="ri-home-2-line mr-3 text-lg"></i>
+                    <span class="text-sm">Dashboard</span>
+                </a>
+            </li>
+            <li class="mb-1 group active">
+                <a href="#" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100 sidebar-dropdown-toggle">
+                    <i class="ri-file-info-line mr-3 text-lg"></i>
+                    <span class="text-white">Reports</span>
+                </a>
+            </li>
+            <li class="mb-1 group">
+                <a href="#" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">
+                    <i class="ri-settings-2-line mr-3 text-lg"></i>
+                    <span class="text-sm">Settings</span>
+                </a>
+            </li>
+        </ul>            
+    </div>
+    <div class="fixed top-0 left-0 w-full h-full bg-black/50 z-40 md:hidden sidebar-overlay"></div>
+    <!-- end: Sidebar -->
+
+    <!-- start: Main -->
+    <main class="w-full md:w-[calc(100%-256px)] md:ml-64 bg-gray-50 min-h-screen transition-all main">
+        <div class="py-2 px-6 bg-white flex items-center shadow-md shadow-black/5 sticky top-0 left-0 z-30">
+            <button type="button" class="text-lg text-gray-600 sidebar-toggle">
+                <i class="ri-menu-line"></i>
+            </button>
+            <ul class="flex items-center text-sm ml-4">
+                <li class="mr-2">
+                    <a href="#" class="text-gray-400 hover:text-gray-600 font-medium">Dashboard</a>
+                </li>
+            </ul>
+            <ul class="ml-auto flex items-center">
+                <li class="mr-1 dropdown">
+                    <button type="button" class="dropdown-toggle text-gray-400 w-8 h-8 rounded flex items-center justify-center hover:bg-gray-50 hover:text-gray-600">
+                        <i class="ri-search-line"></i>
+                    </button>
+                    <div class="dropdown-menu shadow-md shadow-black/5 z-30 hidden max-w-xs w-full bg-white rounded-md border border-gray-100">
+                        <form action="" class="p-4 border-b border-b-gray-100">
+                            <div class="relative w-full">
+                                <input type="text" class="py-2 pr-4 pl-10 bg-gray-50 w-full outline-none border border-gray-100 rounded-md text-sm focus:border-blue-500" placeholder="Search...">
+                                <i class="ri-search-line absolute top-1/2 left-4 -translate-y-1/2 text-gray-400"></i>
+                            </div>
+                        </form>
+                    </div>
+                </li>
+                <li class="dropdown">
+                    <button type="button" class="dropdown-toggle text-gray-400 w-8 h-8 rounded flex items-center justify-center hover:bg-gray-50 hover:text-gray-600">
+                        <i class="ri-notification-3-line"></i>
+                    </button>
+                    <div class="dropdown-menu shadow-md shadow-black/5 z-30 hidden max-w-xs w-full bg-white rounded-md border border-gray-100">
+                        <div class="flex items-center px-4 pt-4 border-b border-b-gray-100 notification-tab">
+                            <button type="button" data-tab="notification" data-tab-page="notifications" class="text-gray-400 font-medium text-[13px] hover:text-gray-600 border-b-2 border-b-transparent mr-4 pb-1 active">Notifications</button>
+                            <button type="button" data-tab="notification" data-tab-page="messages" class="text-gray-400 font-medium text-[13px] hover:text-gray-600 border-b-2 border-b-transparent mr-4 pb-1">Messages</button>
+                        </div>
+                        <div class="my-2">
+                            <ul class="max-h-64 overflow-y-auto" data-tab-for="notification" data-page="notifications">
+                                <li>
+                            <ul class="max-h-64 overflow-y-auto hidden" data-tab-for="notification" data-page="messages">
+                                <li>
+                                    <a href="#" class="py-2 px-4 flex items-center hover:bg-gray-50 group">
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+                <li class="dropdown ml-3">
+                    <button type="button" class="dropdown-toggle flex items-center">
+                        <img src="img/circle-profile-pic.jpg" alt="" class="w-8 h-8 rounded-full block object-cover align-middle">
+                    </button>                   
+                    <ul class="dropdown-menu shadow-md shadow-black/5 z-30 hidden py-1.5 rounded-md bg-white border border-gray-100 w-full max-w-[140px]">
+                        <li>
+                            <a href="#" class="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-blue-500 hover:bg-gray-50">Profile</a>
+                        </li>
+                        <li>
+                            <a href="index.html" id="logoutBtn" class="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-blue-500 hover:bg-gray-50">Logout</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
+        </div>
+
+        <div class="p-6">
+            <div class="grid grid-cols-1 gap-6 mb-6">
+               
+    <!-- Patient Reports -->      
+     
+    <div class="p-6">
+        <div class="grid grid-cols-1 gap-6 mb-6">
+            <!-- Welcome Back Section -->
+            <div class="bg-white rounded-md border border-gray-100 p-6 shadow-md shadow-black/5">
+                <div class="flex justify-between mb-6">
+                    <div class="w-full">
+                        <div class="text-lg font-medium text-gray-400">Patient Name:</div>
+                        <div class="text-3xl font-semibold mb-3" style="font-size: 2rem;">
+                            <span id="patientName">Loading...</span>
+                        </div>                        
+                    </div>
+                </div>
+            </div>
+
+
+		
+            <!---------------------Data------------------------>
+
+            <div class="bg-white rounded-md border border-gray-100 p-6 shadow-md shadow-black/5">
+              <div class="flex justify-between mb-6">
+                  <div>
+                      <div class="text-1xl font-semibold mb-1" style="margin-left: 1rem; font-size:30px; margin-bottom: -2rem;">Patient Data:</div>
+                  </div>
+              </div>
+            
+              <div class="p-6">
+                  <div class="grid grid-cols-1 gap-6 mb-6">
+                    <form id="multiPageForm">
+                      <input type="hidden" name="reportType" value="P1" >
+                          <!-- Page 1 -->
+                          <div class="form-page" id="page1">
+                              <div class="text-2xl font-semibold mb-1" style="color: chocolate; margin-bottom: 1.5rem;">General:</div>
+            
+                              <div class="form-group mb-4">
+                                  <label for="date-of-birth" class="block font-medium text-gray-700">Date of Birth:</label>
+                                  <input type="date" id="date-of-birth" name="date-of-birth" class="w-full p-2 border border-gray-300 rounded-md" min="1900-01-01">
+                              </div>
+
+                                <div class="form-group mb-4">
+                                  <label for="age" class="block font-medium text-gray-700">Age:</label>
+                                  <input type="number" id="age" name="age" placeholder="age" >
+                                </div>
+
+                              <div class="form-group mb-4">
+                                  <label for="gender" class="block font-medium text-gray-700">Gender:</label>
+                                  <select id="gender" name="gender" class="w-full p-2 border border-gray-300 rounded-md">
+                                      <option value="n.A">-</option>
+                                      <option value="Male">Male</option>
+                                      <option value="Female">Female</option>
+                                      <option value="Other">Other</option>
+                                  </select>
+                                </div>
+
+                                <div class="form-group mb-4">
+                                  <label for="height" class="block font-medium text-gray-700">Height:</label>
+                                  <input type="number" id="height" name="height" placeholder="cm" step="0.1" >
+                                </div>
+                                
+                                <div class="form-group mb-4">
+                                  <label for="weight" class="block font-medium text-gray-700">Weight:</label>
+                                  <input type="number" id="weight" name="weight" placeholder="weight" step="0.1" >
+                                </div>
+                                
+                                <div class="form-group mb-4">
+                                  <label for="bmi" class="block font-medium text-gray-700">BMI:</label>
+                                  <input type="number" id="bmi" name="bmi" placeholder="bmi" step="0.1">
+                                </div>
+                                
+                                <div class="form-group mb-4">
+                                  <label for="ethnicity" class="block font-medium text-gray-700">Ethnicity:</label>
+                                  <input type="text" id="ethnicity" name="ethnicity">
+                                </div>
+                                
+                              <div class="text-2xl font-semibold mb-1" style="color: chocolate; margin-bottom: 1.5rem;">Lifestyle / Habits:</div>
+            
+
+                              <div class="form-group mb-4">
+                                  <label for="smoking" class="block font-medium text-gray-700">Smoking Status:</label>
+                                    <select id="smoking" name="smoking" class="w-full p-2 border border-gray-300 rounded-md" onchange="toggleSmokingFields()">
+                                      <option value="n.A">-</option>
+                                      <option value="Never">Never</option>
+                                      <option value="Former">Former</option>
+                                      <option value="Current">Current</option>
+                                  </select>
+                                </div>
+
+                                <div id="smoking-fields-container" class="form-group mb-4" style="display: none;">
+                                  <label for="smoking-duration" class="block font-medium text-gray-700">Smoking Duration (years):</label>
+                                  <input type="number" id="smoking-duration" name="smoking-duration" class="w-full p-2 border border-gray-300 rounded-md mb-4" placeholder="Enter number of years" step="0.1">
+                                  
+                                  <label for="cigarettes-per-day" class="block font-medium text-gray-700">Average Cigarettes/Day:</label>
+                                  <input type="number" id="cigarettes-per-day" name="cigarettes-per-day" class="w-full p-2 border border-gray-300 rounded-md" placeholder="Enter number of cigarettes" min="0">
+                                </div>
+
+                                <div class="form-group mb-4">
+                                  <label for="alcohol" class="block font-medium text-gray-700">Alcohol Consumption:</label>
+                                  <select id="alcohol" name="alcohol" class="w-full p-2 border border-gray-300 rounded-md">
+                                      <option value="n.A">-</option>
+                                      <option value="None">None</option>
+                                      <option value="Occasional">Occasional</option>
+                                      <option value="Regular">Regular</option>
+                                  </select>
+                                </div>
+                                
+                                <div class="form-group mb-4">
+                                  <label for="diet" class="block font-medium text-gray-700">Special Diet:</label>
+                                  <select id="diet" name="diet" class="w-full p-2 border border-gray-300 rounded-md" onchange="toggleDietOther()">
+                                      <option value="n.A">-</option>
+                                      <option value="No">No</option>
+                                      <option value="Low-salt">Low-salt</option>
+                                      <option value="Low-fat">Low-fat</option>
+                                      <option value="Diabetic">Diabetic</option>
+                                      <option value="Other">Other</option>
+                                  </select>
+                                </div>
+
+                                <div id="diet-other-container" class="form-group mb-4" style="display: none;">
+                                  <label for="diet-other-text" class="block font-medium text-gray-700">Please specify other diet:</label>
+                                  <input type="text" id="diet-other-text" name="diet-other-text" class="w-full p-2 border border-gray-300 rounded-md" placeholder="Enter the type of diet">
+                                </div>
+                          </div>
+            
+                          <!-- Page 2 -->
+                          <div class="form-page hidden" id="page2">
+  
+                              <div class="text-2xl font-semibold mb-1" style="color: chocolate; margin-bottom: 1.5rem;">Hereditary Diseases / Family History (first-degree Relatives):</div>
+                              <div class="form-columns">
+                                  <div class="form-column">
+                                      <div class="form-group mb-4">
+                                          <label for="heartattack" class="text-2xl font-semibold">A. Heart & Circulation:</label>
+                                          <label>Close relative with heart attack or coronary stent/bypass surgery: </label>
+                                          <select id="heart-attack" name="heart-attack" class="w-full p-2 border border-gray-300 rounded-md">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>
+                                          </select>
+                                          <label>Sudden unexpected death before age 60:</label>
+                                          <select id="sudden-death" name="sudden-death" class="w-full p-2 border border-gray-300 rounded-md">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>
+                                          </select>
+                                          <label>Stroke:</label>
+                                          <select id="stroke" name="stroke" class="w-full p-2 border border-gray-300 rounded-md">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>
+                                          </select>
+                                          <label>Weak or enlarged heart/heart failure (e.g "poor pump function"): </label>
+                                          <select id="heart-failure" name="heart-failure" class="w-full p-2 border border-gray-300 rounded-md">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>
+                                          </select>
+                                          <label>Heart Rhythm problems or implanted pacemaker/defibrillator: </label>
+                                          <select id="heart-rhythm" name="heart-rhythm" class="w-full p-2 border border-gray-300 rounded-md">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>
+                                          </select>
+                                          <label>Heart defect present at birth (e.g "underdeveloped heart", surgery as a baby): </label>
+                                          <select id="heart-defect" name="heart-defect" class="w-full p-2 border border-gray-300 rounded-md">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>
+                                          </select>
+                                      </div>
+                                  </div>
+
+                                   <div class="form-column">
+                                      <div class="form-group mb-4">
+                                          <label for="blood-pressures" class="text-2xl font-semibold">B. Blood Pressure, Sugar, Cholesterol:</label>
+                                          <label>High Blood Pressure: </label>
+                                          <select id="blood-pressure" name="blood-pressure" class="w-full p-2 border border-gray-300 rounded-md">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>
+                                          </select>
+                                          <label>Diabetes (high blood sugar):</label>
+                                          <select id="diabetes" name="diabetes" class="w-full p-2 border border-gray-300 rounded-md">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>
+                                          </select>
+                                          <label>Very high cholesterol or "inherited high cholesterol":</label>
+                                          <select id="cholesterol" name="cholesterol" class="w-full p-2 border border-gray-300 rounded-md">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>
+                                          </select>
+                                      </div>
+
+                                      <div class="form-group mb-4">
+                                          <label for="other" class="text-2xl font-semibold">C. Other:</label>
+                                          <label>Cancer/tumor (any type): </label>
+                                          <select id="cancer" name="cancer" class="w-full p-2 border border-gray-300 rounded-md">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>
+                                          </select>
+                                          <label>Other important family illness of the heart or vessels:</label>
+                                          <input type="text" id="other-illness-text" name="other-illness-text" class="w-full p-2 border border-gray-300 rounded-md" placeholder="Enter the type of illness">
+                                      </div>
+                                  </div>
+                              </div>
+
+                              <div class="text-2xl font-semibold mb-1" style="color: chocolate; margin-bottom: 1.5rem;">Primary existing non-cardiac diseases:</div>
+            
+                              <div class="form-group mb-4">
+                                  <label for="nyha-class" class="block font-medium text-gray-700">NYHA functional class:</label>
+                                  <select id="nyha" name="nyha" class="w-full p-2 border border-gray-300 rounded-md">
+                                      <option value="n.A">-</option>
+                                      <option value="n.A">n. R</option>
+                                      <option value="I">I</option>
+                                      <option value="II">II</option>
+                                      <option value="III">III</option>
+                                      <option value="IV">IV</option>
+                                  </select>
+                                </div>
+                                
+                             <div class="form-group mb-4">
+                                 <label for="acc_aha" class="block font-medium text-gray-700">ACC/AHA heart failure Stage:</label>
+                                 <select id="acc_stage" name="acc_stage" class="w-full p-2 border border-gray-300 rounded-md">
+                                      <option value="n.A">-</option>
+                                      <option value="A">A</option>
+                                      <option value="B">B</option>
+                                      <option value="C">C</option>
+                                      <option value="D">D</option>
+                                 </select>
+                            </div>                
+                          </div>
+            
+                          <!-- Page 3 -->
+                          <div class="form-page hidden" id="page3">
+  
+                              <div class="text-2xl font-semibold mb-1" style="color: chocolate; margin-bottom: 1.5rem;">Patient existing non-cardiac diseases:</div>
+                                <div class="form-columns">
+                                  <div class="form-column">
+                                      <div class="form-group mb-4">
+                                          <label for="metabolic" class="text-2xl font-semibold">A. Metabolic & Endocrine:</label>
+                                          <label>Diabetes mellitus type 1: </label>
+                                          <select id="diabetes-type-1" name="diabetes-type-1" class="w-full p-2 border border-gray-300 rounded-md">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>
+                                          </select>
+                                          <label>Diabetes mellitus type 2:</label>
+                                          <select id="diabetes-type-2" name="diabetes-type-2" class="w-full p-2 border border-gray-300 rounded-md">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>
+                                          </select>
+                                          <label>Metabolic Syndrome:</label>
+                                          <select id="metabolic-syndrome" name="metabolic-syndrome" class="w-full p-2 border border-gray-300 rounded-md">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>
+                                          </select>
+                                          <label>Dyslipidemia (elevated lipids): </label>
+                                          <select id="dyslipidemia" name="dyslipidemia" class="w-full p-2 border border-gray-300 rounded-md">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>
+                                          </select>
+                                          <label>Thyroid dysfunction: </label>
+                                          <select id="thyroid-dysfunction" name="thyroid-dysfunction" class="w-full p-2 border border-gray-300 rounded-md">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>
+                                          </select>
+                                      </div>
+                                                                            
+                                      <div class="form-group mb-4">
+                                          <label for="renal" class="text-2xl font-semibold">B. Renal & hematologic:</label>
+                                          <label>Significant kidney disease (e.g. CKD,nephrotic syndrome): </label>
+                                          <select id="significant-kidney-disease" name="significant-kidney-disease" class="w-full p-2 border border-gray-300 rounded-md">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>
+                                          </select>
+
+                                          <label>Currently on dialysis:</label>
+                                          <select id="on-dialysis" name="on-dialysis" class="w-full p-2 border border-gray-300 rounded-md">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>
+                                          </select>
+                                          
+                                          <label>Coagulation liver disease (inherited or acquired):</label>
+                                          <select id="coagulation-liver-disease" name="coagulation-liver-disease" class="w-full p-2 border border-gray-300 rounded-md">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>
+                                          </select>
+
+                                          <label>Anemia:</label>
+                                          <select id="anemia" name="anemia" class="w-full p-2 border border-gray-300 rounded-md">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>
+                                          </select>
+                                      </div>
+
+                                      <div class="form-group mb-4">
+                                          <label for="liver" class="text-2xl font-semibold">C. Liver:</label>
+                                          <label>Chronic liver disease (e.g. MASLD, hepatitis, cirrhosis): </label>
+                                          <select id="chronic-liver-disease" name="chronic-liver-disease" class="w-full p-2 border border-gray-300 rounded-md">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>
+                                          </select>
+                                      </div>
+                                  </div>
+
+                                   <div class="form-column">
+                                      <div class="form-group mb-4">
+                                          <label for="pulmonary-sleep" class="text-2xl font-semibold">D. Pulmonary & Sleep:</label>
+                                          <label>Chronic Bronchial Obstruction (COPD, Asthma): </label>
+                                          <select id="chronic-bronchial" name="chronic-bronchial" class="w-full p-2 border border-gray-300 rounded-md">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>
+                                          </select>
+                                          <label>Pulmonary Hypertension (non-cardiac cause):</label>
+                                          <select id="pulmonary-hypertension" name="pulmonary-hypertension" class="w-full p-2 border border-gray-300 rounded-md">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>
+                                          </select>
+                                          <label>Sleep Apnea:</label>
+                                          <select id="sleep-apnea" name="sleep-apnea" class="w-full p-2 border border-gray-300 rounded-md">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>
+                                          </select>
+                                      </div>
+
+                                      <div class="form-group mb-4">
+                                          <label for="oncology" class="text-2xl font-semibold">E. Oncology & Immune:</label>
+                                          <label>Primary Tumor / Malignancy (current or past): </label>
+                                          <select id="primary-tumor" name="primary-tumor" class="w-full p-2 border border-gray-300 rounded-md">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>
+                                          </select>
+										                      <label>Autoimmune disease:</label>
+                                          <select id="autoimmune" name="autoimmune" class="w-full p-2 border border-gray-300 rounded-md">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>
+                                          </select>
+                                      </div>
+
+                                      <div class="form-group mb-4">
+                                          <label for="blood-pressure" class="text-2xl font-semibold">F. Psychiatric:</label>
+                                          <label>Depression or Anxiety Disorder: </label>
+                                          <select id="depression-anxiety" name="depression-anxiety" class="w-full p-2 border border-gray-300 rounded-md">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>
+                                          </select>
+                                      </div>
+
+                                      <div class="form-group mb-4">
+                                          <label for="female" class="text-2xl font-semibold">G. Female-Specific (only if female patient):</label>
+                                          <label>History of Preeclampsia: </label>
+                                          <select id="preeclampsia" name="preeclampsia" class="w-full p-2 border border-gray-300 rounded-md">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>
+                                          </select>
+										                      <label>History of HELLP Syndrome:</label>
+                                          <select id="hellp" name="hellp" class="w-full p-2 border border-gray-300 rounded-md">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>
+                                          </select>
+                                      </div>
+                                  </div>
+                              </div>
+						</div>
+
+  
+                          <!-----------page 4------------->
+  
+                          <div class="form-page hidden" id="page4">
+                              <div class="text-2xl font-semibold mb-1" style="color: chocolate; margin-bottom: 1.5rem;">Previous Cardiac Interventions and Surgeries:</div>
+                              <div class="form-columns">
+                                  <div class="form-column">
+  
+                                        <div class="form-group mb-4">
+                                          <label for="coronary-revascularization" class="text-2xl font-semibold"> A. Coronoary Revascularization</label>
+                                          <label>PCI/Angioplasty with or without stent: </label>
+                                          <select id="pci" name="pci" class="w-full p-2 border border-gray-300 rounded-md">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>
+                                          </select>
+										                      <label>Coronary Artery Bypass Grafting:</label>
+                                          <select id="cabg" name="cabg" class="w-full p-2 border border-gray-300 rounded-md">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>
+                                          </select>
+                                          </div>
+
+                                        <div class="form-group mb-4">
+                                          <label for="coronary-revascularization" class="text-2xl font-semibold"> B. Valve and structural heart procedures</label>
+                                          <label>Surgical valve repair/replacement: </label>
+                                          <select id="svr" name="svr" class="w-full p-2 border border-gray-300 rounded-md">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>
+                                          </select>
+										                      <label>Transcatheter valve intervention (TAVI / MitraClip / other): </label>
+                                          <select id="tavi" name="tavi" class="w-full p-2 border border-gray-300 rounded-md">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>
+                                          </select>
+
+                                          <label for="septalmyectomy" class="block font-medium text-gray-700">Septal myectomy:</label>
+                                          <select id="septal-myectomy-2" name="septal-myectomy-2" class="w-full p-2 border border-gray-300 rounded-md" onchange="toggleSeptal()">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>
+                                          </select>
+
+                                          <div id="septal-yes-container" class="form-group mb-4" style="display: none;">
+                                          <label for="myectomy-year" class="block font-medium text-gray-700">Please specify the year:</label>
+                                          <input type="text" id="myectomy-year" name="myectomy-year" class="w-full p-2 border border-gray-300 rounded-md" placeholder="Enter the year">
+                                         </div>
+                                      </div>
+                                         
+                                        <div class="form-group mb-4">
+                                          <label for="rhytm-and-device-procedures" class="text-2xl font-semibold">C.	Rhythm and device procedures</label>
+                                          <label for="cardiac-pacemakers" class="block font-medium text-gray-700">Cardiac pacemaker implantation:</label>
+                                          <select id="cardiac-pacemaker" name="cardiac-pacemaker" class="w-full p-2 border border-gray-300 rounded-md" onchange="togglePacemaker()">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>
+                                          </select>
+
+                                          <div id="cardiac-pacemaker-yes-container" class="form-group mb-4" style="display: none;">
+                                          <label for="cardiac-pacemaker-year" class="block font-medium text-gray-700">Please specify the year:</label>
+                                          <input type="text" id="cardiac-pacemaker-year" name="cardiac-pacemaker-year" class="w-full p-2 border border-gray-300 rounded-md" placeholder="Enter the year">
+                                         </div>
+                                         
+                                          <label for="cardiacicd" class="block font-medium text-gray-700">Implantable cardioverter defibrillator (ICD):</label>
+                                          <select id="cardiac-icd" name="cardiac-icd" class="w-full p-2 border border-gray-300 rounded-md" onchange="toggleCardiacICD()">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>
+                                          </select>
+
+                                          <div id="cardiac-icd-yes-container" class="form-group mb-4" style="display: none;">
+                                          <label for="cardiac-icd-year" class="block font-medium text-gray-700">Please specify the year:</label>
+                                          <input type="text" id="cardiac-icd-year" name="cardiac-icd-year" class="w-full p-2 border border-gray-300 rounded-md" placeholder="Enter the year">
+                                         </div>
+
+                                         <label for="cardiaccrt" class="block font-medium text-gray-700">Cardiac resynchronization therapy (CRT-P / CRT-D):</label>
+                                          <select id="cardiac-crt" name="cardiac-crt" class="w-full p-2 border border-gray-300 rounded-md" onchange="toggleCardiacCRT()">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>
+                                          </select>
+
+                                          <div id="cardiac-crt-yes-container" class="form-group mb-4" style="display: none;">
+                                          <label for="cardiac-crt-year" class="block font-medium text-gray-700">Please specify the year:</label>
+                                          <input type="text" id="cardiac-crt-year" name="cardiac-crt-year" class="w-full p-2 border border-gray-300 rounded-md" placeholder="Enter the year">
+                                         </div>
+
+                                         <label for="cardiac-ablation" class="block font-medium text-gray-700">Catheter ablation (e.g. for AF):</label>
+                                          <select id="cardiac-catheter-ablation" name="cardiac-catheter-ablation" class="w-full p-2 border border-gray-300 rounded-md" onchange="toggleCardiacCatheter()">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>
+                                          </select>
+
+                                          <div id="cardiac-catheter-ablation-yes-container" class="form-group mb-4" style="display: none;">
+                                          <label for="cardiac-catheter-ablation-year" class="block font-medium text-gray-700">Please specify the year:</label>
+                                          <input type="text" id="cardiac-catheter-ablation-year" name="cardiac-catheter-ablation-year" class="w-full p-2 border border-gray-300 rounded-md" placeholder="Enter the year">
+                                         </div>
+
+                                         <label for="cardiacmaze-procedure" class="block font-medium text-gray-700">Maze procedure (surgical AF ablation):</label>
+                                          <select id="cardiac-maze-procedure" name="cardiac-maze-procedure" class="w-full p-2 border border-gray-300 rounded-md" onchange="toggleCardiacMazeProcedure()">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>
+                                          </select>
+
+                                          <div id="cardiac-maze-procedure-yes-container" class="form-group mb-4" style="display: none;">
+                                          <label for="cardiac-maze-procedure-year" class="block font-medium text-gray-700">Please specify the year:</label>
+                                          <input type="text" id="cardiac-maze-procedure-year" name="cardiac-maze-procedure-year" class="w-full p-2 border border-gray-300 rounded-md" placeholder="Enter the year">
+                                         </div>                                         
+                              </div>
+                          </div>
+  
+                              <div class="form-column">
+                                                                    
+                                        <div class="form-group mb-4">
+                                          <label for="advance-heart-failure" class="text-2xl font-semibold">D.	Advanced heart failure / pulmonary vascular surgery</label>
+                                          <label for="lvadimplementation" class="block font-medium text-gray-700">LV assist device (LVAD) implantation:</label>
+                                          <select id="lvad-implementation" name="lvad-implementation" class="w-full p-2 border border-gray-300 rounded-md" onchange="toggleLvad()">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>
+                                          </select>
+
+                                          <div id="lvad-implementation-yes-container" class="form-group mb-4" style="display: none;">
+                                          <label for="lvad-implementation-year" class="block font-medium text-gray-700">Please specify the year:</label>
+                                          <input type="text" id="lvad-implementation-year" name="lvad-implementation-year" class="w-full p-2 border border-gray-300 rounded-md" placeholder="Enter the year">
+                                         </div>
+                                         
+                                          <label for="hearttransplant" class="block font-medium text-gray-700">Heart Transplant:</label>
+                                          <select id="heart-transplant" name="heart-transplant" class="w-full p-2 border border-gray-300 rounded-md" onchange="toggleHeartTransplant()">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>
+                                          </select>
+
+                                          <div id="heart-transplant-yes-container" class="form-group mb-4" style="display: none;">
+                                          <label for="heart-transplant-year" class="block font-medium text-gray-700">Please specify the year:</label>
+                                          <input type="text" id="heart-transplant-year" name="heart-transplant-year" class="w-full p-2 border border-gray-300 rounded-md" placeholder="Enter the year">
+                                         </div>
+
+                                         <label for="pulmonarythromboendarterectomy" class="block font-medium text-gray-700">Pulmonary thromboendarterectomy:</label>
+                                          <select id="pulmonary-thromboendarterectomy" name="pulmonary-thromboendarterectomy" class="w-full p-2 border border-gray-300 rounded-md" onchange="togglePulmonaryThromboendarterectomy()">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>
+                                          </select>
+
+                                          <div id="pulmonary-thromboendarterectomy-yes-container" class="form-group mb-4" style="display: none;">
+                                          <label for="pulmonary-thromboendarterectomy-year" class="block font-medium text-gray-700">Please specify the year:</label>
+                                          <input type="text" id="pulmonary-thromboendarterectomy-year" name="pulmonary-thromboendarterectomy-year" class="w-full p-2 border border-gray-300 rounded-md" placeholder="Enter the year">
+                                         </div>
+                                        </div>
+                                   
+                                         <div class="form-group mb-4">
+                                          <label for="other-surgeries" class="text-2xl font-semibold">E.	Other major surgeries</label>
+                                          <label for="aorticaneurysm" class="block font-medium text-gray-700">Aortic aneurysm / aortic surgery:</label>
+                                          <select id="aortic-aneurysm" name="aortic-aneurysm" class="w-full p-2 border border-gray-300 rounded-md" onchange="toggleAorticAneurysm()">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>
+                                          </select>
+
+                                          <div id="aortic-aneurysm-yes-container" class="form-group mb-4" style="display: none;">
+                                          <label for="aortic-aneurysm-year" class="block font-medium text-gray-700">Please specify the year:</label>
+                                          <input type="text" id="aortic-aneurysm-year" name="aortic-aneurysm-year" class="w-full p-2 border border-gray-300 rounded-md" placeholder="Enter the year">
+                                         </div>
+                                         
+                                          <label for="thoracicsurgery" class="block font-medium text-gray-700">Other major thoracic surgery (e.g. lung cancer surgery):</label>
+                                          <select id="thoracic-surgery" name="thoracic-surgery" class="w-full p-2 border border-gray-300 rounded-md" onchange="toggleThoracicSurgery()">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>
+                                          </select>
+
+                                          <div id="thoracic-surgery-yes-container" class="form-group mb-4" style="display: none;">
+                                          <label for="thoracic-surgery-year" class="block font-medium text-gray-700">Please specify the year:</label>
+                                          <input type="text" id="thoracic-surgery-year" name="thoracic-surgery-year" class="w-full p-2 border border-gray-300 rounded-md" placeholder="Enter the year">
+                                         </div>
+
+                                         <label for="abdominalsurgeries" class="block font-medium text-gray-700">Major abdominal surgery:</label>
+                                          <select id="abdominal-surgeries" name="abdominal-surgeries" class="w-full p-2 border border-gray-300 rounded-md" onchange="toggleAbdominalSurgeries()">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>
+                                          </select>
+
+                                          <div id="abdominal-surgeries-yes-container" class="form-group mb-4" style="display: none;">
+                                          <label for="abdominal-surgeries-year" class="block font-medium text-gray-700">Please specify the year:</label>
+                                          <input type="text" id="abdominal-surgeries-year" name="abdominal-surgeries-year" class="w-full p-2 border border-gray-300 rounded-md" placeholder="Enter the year">
+                                         </div>
+                                  </div>
+
+
+                                <div class="form-group mb-4">
+                                        <label for="free-summary" class="text-2xl font-semibold">Summary</label>
+                                        <textarea id="summary1" name="summary1" class="w-full p-2 border border-gray-300 rounded-md" rows="4"></textarea>
+                                  </div>
+
+                              </div>
+                          </div>
+                      </div>
+
+                      
+                          <!-- Page 5 -->
+                          <div class="form-page hidden" id="page5">
+  
+                              <div class="text-2xl font-semibold mb-1" style="color: chocolate; margin-bottom: 1.5rem;">Current Medications:</div>
+                              <div class="form-columns">
+                                  <div class="form-column">
+  
+                                      <div class="form-group mb-4">
+                                          <label for="bp-hf" class="text-2xl font-semibold">A. Blood pressure / heart failure / anti-anginal</label>
+                                          <label for="ace-inhibitor" class="block font-medium text-gray-700">ACE inhibitors (e.g. lisinopril, ramipril, enalapril):</label>
+                                          <select id="ace-inhibitors" name="ace-inhibitors" class="w-full p-2 border border-gray-300 rounded-md" onchange="toggleAce()">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>
+                                          </select>
+
+                                          <div id="ace-inhibitors-yes-container" class="form-group mb-4" style="display: none;">
+                                          <label for="ace-inhibitors-drugs" class="block font-medium text-gray-700">Please specify the drugs and dose:</label>
+                                          <input type="text" id="ace-inhibitors-drugs" name="ace-inhibitors-drugs" class="w-full p-2 border border-gray-300 rounded-md" placeholder="Enter the drugs and dose">
+                                         </div>
+
+                                        <label for="arbs2" class="block font-medium text-gray-700">Angiotensin II receptor blockers (ARBs):</label>
+                                          <select id="arbs-2" name="arbs-2" class="w-full p-2 border border-gray-300 rounded-md" onchange="toggleArbs()">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>
+                                          </select>
+
+                                          <div id="arb-yes-container" class="form-group mb-4" style="display: none;">
+                                          <label for="arb-drugs" class="block font-medium text-gray-700">Please specify the drugs and dose:</label>
+                                          <input type="text" id="arb-drugs" name="arb-drugs" class="w-full p-2 border border-gray-300 rounded-md" placeholder="Enter the drugs and dose">
+                                         </div>
+
+                                        <label for="beta-blocker" class="block font-medium text-gray-700">Beta-blockers (e.g. metoprolol, bisoprolol, atenolol, carvedilol):</label>
+                                          <select id="beta-blockers" name="beta-blockers" class="w-full p-2 border border-gray-300 rounded-md" onchange="toggleBetaBlockers()">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>
+                                          </select>
+
+                                          <div id="beta-blockers-yes-container" class="form-group mb-4" style="display: none;">
+                                          <label for="beta-blockers-drugs" class="block font-medium text-gray-700">Please specify the drugs and dose:</label>
+                                          <input type="text" id="beta-blockers-drugs" name="beta-blockers-drugs" class="w-full p-2 border border-gray-300 rounded-md" placeholder="Enter the drugs and dose">
+                                         </div>
+
+                                        <label for="calciumchannel-blockers" class="block font-medium text-gray-700">Calcium channel blockers(e.g. amlodipine, diltiazem, verapamil):</label>
+                                          <select id="calcium-channel-blockers" name="calcium-channel-blockers" class="w-full p-2 border border-gray-300 rounded-md" onchange="toggleCalciumblocker()">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>
+                                          </select>
+
+                                          <div id="calcium-channel-blockers-yes-container" class="form-group mb-4" style="display: none;">
+                                          <label for="calcium-channel-blockers-drugs" class="block font-medium text-gray-700">Please specify the drugs and dose:</label>
+                                          <input type="text" id="calcium-channel-blockers-drugs" name="calcium-channel-blockers-drugs" class="w-full p-2 border border-gray-300 rounded-md" placeholder="Enter the drugs and dose">
+                                         </div>
+
+                                        <label for="diuretics-tablet" class="block font-medium text-gray-700">Diuretics (water tablets)(e.g. furosemide, torasemide, hydrochlorothiazide, spironolactone):</label>
+                                          <select id="diuretics-tablets" name="diuretics-tablets" class="w-full p-2 border border-gray-300 rounded-md" onchange="toggleDiuretics()">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>
+                                          </select>
+
+                                          <div id="diuretics-yes-container" class="form-group mb-4" style="display: none;">
+                                          <label for="diuretics-tablets-drugs" class="block font-medium text-gray-700">Please specify the drugs and dose:</label>
+                                          <input type="text" id="diuretics-tablets-drugs" name="diuretics-tablets-drugs" class="w-full p-2 border border-gray-300 rounded-md" placeholder="Enter the drugs and dose">
+                                         </div>
+                                         
+                                        <label for="other-heart-failure-medication" class="block font-medium text-gray-700">Other heart failure medications(e.g. ARNI / sacubitril-valsartan, SGLT2-inhibitors, digoxin):</label>
+                                          <select id="other-heart-failure-medications" name="other-heart-failure-medications" class="w-full p-2 border border-gray-300 rounded-md" onchange="toggleOtherHeartFailureMedications()">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>
+                                          </select>
+
+                                          <div id="other-heart-failure-medications-yes-container" class="form-group mb-4" style="display: none;">
+                                          <label for="other-heart-failure-medications-drugs" class="block font-medium text-gray-700">Please specify the drugs and dose:</label>
+                                          <input type="text" id="other-heart-failure-medications-drugs" name="other-heart-failure-medications-drugs" class="w-full p-2 border border-gray-300 rounded-md" placeholder="Enter the drugs and dose">
+                                         </div>
+                                         
+                                        <label for="nitrate" class="block font-medium text-gray-700">Nitrates / anti-anginal medication(e.g. nitroglycerin spray, isosorbide mononitrate, ranolazine):</label>
+                                          <select id="nitrates" name="nitrates" class="w-full p-2 border border-gray-300 rounded-md" onchange="toggleNitrates()">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>
+                                          </select>
+
+                                          <div id="nitrates-yes-container" class="form-group mb-4" style="display: none;">
+                                          <label for="nitrates-drugs" class="block font-medium text-gray-700">Please specify the drugs and dose:</label>
+                                          <input type="text" id="nitrates-drugs" name="nitrates-drugs" class="w-full p-2 border border-gray-300 rounded-md" placeholder="Enter the drugs and dose">
+                                         </div>
+                                  </div>
+
+                                  <div class="form-group mb-4">
+                                          <label for="rhythm" class="text-2xl font-semibold">B. Rhythm / antiarrhythmic medication</label>
+                                          <label for="antiarryhthmic-drug" class="block font-medium text-gray-700">Antiarrhythmic drugs (other than beta-blockers)(e.g. amiodarone, sotalol, flecainide, propafenone):</label>
+                                          <select id="antiarryhthmic-drugs" name="antiarryhthmic-drugs" class="w-full p-2 border border-gray-300 rounded-md" onchange="toggleAntiArrhythmicDrugs()">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>
+                                          </select>
+
+                                          <div id="antiarryhthmic-drugs-yes-container" class="form-group mb-4" style="display: none;">
+                                          <label for="antiarryhthmic-drugs-drugs" class="block font-medium text-gray-700">Please specify the drugs and dose:</label>
+                                          <input type="text" id="antiarryhthmic-drugs-drugs" name="antiarryhthmic-drugs-drugs" class="w-full p-2 border border-gray-300 rounded-md" placeholder="Enter the drugs and dose">
+                                         </div>
+                                  </div>
+                                       
+                                        <div class="form-group mb-4">
+                                          <label for="blood-thinners" class="text-2xl font-semibold">C. Blood thinners & antiplatelet medication</label>
+                                          <label for="antiplateletmedication" class="block font-medium text-gray-700">Antiplatelet medication(e.g. aspirin, clopidogrel, ticagrelor, prasugrel):</label>
+                                          <select id="antiplatelet-medication" name="antiplatelet-medication" class="w-full p-2 border border-gray-300 rounded-md" onchange="toggleAntiPlateletMedication()">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>
+                                          </select>
+
+                                          <div id="antiplatelet-medication-yes-container" class="form-group mb-4" style="display: none;">
+                                          <label for="antiplatelet-medication-drugs" class="block font-medium text-gray-700">Please specify the drugs and dose:</label>
+                                          <input type="text" id="antiplatelet-medication-drugs" name="antiplatelet-medication-drugs" class="w-full p-2 border border-gray-300 rounded-md" placeholder="Enter the drugs and dose">
+                                         </div>
+
+                                          <label for="oral-anticoagulant" class="block font-medium text-gray-700">Oral anticoagulants (blood thinners)(e.g. warfarin/phenprocoumon, dabigatran, rivaroxaban, apixaban, edoxa-ban):</label>
+                                          <select id="oral-anticoagulants" name="oral-anticoagulants" class="w-full p-2 border border-gray-300 rounded-md" onchange="toggleOralAnticoagulants()">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>
+                                          </select>
+
+                                          <div id="oral-anticoagulants-yes-container" class="form-group mb-4" style="display: none;">
+                                          <label for="oral-anticoagulants-drugs" class="block font-medium text-gray-700">Please specify the drugs and dose:</label>
+                                          <input type="text" id="oral-anticoagulants-drugs" name="oral-anticoagulants-drugs" class="w-full p-2 border border-gray-300 rounded-md" placeholder="Enter the drugs and dose">
+                                         </div>
+                                </div>
+                              </div>
+
+                                  <!-----------page5----------->
+                                  <div class="form-column">   
+                                      <div class="form-group mb-4">
+                                          <label for="cholesterols" class="text-2xl font-semibold">D. Cholesterol / lipid-lowering medication</label>
+                                          <label for="statin" class="block font-medium text-gray-700">Statins(e.g. atorvastatin, simvastatin, rosuvastatin):</label>
+                                          <select id="statins" name="statins" class="w-full p-2 border border-gray-300 rounded-md" onchange="toggleStatins()">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>
+                                          </select>
+
+                                          <div id="statins-yes-container" class="form-group mb-4" style="display: none;">
+                                          <label for="statins-drugs" class="block font-medium text-gray-700">Please specify the drugs and dose:</label>
+                                          <input type="text" id="statins-drugs" name="statins-drugs" class="w-full p-2 border border-gray-300 rounded-md" placeholder="Enter the drugs and dose">
+                                         </div>
+
+                                          <label for="other-lipid-lowering-drug" class="block font-medium text-gray-700">Other lipid-lowering drugs(e.g. ezetimibe, fibrates, PCSK9-inhibitors, bile acid sequestrants):</label>
+                                          <select id="other-lipid-lowering-drugs" name="other-lipid-lowering-drugs" class="w-full p-2 border border-gray-300 rounded-md" onchange="toggleOtherLipidLoweringDrugs()">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>
+                                          </select>
+
+                                          <div id="other-lipid-lowering-drugs-yes-container" class="form-group mb-4" style="display: none;">
+                                          <label for="other-lipid-lowering-drugs-drugs" class="block font-medium text-gray-700">Please specify the drugs and dose:</label>
+                                          <input type="text" id="other-lipid-lowering-drugs-drugs" name="other-lipid-lowering-drugs-drugs" class="w-full p-2 border border-gray-300 rounded-md" placeholder="Enter the drugs and dose">
+                                         </div>
+                                  </div>
+              
+                                      <div class="form-group mb-4">
+                                          <label for="metabolic" class="text-2xl font-semibold">E. Metabolic / endocrine medication</label>
+                                          <label for="medication-for-diabete" class="block font-medium text-gray-700">Medication for diabetes(e.g. metformin, insulin, GLP-1 agonists, SGLT2-inhibitors):</label>
+                                          <select id="medication-for-diabetes" name="medication-for-diabetes" class="w-full p-2 border border-gray-300 rounded-md" onchange="toggleMedicationForDiabetes()">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>
+                                          </select>
+
+                                          <div id="medication-for-diabetes-yes-container" class="form-group mb-4" style="display: none;">
+                                          <label for="medication-for-diabetes-drugs" class="block font-medium text-gray-700">Please specify the drugs and dose:</label>
+                                          <input type="text" id="medication-for-diabetes-drugs" name="medication-for-diabetes-drugs" class="w-full p-2 border border-gray-300 rounded-md" placeholder="Enter the drugs and dose">
+                                         </div>
+
+                                          <label for="medicationthyroid" class="block font-medium text-gray-700">Medication for thyroid disease(e.g. levothyroxine, thyreostatics):</label>
+                                          <select id="medication-thyroid" name="medication-thyroid" class="w-full p-2 border border-gray-300 rounded-md" onchange="toggleMedicationThyroid()">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>
+                                          </select>
+
+                                          <div id="medication-thyroid-yes-container" class="form-group mb-4" style="display: none;">
+                                          <label for="medication-thyroid-drugs" class="block font-medium text-gray-700">Please specify the drugs and dose:</label>
+                                          <input type="text" id="medication-thyroid-drugs" name="medication-thyroid-drugs" class="w-full p-2 border border-gray-300 rounded-md" placeholder="Enter the drugs and dose">
+                                         </div>
+                                 </div>
+
+                                      <div class="form-group mb-4">
+                                          <label for="psychiatric-medication" class="text-2xl font-semibold">F. Psychiatric medication</label>
+                                          <label for="medication-antidepressant" class="block font-medium text-gray-700">Antidepressants (SSRIs, SNRIs, TCAs, others)(e.g. sertraline, escitalopram, citalopram, venlafaxine, amitriptyline, mirtazap-ine, bupropion):</label>
+                                          <select id="medication-for-antidepressant" name="medication-for-antidepressant" class="w-full p-2 border border-gray-300 rounded-md" onchange="toggleMedicationAntidepressant()">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>
+                                          </select>
+
+                                          <div id="medication-for-antidepressant-yes-container" class="form-group mb-4" style="display: none;">
+                                          <label for="medication-for-antidepressant-drugs" class="block font-medium text-gray-700">Please specify the drugs and dose:</label>
+                                          <input type="text" id="medication-for-antidepressant-drugs" name="medication-for-antidepressant-drugs" class="w-full p-2 border border-gray-300 rounded-md" placeholder="Enter the drugs and dose">
+                                         </div>
+
+                                          <label for="antianxiety" class="block font-medium text-gray-700">Anti-anxiety / tranquilizers(e.g. benzodiazepines or others):</label>
+                                          <select id="anti-anxiety" name="anti-anxiety" class="w-full p-2 border border-gray-300 rounded-md" onchange="toggleAntiAnxiety()">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>
+                                          </select>
+
+                                          <div id="anti-anxiety-yes-container" class="form-group mb-4" style="display: none;">
+                                          <label for="anti-anxiety-drugs" class="block font-medium text-gray-700">Please specify the drugs and dose:</label>
+                                          <input type="text" id="anti-anxiety-drugs" name="anti-anxiety-drugs" class="w-full p-2 border border-gray-300 rounded-md" placeholder="Enter the drugs and dose">
+                                         </div>
+                                </div>
+
+              
+                                      <div class="form-group mb-4">
+                                          <label for="other-medications" class="text-2xl font-semibold">G. Other important medication</label>
+                                          <label for="other-medications" class="block font-medium text-gray-700">Any other regular medication that might affect the heart, blood pressure, kidneys, or liver:</label>
+                                          <input type="text" id="other-medication" name="other-medication">
+                                     </div>
+
+                         </div>
+                      </div>
+                  </div>
+                    
+                          <!-- Page 6 -->
+                          <div class="form-page hidden" id="page6">                                
+                              <div class="text-2xl font-semibold mb-1" style="color: chocolate; margin-bottom: 1.5rem;">Patient Last Cardio Evaluation:</div>
+                              <div class="form-columns">
+                                  <div class="form-column">
+                                                                        
+                                      <div class="form-group mb-4">
+                                          <label for="timing-and-type" class="text-2xl font-semibold">A. Timing & Type of Last Evaluation</label>
+                                          <label for="timing-and-type" class="block font-medium text-gray-700">Time since last evaluation:</label>
+                                          <input type="text" id="timing-and-type-input" name="timing-and-type-input" class="w-full p-2 border border-gray-300 rounded-md" placeholder="Enter the time since last evaluation (e.g. 2 months)">
+                                     </div>
+                                     
+                                      <div class="form-group mb-4">
+                                          <label for="blood-pressure" class="text-2xl font-semibold">B. Heart Failure & Ischemia Summary</label>
+                                          <label>Heart failure phenotype based on last diagnostic: </label>
+                                          <select id="failure-phenotype" name="failure-phenotype" class="w-full p-2 border border-gray-300 rounded-md">
+                                              <option value="n.A">-</option>
+                                              <option value="No">No Heart Failure</option>
+                                              <option value="HFpEF">HFpEF</option>
+                                              <option value="HFmrEF">HFmrEF</option>
+                                              <option value="HFrEF">HFrEF</option>
+                                          </select>
+
+                                          <label>Clinical ischemia present (angina / ischemia on test):</label>
+                                          <select id="clinical-ischemia" name="clinical-ischemia" class="w-full p-2 border border-gray-300 rounded-md">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>                                              
+                                              <option value="Not Assessed">Not Assessed</option>
+                                          </select>
+
+                                          <label>Prior myocardial infarction (based on history / imaging):</label>
+                                          <select id="prior-myocardial" name="prior-myocardial" class="w-full p-2 border border-gray-300 rounded-md">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>                          
+                                              <option value="Not Assessed">Not Assessed</option>
+                                          </select>
+                                          
+                                          <label>Coronary artery disease (obstructive CAD, prior PCI/CABG):</label>
+                                          <select id="coronary-artery-disease" name="coronary-artery-disease" class="w-full p-2 border border-gray-300 rounded-md">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>                          
+                                              <option value="Not Assessed">Not Assessed</option>
+                                          </select>
+                                      </div>
+                                     
+                                      <div class="form-group mb-4">
+                                          <label for="blood-pressure" class="text-2xl font-semibold">C. Key Clinical Signs & Hemodynamics (at last evaluation)</label>
+                                          <label>Hypotension (clinically relevant): </label>
+                                          <select id="hypotension" name="hypotension" class="w-full p-2 border border-gray-300 rounded-md">
+                                              <option value="n.A">-</option>
+                                              <option value="No">No</option>
+                                              <option value="Yes">Yes</option>                        
+                                          </select>
+
+                                          <label>Pulmonary congestion (clinical or imaging):</label>
+                                          <select id="pulmonary-congestion" name="pulmonary-congestion" class="w-full p-2 border border-gray-300 rounded-md">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>                    
+                                          </select>
+
+                                          <label>Pleural effusion:</label>
+                                          <select id="pleural-effusion" name="pleural-effusion" class="w-full p-2 border border-gray-300 rounded-md">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>                    
+                                          </select>
+                                          
+                                          <label>Jugular venous distension:</label>
+                                          <select id="jugular-venous-distension" name="jugular-venous-distension" class="w-full p-2 border border-gray-300 rounded-md">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>                    
+                                          </select>
+                                      </div>
+
+                                          <div class="form-group mb-4">
+                                          <label for="catheter" class="text-2xl font-semibold">D. Catheter / Hemodynamic Measurements</label>
+                                          <label for="global-hemodynamics" class="text-2xl font-semibold">Global hemodynamics</label>
+                                          
+                                          <label for="cardiacindex" class="block font-medium text-gray-700">Cardiac Index (CI):</label>
+                                          <div class="flex items-center gap-4">
+                                            <input type="number" id="cardiac-index" name="cardiac-index" placeholder="L/min/m²" class="w-24">
+                                            <label class="flex items-center"> <input type="checkbox" name="cardiac-index-not-measured" class="mr-2"> Not Measured </label>
+                                          </div>
+
+                                          <label for="systemicvascular-resistance" class="block font-medium text-gray-700">Systemic vascular resistance (SVR):</label>
+                                          <div class="flex items-center gap-4">
+                                            <input type="number" id="systemic-vascular-resistance" name="systemic-vascular-resistance" placeholder=" dynes·s·cm⁻⁵" class="w-24">
+                                            <label class="flex items-center"> <input type="checkbox" name="systemic-vascular-resistance-not-measured" class="mr-2"> Not Measured </label>
+                                          </div>
+
+                                          <label for="pressures" class="text-2xl font-semibold">Pressures</label>
+
+                                          <label for="rightatrial-pressure" class="block font-medium text-gray-700">Right atrial pressure (mean):</label>
+                                          <div class="flex items-center gap-4">
+                                            <input type="number" id="right-atrial-pressure" name="right-atrial-pressure" placeholder=" mmHg" class="w-24">
+                                            <label class="flex items-center"> <input type="checkbox" name="right-atrial-pressure-not-measured" class="mr-2"> Not Measured </label>
+                                          </div>
+
+                                          <label for="rightventricular-pressure" class="block font-medium text-gray-700">Right ventricular pressure (systolic / diastolic):</label>
+                                          <div class="flex items-center gap-4">
+                                            <input type="number" id="right-ventricular-pressure" name="right-ventricular-pressure" placeholder=" mmHg" class="w-24">
+                                            <label class="flex items-center"> <input type="checkbox" name="right-ventricular-pressure-not-measured" class="mr-2"> Not Measured </label>
+                                          </div>
+
+                                          <label for="pulmonaryartery-pressure" class="block font-medium text-gray-700">Pulmonary artery pressure (systolic / diastolic / mean):</label>
+                                          <div class="flex items-center gap-4">
+                                            <input type="number" id="pulmonary-artery-pressure" name="pulmonary-artery-pressure" placeholder=" mmHg" class="w-24">
+                                            <label class="flex items-center"> <input type="checkbox" name="pulmonary-artery-pressure-not-measured" class="mr-2"> Not Measured </label>
+                                          </div>
+
+                                          <label for="pulmonarycapillary-wedge-pressure" class="block font-medium text-gray-700">Pulmonary capillary wedge pressure (PCWP):</label>
+                                          <div class="flex items-center gap-4">
+                                            <input type="number" id="pulmonary-capillary-wedge-pressure" name="pulmonary-capillary-wedge-pressure" placeholder=" mmHg" class="w-24">
+                                            <label class="flex items-center"> <input type="checkbox" name="pulmonary-capillary-wedge-pressure-not-measured" class="mr-2"> Not Measured </label>
+                                          </div>
+
+
+                                          <label for="aorticpressure-during-cath" class="block font-medium text-gray-700">Aortic pressure during cath (systolic / diastolic / mean):</label>
+                                          <div class="flex items-center gap-4">
+                                            <input type="number" id="aortic-pressure-during-cath" name="aortic-pressure-during-cath" placeholder=" mmHg" class="w-24">
+                                            <label class="flex items-center"> <input type="checkbox" name="aortic-pressure-during-cath-not-measured" class="mr-2"> Not Measured </label>
+                                          </div>
+
+                                          <label for="pulmonary-circulation" class="text-2xl font-semibold">Pulmonary circulation </label>
+                                          <label for="pulmonaryvascular-resistance" class="block font-medium text-gray-700">Pulmonary vascular resistance (PVR):</label>
+                                          <div class="flex items-center gap-4">
+                                            <input type="number" id="pulmonary-vascular-resistance" name="pulmonary-vascular-resistance" placeholder="Wood units" class="w-24">
+                                            <label class="flex items-center"> <input type="checkbox" name="pulmonary-vascular-resistance-not-measured" class="mr-2"> Not Measured </label>
+                                          </div>
+
+                                          <label for="pulmonaryhypertension-catheter" class="block font-medium text-gray-700">Pulmonary hypertension based on catheter data:</label>
+                                          <select id="pulmonary-hypertension-catheter" name="pulmonary-hypertension-catheter" class="w-full p-2 border border-gray-300 rounded-md">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>                          
+                                              <option value="Not Assessed">Not Assessed</option>
+                                          </select>
+                                      </div>
+
+                                      
+                                          <div class="form-group mb-4">
+                                          <label for="catheter" class="text-2xl font-semibold">E. Laboratory Results - Cardiac Biomarkers</label>
+                                          <label for="troponini" class="block font-medium text-gray-700">Troponin I (cTnI):</label>
+                                          <input type="number" id="troponin-i" name="troponin-i" placeholder="ng/mL" step="0.1">
+
+                                          <label for="troponint" class="block font-medium text-gray-700">Troponin T (cTnT):</label>
+                                          <input type="number" id="troponin-t" name="troponin-t" placeholder="ng/mL" step="0.1">
+
+                                          <label for="ntprobnp" class="block font-medium text-gray-700">NT-proBNP:</label>
+                                          <input type="number" id="nt-probnp" name="nt-probnp" placeholder="ng/mL" step="0.1">
+
+                                          <label for="b_n_p" class="block font-medium text-gray-700">BNP:</label>
+                                            <div class="flex items-center gap-4">
+                                            <input type="number" id="bnp" name="bnp" placeholder="pg/mL" class="w-24">
+                                            <label class="flex items-center"> <input type="checkbox" name="bnp-not-measured" class="mr-2"> Not Measured </label>
+                                          </div>
+
+                                          <label for="ckmb" class="block font-medium text-gray-700">CK-MB:</label>
+                                          <div class="flex items-center gap-4">
+                                            <input type="number" id="ck-mb" name="ck-mb" placeholder="units" class="w-24">
+                                            <label class="flex items-center"> <input type="checkbox" name="ck-mb-not-measured" class="mr-2"> Not Measured </label>
+                                          </div>
+
+                                          <label for="myoglobins" class="block font-medium text-gray-700">Myoglobin:</label>
+                                          <div class="flex items-center gap-4">
+                                            <input type="number" id="myoglobin" name="myoglobin" placeholder="ng/mL" class="w-24">
+                                            <label class="flex items-center"> <input type="checkbox" name="myoglobin-not-measured" class="mr-2"> Not Measured </label>
+                                          </div>
+
+                                          <label for="l_d_h" class="block font-medium text-gray-700">Lactate dehydrogenase (LDH):</label>
+                                          <div class="flex items-center gap-4">
+                                            <input type="number" id="ldh" name="ldh" placeholder="units" class="w-24">
+                                            <label class="flex items-center"> <input type="checkbox" name="ldh-not-measured" class="mr-2"> Not Measured </label>
+                                          </div>
+                                      </div>
+                               </div>
+
+                                                          
+            <!---------------------------------------------->
+                                  <div class="form-column"> 
+                                    
+                                        <div class="form-group mb-4">
+                                          <label for="Laboratory-result" class="text-2xl font-semibold">F. Laboratory Results - Inflammation, Coagulation & Metabolic</label>
+                                          <label for="c_rp" class="block font-medium text-gray-700">CRP:</label>
+                                          <input type="number" id="crp" name="crp" placeholder="mg/L" step="0.1">
+
+                                          <label for="d_dimer" class="block font-medium text-gray-700">D-Dimer:</label>
+                                          <input type="number" id="ddimer" name="ddimer" placeholder="mg/L" step="0.1">
+
+                                          <label for="homo_cysteine" class="block font-medium text-gray-700">Homocysteine:</label>
+                                          <input type="number" id="homocysteine" name="homocysteine" placeholder="µmol/L" step="0.1">
+
+                                          <label class="block font-medium text-gray-800 mt-4">Lipid profile:</label>
+
+                                            <div class="ml-6">
+                                              <label for="ldl1" class="block font-medium text-gray-700">LDL:</label>
+                                              <input type="number" id="ldl" name="ldl" placeholder="mg/dL" step="0.1">
+
+                                              <label for="hdl1" class="block font-medium text-gray-700">HDL:</label>
+                                              <input type="number" id="hdl" name="hdl" placeholder="mg/dL" step="0.1">
+
+                                              <label for="triglyceride" class="block font-medium text-gray-700">Triglycerides:</label>
+                                              <input type="number" id="triglycerides" name="triglycerides" placeholder="mg/dL" step="0.1">
+                                            </div>
+                                            
+                                          <label class="block font-medium text-gray-800 mt-4">Blood sugar control:</label>
+                                            <div class="ml-6">
+                                              <label for="hba1c_" class="block font-medium text-gray-700">HbA1c:</label>
+                                              <input type="number" id="hba1c" name="hba1c" placeholder="%" step="0.1">
+                                            </div>
+
+                                          <label class="block font-medium text-gray-800 mt-4">Renal function:</label>
+                                            <div class="ml-6">
+                                              <label for="bun_" class="block font-medium text-gray-700">BUN:</label>
+                                              <input type="number" id="bun" name="bun" placeholder="mg/dL" step="0.1">
+
+                                              <label for="creatinine1" class="block font-medium text-gray-700">Creatinine:</label>
+                                              <input type="number" id="creatinine" name="creatinine" placeholder="mg/dL" step="0.1">
+                                            </div>
+                                  </div>
+
+                                        <div class="form-group mb-4">
+                                          <label for="electrolytes" class="text-2xl font-semibold">G. Electrolytes, Acid - Base & Hormones</label>
+                                          <label for="bloodph" class="block font-medium text-gray-700">Blood pH:</label>
+                                          <input type="number" id="blood-ph" name="blood-ph" placeholder="pH" step="0.1">
+
+                                          <label for="ketone" class="block font-medium text-gray-700">Ketones:</label>
+                                          <select id="ketones" name="ketones" class="w-full p-2 border border-gray-300 rounded-md">
+                                              <option value="n.A">-</option>
+                                              <option value="Negative">Negative</option>
+                                              <option value="Positive">Positive</option>              
+                                          </select>
+
+                                          <label class="block font-medium text-gray-800 mt-4">Serum electrolytes:</label>
+                                            <div class="ml-6">
+                                              <label for="sodiums" class="block font-medium text-gray-700">Sodium (Na⁺):</label>
+                                              <input type="number" id="sodium" name="sodium" placeholder="mmol/L" step="0.1">
+
+                                              <label for="potassiums" class="block font-medium text-gray-700">Potassium (K⁺):</label>
+                                              <input type="number" id="potassium" name="potassium" placeholder="mmol/L" step="0.1">
+                                              
+                                              <label for="calciums" class="block font-medium text-gray-700">Calcium (Ca²⁺):</label>
+                                              <div class="flex items-center gap-4">
+                                                <input type="number" id="calcium" name="calcium" placeholder="mmol/L" class="w-24">
+                                                <label class="flex items-center"> <input type="checkbox" name="calcium-not-assessed" class="mr-2"> Not Assessed</label>
+                                              </div>
+
+                                              <label for="magnesiums" class="block font-medium text-gray-700">Magnesium (Mg²⁺):</label>
+                                              <div class="flex items-center gap-4">
+                                                <input type="number" id="magnesium" name="magnesium" placeholder="mmol/L" class="w-24">
+                                                <label class="flex items-center"> <input type="checkbox" name="magnesium-not-assessed" class="mr-2"> Not Assessed</label>
+                                              </div>
+
+                                              <label for="chlorides" class="block font-medium text-gray-700">Chloride (Cl⁻):</label>
+                                              <div class="flex items-center gap-4">
+                                                <input type="number" id="chloride" name="chloride" placeholder="mmol/L" class="w-24">
+                                                <label class="flex items-center"> <input type="checkbox" name="chloride-not-assessed" class="mr-2"> Not Assessed</label>
+                                              </div>
+                                            </div>
+                                            
+                                          <label class="block font-medium text-gray-800 mt-4">Thyroid function (if assessed):</label>
+                                            <div class="ml-6">
+                                              <label for="tsh1" class="block font-medium text-gray-700">TSH:</label>
+                                              <div class="flex items-center gap-4">
+                                                <input type="number" id="tsh" name="tsh" placeholder="mIU/L " class="w-24">
+                                                <label class="flex items-center"> <input type="checkbox" name="tsh-not-assessed" class="mr-2"> Not Assessed</label>
+                                              </div>
+
+                                              <label for="freet3" class="block font-medium text-gray-700">Free T3:</label>
+                                              <div class="flex items-center gap-4">
+                                                <input type="number" id="free-t3" name="free-t3" placeholder="pmol/L" class="w-24">
+                                                <label class="flex items-center"> <input type="checkbox" name="free-t3-not-assessed" class="mr-2"> Not Assessed</label>
+                                              </div>
+
+                                              <label for="freet4" class="block font-medium text-gray-700">Free T4:</label>
+                                              <div class="flex items-center gap-4">
+                                                <input type="number" id="free-t4" name="free-t4" placeholder="pmol/L" class="w-24">
+                                                <label class="flex items-center"> <input type="checkbox" name="free-t4-not-assessed" class="mr-2"> Not Assessed</label>
+                                              </div>
+                                            </div>                                                                                      
+
+                                          <label class="block font-medium text-gray-800 mt-4">Testosterone level (if relevant):</label>
+                                              <div class="flex items-center gap-4">
+                                                <input type="number" id="testosterone" name="testosterone" placeholder="ng/dL" class="w-24">
+                                                <label class="flex items-center"> <input type="checkbox" name="testosterone-not-assessed" class="mr-2"> Not Assessed</label>
+                                              </div>
+                                          
+                                          <label class="block font-medium text-gray-700 mt-4">Iron status (if available):</label>
+                                            <div class="ml-6">
+                                              <label for="ferritin1" class="block font-medium text-gray-700">Ferritin:</label>
+                                              <input type="number" id="ferritin" name="ferritin" placeholder="µg/L" step="0.1">
+
+                                              <label for="transferrinsaturation" class="block font-medium text-gray-700">transferrin saturation:</label>
+                                              <input type="number" id="transferrin-saturation" name="transferrin-saturation" placeholder="%" step="0.1">
+                                            </div>
+                                  </div>
+
+                             </div>
+                          </div>
+                        </div>
+
+                    
+                          <!-- Page 7 -->
+                          <div class="form-page hidden" id="page7">                                
+                              <div class="text-2xl font-semibold mb-1" style="color: chocolate; margin-bottom: 1.5rem;">Patient Last Cardio Evaluation:</div>
+                              <div class="form-columns">
+                                  <div class="form-column">
+
+                                        <div class="form-group mb-4">
+                                          <label for="imaging" class="text-2xl font-semibold">H. Imaging / Structural & Vascular Findings</label>
+                                          <label for="coronaryartery-calcium" class="block font-medium text-gray-700">Coronary artery calcium score:</label>
+                                          <input type="number" id="coronary-artery-calcium" name="coronary-artery-calcium" placeholder="" step="0.1">
+
+                                          <label for="periphralartery" class="block font-medium text-gray-700">Peripheral artery disease (clinical / imaging):</label>
+                                          <select id="periphral-artery" name="periphral-artery" class="w-full p-2 border border-gray-300 rounded-md">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>
+                                              <option value="Not Assessed">Not Assessed</option>              
+                                          </select>
+
+                                          <label class="block font-medium text-gray-700 mt-4">Ankle-Brachial Index (ABI):</label>
+                                            <div class="ml-6">
+                                              <label class="block font-medium text-gray-800 mt-4">Right:</label>
+                                              <div class="flex items-center gap-4">
+                                                <input type="number" id="right-ankle-brachial" name="right-ankle-brachial" placeholder="" step="0.1">
+                                                <label class="flex items-center"> <input type="checkbox" name="right-ankle-brachial-not-assessed" class="mr-2"> Not Assessed</label>
+                                              </div>
+
+                                              <label class="block font-medium text-gray-800 mt-4">Left:</label>
+                                              <div class="flex items-center gap-4">
+                                                <input type="number" id="left-ankle-brachial" name="left-ankle-brachial" placeholder="" step="0.1">
+                                                <label class="flex items-center"> <input type="checkbox" name="left-ankle-brachial-not-assessed" class="mr-2"> Not Assessed</label>
+                                              </div>
+											  
+                                            </div>
+										</div>
+
+                                        <div class="form-group mb-4">
+                                          <label for="other-major-structural" class="text-2xl font-semibold">Other major structural diagnoses:</label>
+
+                                          <label for="aaad" class="block font-medium text-gray-700">Aortic aneurysm / aortic dissection:</label>
+                                          <select id="aa-ad" name="aa-ad" class="w-full p-2 border border-gray-300 rounded-md">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>            
+                                          </select>
+                                          
+                                          <label for="chd1" class="block font-medium text-gray-700">Congenital heart disease:</label>
+                                          <select id="chd" name="chd" class="w-full p-2 border border-gray-300 rounded-md">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>            
+                                          </select>
+
+                                          <label for="endocarditis" class="block font-medium text-gray-700">Endocarditis:</label>
+                                          <select id="endocarditis1" name="endocarditis1" class="w-full p-2 border border-gray-300 rounded-md">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>            
+                                          </select>
+
+                                          <label for="myocarditis" class="block font-medium text-gray-700">Myocarditis:</label>
+                                          <select id="myocarditis1" name="myocarditis1" class="w-full p-2 border border-gray-300 rounded-md">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>            
+                                          </select>
+
+                                          <label for="pericarditis" class="block font-medium text-gray-700">Pericarditis / pericardial effusion / constrictive pericarditis:</label>
+                                          <select id="pericarditis1" name="pericarditis1" class="w-full p-2 border border-gray-300 rounded-md">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>            
+                                          </select>
+                                    </div>
+                   </div>
+                     
+                     <!------------------ 2nd column ---------------------------->
+                                  <div class="form-column">
+
+                                        <div class="form-group mb-4">
+                                          <label for="valvular-heart-disease" class="text-2xl font-semibold">I. Valvular Heart Disease</label>
+                                          <label for="valvular-disease" class="text-2xl font-semibold">Valvular disease (clinically relevant)</label>
+
+                                          <label for="txt" class="block font-medium text-gray-700">For each valve, mark presence and dominant lesion:</label>
+                                          <label for="aortic-valve" class="block font-medium text-gray-700">Aortic valve</label>
+                                          <label for="diseasepresent" class="block font-medium text-gray-700">Disease present:</label>
+                                          <select id="disease-present" name="disease-present" class="w-full p-2 border border-gray-300 rounded-md" onchange="toggleDiseasePresent()">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>
+                                          </select>
+
+                                          <div id="disease-present-yes-container" class="form-group mb-4" style="display: none;">
+                                          <label for="disease-present-result" class="block font-medium text-gray-700">If yes:</label>
+                                          <select id="disease-present-result" name="disease-present-result" class="w-full p-2 border border-gray-300 rounded-md">
+                                              <option value="n.A">-</option>
+                                              <option value="Stenosis">Stenosis</option>
+                                              <option value="Regurgitation">Regurgitation</option>
+                                              <option value="Mixed / Other">Mixed / Other</option>
+                                          </select>
+                                        </div>
+
+                                          <label for="mitral-valve" class="block font-medium text-gray-700">Mitral valve</label>
+                                          <label for="diseasepresent2" class="block font-medium text-gray-700">Disease present:</label>
+                                          <select id="disease-present2" name="disease-present2" class="w-full p-2 border border-gray-300 rounded-md" onchange="toggleDiseasePresent2()">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>
+                                          </select>
+
+                                          <div id="disease-present2-yes-container" class="form-group mb-4" style="display: none;">
+                                          <label for="disease-present2-result" class="block font-medium text-gray-700">If yes:</label>
+                                          <select id="disease-present2-result" name="disease-present2-result" class="w-full p-2 border border-gray-300 rounded-md">
+                                              <option value="n.A">-</option>
+                                              <option value="Stenosis">Stenosis</option>
+                                              <option value="Regurgitation">Regurgitation</option>
+                                              <option value="Mixed / Other">Mixed / Other</option>
+                                          </select>
+                                        </div>
+
+                                        <label for="tricuspid-valve" class="block font-medium text-gray-700">Tricuspid valve</label>
+                                          <label for="diseasepresent3" class="block font-medium text-gray-700">Disease present:</label>
+                                          <select id="disease-present3" name="disease-present3" class="w-full p-2 border border-gray-300 rounded-md" onchange="toggleDiseasePresent3()">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>
+                                          </select>
+
+                                          <div id="disease-present3-yes-container" class="form-group mb-4" style="display: none;">
+                                          <label for="disease-present3-result" class="block font-medium text-gray-700">If yes:</label>
+                                          <select id="disease-present3-result" name="disease-present3-result" class="w-full p-2 border border-gray-300 rounded-md">
+                                              <option value="n.A">-</option>
+                                              <option value="Stenosis">Stenosis</option>
+                                              <option value="Regurgitation">Regurgitation</option>
+                                              <option value="Mixed / Other">Mixed / Other</option>
+                                          </select>
+                                        </div>
+
+                                        <label for="pulmonary-valve" class="block font-medium text-gray-700">Pulmonary valve</label>
+                                          <label for="diseasepresent4" class="block font-medium text-gray-700">Disease present:</label>
+                                          <select id="disease-present4" name="disease-present4" class="w-full p-2 border border-gray-300 rounded-md" onchange="toggleDiseasePresent4()">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>
+                                          </select>
+
+                                          <div id="disease-present4-yes-container" class="form-group mb-4" style="display: none;">
+                                          <label for="disease-present4-result" class="block font-medium text-gray-700">If yes:</label>
+                                          <select id="disease-present4-result" name="disease-present4-result" class="w-full p-2 border border-gray-300 rounded-md">
+                                              <option value="n.A">-</option>
+                                              <option value="Stenosis">Stenosis</option>
+                                              <option value="Regurgitation">Regurgitation</option>
+                                              <option value="Mixed / Other">Mixed / Other</option>
+                                          </select>
+                                        </div>
+                                        
+                                          <label for="asymptomaticvalvular" class="block font-medium text-gray-700">Asymptomatic valvular disease identified:</label>
+                                          <select id="asymptomatic-valvular" name="asymptomatic-valvular" class="w-full p-2 border border-gray-300 rounded-md">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>
+                                              <option value="Not Assessed">Not Assessed</option>
+                                          </select>
+
+                                        </div>
+
+                                        
+                                        <div class="form-group mb-4">
+                                          <label for="auscultation" class="text-2xl font-semibold">Auscultation findings</label>
+                                          <label for="murmurpresent" class="block font-medium text-gray-700">Murmur present</label>
+                                          <select id="murmur-present" name="murmur-present" class="w-full p-2 border border-gray-300 rounded-md">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>
+                                              <option value="Not Assessed">Not Assessed</option>
+                                          </select>
+                                          
+                                          <label for="s_3" class="block font-medium text-gray-700">Abnormal heart sound S3</label>
+                                          <select id="s3" name="s3" class="w-full p-2 border border-gray-300 rounded-md">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>
+                                              <option value="Not Assessed">Not Assessed</option>
+                                          </select>
+
+                                          <label for="s_4" class="block font-medium text-gray-700">Abnormal heart sound S4</label>
+                                          <select id="s4" name="s4" class="w-full p-2 border border-gray-300 rounded-md">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>
+                                              <option value="Not Assessed">Not Assessed</option>
+                                          </select>
+
+                                          </div>
+                                    </div>
+                                    </div>
+
+                                        <div class="form-group mb-4">
+                                          <label for="auscultation" class="text-2xl font-semibold">G. Summary (Optional Free Text)</label>
+                                          <textarea id="summary" name="summary" class="w-full p-2 border border-gray-300 rounded-md" rows="4"></textarea>
+                                          </div>
+                             </div>
+
+
+
+                        
+                          <!-- Page 8 -->
+                          <div class="form-page hidden" id="page8">                                
+                              <div class="text-2xl font-semibold mb-1" style="color: chocolate; margin-bottom: 1.5rem;">Echocardiography measurement results</div>
+                              <div class="form-columns">
+                                  <div class="form-column">
+                                    
+                                        <div class="form-group mb-4">
+                                          <label for="echocardiography" class="text-2xl font-semibold">Echocardiography & Cardiac Structure:</label>
+                                          <label for="lv-size-systolic" class="text-2xl font-semibold">A. Left ventricle - size & systolic function</label>
+
+                                          <label for="lvsize" class="block font-medium text-gray-700">Overall LV size:</label>
+                                          <select id="lv-size" name="lv-size" class="w-full p-2 border border-gray-300 rounded-md">
+                                              <option value="n.A">-</option>
+                                              <option value="Normal">Normal</option>
+                                              <option value="Dilated">Dilated</option>
+                                              <option value="Hypertrophied">Hypertrophied</option>        
+                                              <option value="Small">Small</option>
+                                          </select>
+                                          
+                                          <label class="block font-medium text-gray-700 mt-4">LV end-diastolic volume (LVEDV):</label>
+                                              <div class="flex items-center gap-4">
+                                                <input type="number" id="lvedv" name="lvedv" placeholder="mL" class="w-24">
+                                                <label class="flex items-center"> <input type="checkbox" name="lvedv-not-assessed" class="mr-2"> Not Assessed</label>
+                                              </div>
+                                              
+                                          <label class="block font-medium text-gray-700 mt-4">LV end-systolic volume (LVESV):</label>
+                                              <div class="flex items-center gap-4">
+                                                <input type="number" id="lvesv" name="lvesv" placeholder="mL" class="w-24">
+                                                <label class="flex items-center"> <input type="checkbox" name="lvesv-not-assessed" class="mr-2"> Not Assessed</label>
+                                              </div>
+                                              
+                                          <label class="block font-medium text-gray-700 mt-4">LV ejection fraction (LVEF):</label>
+                                              <div class="flex items-center gap-4">
+                                                <input type="number" id="lvef" name="lvef" placeholder="%" class="w-24">
+                                                <label class="flex items-center"> <input type="checkbox" name="lvef-not-assessed" class="mr-2"> Not Assessed</label>
+                                              </div>
+
+                                          <label class="block font-medium text-gray-700 mt-4">Fractional shortening (FS):</label>
+                                              <div class="flex items-center gap-4">
+                                                <input type="number" id="fs" name="fs" placeholder="%" class="w-24">
+                                                <label class="flex items-center"> <input type="checkbox" name="fs-not-assessed" class="mr-2"> Not Assessed</label>
+                                              </div>
+
+                                          <label class="block font-medium text-gray-700 mt-4">Left ventricular mass:</label>
+                                              <div class="flex items-center gap-4">
+                                                <input type="number" id="lv-mass" name="lv-mass" placeholder="g" class="w-24">
+                                                <label class="flex items-center"> <input type="checkbox" name="lv-mass-not-assessed" class="mr-2"> Not Assessed</label>
+                                              </div>
+
+                                          <label class="block font-medium text-gray-700 mt-4">LV mass index (LVMI):</label>
+                                              <div class="flex items-center gap-4">
+                                                <input type="number" id="lv-mass-index" name="lv-mass-index" placeholder="g/m²" class="w-24">
+                                                <label class="flex items-center"> <input type="checkbox" name="lv-mass-index-not-assessed" class="mr-2"> Not Assessed</label>
+                                              </div>
+                                              
+                                          <label class="block font-medium text-gray-700 mt-4">Global longitudinal strain (GLS):</label>
+                                              <div class="flex items-center gap-4">
+                                                <input type="number" id="gls" name="gls" placeholder="%" class="w-24">
+                                                <label class="flex items-center"> <input type="checkbox" name="gls-not-assessed" class="mr-2"> Not Assessed</label>
+                                              </div>
+                                              
+                                          <label for="cd-imaging" class="block font-medium text-gray-700">Cardiomyopathy diagnosed on imaging (e.g. HCM, DCM, others):</label>
+                                          <select id="cd-on-imaging" name="cd-on-imaging" class="w-full p-2 border border-gray-300 rounded-md">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>
+                                              <option value="Not Assessed">Not Assessed</option>
+                                          </select>
+
+                                          <label for="lvhypertrophy" class="block font-medium text-gray-700">LV hypertrophy present:</label>
+                                          <select id="lv-hypertrophy" name="lv-hypertrophy" class="w-full p-2 border border-gray-300 rounded-md">
+                                              <option value="n.A">-</option>
+                                              <option value="Yes">Yes</option>
+                                              <option value="No">No</option>
+                                              <option value="Not Assessed">Not Assessed</option>
+                                          </select>
+
+                                      </div>
+
+                                        <div class="form-group mb-4">
+                                          <label for="lv-diastolic-function-output" class="text-2xl font-semibold">B. Left ventricle - diastolic function & output</label>
+
+                                          <label class="block font-medium text-gray-700 mt-4">E/E' ratio:</label>
+                                              <div class="flex items-center gap-4">
+                                                <input type="number" id="e-e-prime-ratio" name="e-e-prime-ratio" placeholder="" class="w-24">
+                                                <label class="flex items-center"> <input type="checkbox" name="e-e-prime-ratio-not-assessed" class="mr-2"> Not Assessed</label>
+                                              </div>
+                                              
+                                          <label class="block font-medium text-gray-700 mt-4">Ejection time:</label>
+                                              <div class="flex items-center gap-4">
+                                                <input type="number" id="ejection-time" name="ejection-time" placeholder="ms" class="w-24">
+                                                <label class="flex items-center"> <input type="checkbox" name="ejection-time-not-assessed" class="mr-2"> Not Assessed</label>
+                                              </div>
+
+                                          <label class="block font-medium text-gray-700 mt-4">Cardiac output (echo-derived):</label>
+                                              <div class="flex items-center gap-4">
+                                                <input type="number" id="cardiac-output" name="cardiac-output" placeholder="L/min" class="w-24">
+                                                <label class="flex items-center"> <input type="checkbox" name="cardiac-output-not-assessed" class="mr-2"> Not Assessed</label>
+                                              </div>
+                                      </div>
+                                      
+                                        <div class="form-group mb-4">
+                                          <label for="rv-size-function" class="text-2xl font-semibold">C. Right ventricle - size & function</label>
+
+                                          <label class="block font-medium text-gray-700 mt-4">RV size (qualitative):</label>
+                                          <select id="rv-size" name="rv-size" class="w-full p-2 border border-gray-300 rounded-md">
+                                              <option value="n.A">-</option>
+                                              <option value="Normal">Normal</option>
+                                              <option value="Dilated">Dilated</option>
+                                              <option value="Not Assessed">Not Assessed</option>
+                                          </select>
+                                              
+                                          <label class="block font-medium text-gray-700 mt-4">RV diameter:</label>
+                                              <div class="flex items-center gap-4">
+                                                <input type="number" id="rv-diameter" name="rv-diameter" placeholder="mm" class="w-24">
+                                                <label class="flex items-center"> <input type="checkbox" name="rv-diameter-not-assessed" class="mr-2"> Not Assessed</label>
+                                              </div>
+
+                                          <label class="block font-medium text-gray-700 mt-4">RV wall thickness:</label>
+                                              <div class="flex items-center gap-4">
+                                                <input type="number" id="rv-wall-thickness" name="rv-wall-thickness" placeholder="mm" class="w-24">
+                                                <label class="flex items-center"> <input type="checkbox" name="rv-wall-thickness-not-assessed" class="mr-2"> Not Assessed</label>
+                                              </div>
+                                              
+                                          <label class="block font-medium text-gray-700 mt-4">Right ventricular ejection fraction (RVEF):</label>
+                                              <div class="flex items-center gap-4">
+                                                <input type="number" id="rv-ejection-fraction" name="rv-ejection-fraction" placeholder="%" class="w-24">
+                                                <label class="flex items-center"> <input type="checkbox" name="rv-ejection-fraction-not-assessed" class="mr-2"> Not Assessed</label>
+                                              </div>
+
+                                          <label class="block font-medium text-gray-700 mt-4">TAPSE (tricuspid annular plane systolic excursion):</label>
+                                              <div class="flex items-center gap-4">
+                                                <input type="number" id="rv-tapse" name="rv-tapse" placeholder="mm" class="w-24">
+                                                <label class="flex items-center"> <input type="checkbox" name="rv-tapse-not-assessed" class="mr-2"> Not Assessed</label>
+                                              </div>
+                                      </div>
+                                  </div>
+
+                                      
+                                  <div class="form-column">
+                                        <div class="form-group mb-4">
+                                          <label for="rv-size-function" class="text-2xl font-semibold">D. Atria, aorta & vena cava</label>
+
+                                          <label class="block font-medium text-gray-700 mt-4">Left atrial volume (LAV):</label>
+                                              <div class="flex items-center gap-4">
+                                                <input type="number" id="left-atrial-volume" name="left-atrial-volume" placeholder="mL" class="w-24">
+                                                <label class="flex items-center"> <input type="checkbox" name="left-atrial-volume-not-assessed" class="mr-2"> Not Assessed</label>
+                                              </div>
+
+                                          <label class="block font-medium text-gray-700 mt-4">Aortic root diameter:</label>
+                                              <div class="flex items-center gap-4">
+                                                <input type="number" id="aortic-root-diameter" name="aortic-root-diameter" placeholder="mm" class="w-24">
+                                                <label class="flex items-center"> <input type="checkbox" name="aortic-root-diameter-not-assessed" class="mr-2"> Not Assessed</label>
+                                              </div>
+
+                                          <label class="block font-medium text-gray-700 mt-4">Ascending aorta diameter:</label>
+                                              <div class="flex items-center gap-4">
+                                                <input type="number" id="ascending-aorta-diameter" name="ascending-aorta-diameter" placeholder="mm" class="w-24">
+                                                <label class="flex items-center"> <input type="checkbox" name="ascending-aorta-diameter-not-assessed" class="mr-2"> Not Assessed</label>
+                                              </div>
+
+                                          <label class="block font-medium text-gray-700 mt-4">Inferior vena cava (IVC) diameter:</label>
+                                              <div class="flex items-center gap-4">
+                                                <input type="number" id="ivc-diameter" name="ivc-diameter" placeholder="mm" class="w-24">
+                                                <label class="flex items-center"> <input type="checkbox" name="ivc-diameter-not-assessed" class="mr-2"> Not Assessed</label>
+                                              </div>
+
+                                          <label class="block font-medium text-gray-700 mt-4">IVC collapsibility index:</label>
+                                              <div class="flex items-center gap-4">
+                                                <input type="number" id="ivc-collapsibility-index" name="ivc-collapsibility-index" placeholder="%" class="w-24">
+                                                <label class="flex items-center"> <input type="checkbox" name="ivc-collapsibility-index-not-assessed" class="mr-2"> Not Assessed</label>
+                                              </div>
+                                          </div>
+
+                                        <div class="form-group mb-4">
+                                          <label for="wall-motion" class="text-2xl font-semibold">E. Wall motion & regional function</label>
+
+                                          <label class="block font-medium text-gray-700 mt-4">Wall motion abnormalities:</label>
+                                          <select id="wall-motion-abnormalities" name="wall-motion-abnormalities" class="w-full p-2 border border-gray-300 rounded-md">
+                                              <option value="n.A">-</option>
+                                              <option value="Present">Present</option>
+                                              <option value="Not Present">Not Present</option>
+                                              <option value="Not Assessed">Not Assessed</option>
+                                          </select>
+                                          </div>
+                                          
+                                        <div class="form-group mb-4">
+                                          <label for="valvularfunction" class="text-2xl font-semibold">F. Valvular function</label>
+
+                                          <label class="block font-medium text-gray-700 mt-4">Any valvular dysfunction on echo (any valve):</label>
+                                          <select id="valvular-function" name="valvular-function" class="w-full p-2 border border-gray-300 rounded-md">
+                                              <option value="n.A">-</option>
+                                              <option value="Normal">None</option>
+                                              <option value="Not Present">Present</option>
+                                              <option value="Not Assessed">Not Assessed</option>
+                                          </select>
+                                          
+                                          <label class="block font-medium text-gray-700 mt-4">If measured, document per most affected valve:</label>
+                                          <label class="block font-medium text-gray-700 mt-4">Valve area:</label>
+                                              <div class="flex items-center gap-4">
+                                                <input type="number" id="valve-area" name="valve-area" placeholder="cm²" class="w-24">
+                                                <label class="flex items-center"> <input type="checkbox" name="valve-area-not-assessed" class="mr-2"> Not Assessed</label>
+                                              </div>
+                                              
+                                          <label class="block font-medium text-gray-700 mt-4">Pressure gradients (peak / mean):</label>
+                                              <div class="flex items-center gap-4">
+                                                <input type="number" id="pressure-peak" name="pressure-peak" placeholder="Peak mmHg" class="w-24 p-1 border border-gray-300 rounded-md">
+                                                <input type="number" id="pressure-mean" name="pressure-mean" placeholder="Mean mmHg" class="w-24 p-1 border border-gray-300 rounded-md" >
+                                                <label class="flex items-center ml-2"> <input type="checkbox" name="pressure-gradients-not-assessed" class="mr-2"> Not Assessed</label>
+                                              </div>
+
+                                          <label class="block font-medium text-gray-700 mt-4">Regurgitation volume / regurgitation fraction:</label>
+                                          <label class="block font-medium text-gray-700 mt-4">Volume: :</label>
+                                              <div class="flex items-center gap-4">
+                                                <input type="number" id="regurgitation-volume" name="regurgitation-volume" placeholder="%" class="w-24">
+                                                <label class="flex items-center"> <input type="checkbox" name="regurgitation-volume-not-assessed" class="mr-2"> Not Assessed</label>
+                                              </div>
+
+                                          <label class="block font-medium text-gray-700 mt-4">Fraction:</label>
+                                              <div class="flex items-center gap-4">
+                                                <input type="number" id="regurgitation-fraction" name="regurgitation-fraction" placeholder="%" class="w-24">
+                                                <label class="flex items-center"> <input type="checkbox" name="regurgitation-fraction-not-assessed" class="mr-2"> Not Assessed</label>
+                                              </div>
+
+                                          <label class="block font-medium text-gray-700 mt-4">Valvular disease severity grading (e.g. mild / moderate / severe):</label>
+                                          <select id="valvular-disease-severity" name="valvular-disease-severity" class="w-full p-2 border border-gray-300 rounded-md">
+                                              <option value="n.A">-</option>
+                                              <option value="Mild">Mild</option>
+                                              <option value="Moderate">Moderate</option>
+                                              <option value="Severe">Severe</option>
+                                              <option value="Not Assessed">Not Assessed</option>
+                                          </select>
+
+                                          </div>
+
+                            </div>
+                          </div>
+                        </div>
+
+                      
+						<!-- Navigation Buttons -->
+                          <div class="submit-button-container mt-6 flex justify-between">
+                              <button type="button" id="backButton" class="px-3 py-1 bg-white text-black border border-black rounded-sm text-sm">Back</button>
+                              <button type="button" id="nextButton" class="px-3 py-1 bg-white text-black border border-black rounded-sm text-sm">Next</button>
+                              <button type="submit" id="submitButton" class="px-3 py-1 bg-white text-black border border-black rounded-sm text-sm hidden">Submit</button>
+                          </div>       
+                    </form>
+              </div>
+          </div>
+        </div>
+
+		   
+    </main>        
+    <!-- end: Main -->
+
+<script type="module" src="dist/js/report.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+  const token = localStorage.getItem('token');
+  const role = localStorage.getItem('role');
+  if (!token || role !== 'doctor') { window.location.href = 'index.html'; return; }
+
+  // Get patientId from URL parameter
+  const params = new URLSearchParams(location.search);
+  const patientId = params.get('patientId');
+  if (!patientId) { 
+    alert('Missing patientId'); 
+    window.location.href = 'doctor.html'; 
+    return; 
+  }
+
+  // Fetch and display patient name (with retry for DOM loading)
+  const setPatientName = async () => {
+    try {
+      const res = await fetch('/api/doctor', { headers: { Authorization: `Bearer ${token}` } });
+      if (res.ok) {
+        const data = await res.json();
+        const patient = data.patients.find(p => p.id == patientId);
+        if (patient) {
+          const patientNameElement = document.getElementById('patientName');
+          if (patientNameElement) {
+            patientNameElement.textContent = patient.full_name || patient.username;
+            console.log('Patient name set:', patient.full_name || patient.username);
+          } else {
+            console.error('patientName element not found in DOM');
+            // Retry after a short delay
+            setTimeout(() => {
+              const retryElement = document.getElementById('patientName');
+              if (retryElement) {
+                retryElement.textContent = patient.full_name || patient.username;
+                console.log('Patient name set on retry:', patient.full_name || patient.username);
+              }
+            }, 100);
+          }
+        } else {
+          console.error('Patient not found with ID:', patientId);
+        }
+      } else {
+        console.error('Failed to fetch patients:', res.status);
+      }
+    } catch (error) {
+      console.error('Error fetching patient name:', error);
+    }
+  };
+  
+  setPatientName();
+
+  // Multi-page form navigation
+  const form = document.getElementById('multiPageForm');
+  const pages = document.querySelectorAll('.form-page');
+  const nextButton = document.getElementById('nextButton');
+  const backButton = document.getElementById('backButton');
+  const submitButton = document.getElementById('submitButton');
+  
+  let currentPage = 0;
+
+  function showPage(pageIndex) {
+    pages.forEach((page, index) => {
+      if (index === pageIndex) {
+        page.classList.remove('hidden');
+        page.style.display = 'block';
+      } else {
+        page.classList.add('hidden');
+        page.style.display = 'none';
+      }
+    });
+
+    // Update button visibility
+    if (backButton) {
+      backButton.style.display = pageIndex === 0 ? 'none' : 'inline-block';
+    }
+    if (nextButton) {
+      nextButton.style.display = pageIndex === pages.length - 1 ? 'none' : 'inline-block';
+    }
+    if (submitButton) {
+      if (pageIndex === pages.length - 1) {
+        submitButton.style.display = 'inline-block';
+        submitButton.classList.remove('hidden');
+        console.log('');
+      } else {
+        submitButton.style.display = 'none';
+        submitButton.classList.add('hidden');
+      }
+    }
+  }
+
+  // Initialize first page
+  if (pages.length > 0) {
+    showPage(0);
+    console.log(`Found ${pages.length} form pages`);
+  } else {
+    console.log('No form pages found');
+  }
+
+  // Next button
+  if (nextButton) {
+    nextButton.addEventListener('click', () => {
+      if (currentPage < pages.length - 1) {
+        currentPage++;
+        showPage(currentPage);
+        console.log(`Moved to page ${currentPage + 1}`);
+      }
+    });
+  }
+
+  // Back button
+  if (backButton) {
+    backButton.addEventListener('click', () => {
+      if (currentPage > 0) {
+        currentPage--;
+        showPage(currentPage);
+        console.log(`Moved to page ${currentPage + 1}`);
+      }
+    });
+  }
+
+  // Add click event to submit button as backup
+  if (submitButton) {
+    submitButton.addEventListener('click', async (e) => {
+      e.preventDefault();
+      console.log('Submit button clicked directly');
+      await handleFormSubmit();
+    });
+  }
+
+  // Form submission
+  if (form) {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      console.log('Form submit event triggered');
+      await handleFormSubmit();
+    });
+  } else {
+    console.error('Form element not found');
+  }
+
+  // Extract form submission logic into a function
+  async function handleFormSubmit() {
+    console.log('Form submission started');
+    
+    if (!form) {
+      console.error('Form not found during submission');
+      alert('Error: Form not found');
+      return;
+    }
+    
+    const payload = { patientId: Number(patientId) };
+    
+    // Manually collect all form elements from all pages (including hidden ones)
+    const allFormElements = form.querySelectorAll('input, select, textarea');
+    console.log(`Found ${allFormElements.length} form elements across all pages`);
+    
+    allFormElements.forEach(element => {
+      // Use name attribute if available, otherwise use id
+      const fieldName = element.name && element.name.trim() !== '' ? element.name : element.id;
+      
+      if (!fieldName) {
+        return; // Skip elements with no name or id
+      }
+      
+      const key = fieldName;
+      let value = '';
+      let isCheckbox = false;
+      
+      // Get value based on element type
+      if (element.type === 'checkbox') {
+        isCheckbox = true;
+        // For checkboxes: if checked, use the label text from the parent
+        // If checkbox name ends with -not-measured or -not-assessed, set appropriate value
+        if (element.checked) {
+          if (key.endsWith('not-measured') || key.endsWith('not_measured')) {
+            value = 'Not Measured';
+          } else if (key.endsWith('not-assessed') || key.endsWith('not_assessed')) {
+            value = 'Not Assessed';
+          } else {
+            // Generic checkbox
+            value = element.value && element.value !== 'on' ? element.value : 'Yes';
+          }
+        } else {
+          value = ''; // Unchecked boxes are empty
+        }
+      } else if (element.type === 'radio') {
+        if (element.checked) {
+          value = element.value;
+        } else {
+          return; // Skip unchecked radio buttons
+        }
+      } else {
+        value = element.value || '';
+      }
+      
+      const inputType = element.type;
+      console.log(`Form field: ${key} = "${value}" (type: ${inputType}, checked: ${element.checked || false})`);
+      
+      // Convert field names from dash-case to snake_case for database
+      const dbFieldName = key.replace(/-/g, '_');
+      
+      // Handle different input types differently
+      if (inputType === 'number') {
+        // For numerical inputs: empty stays null, don't convert to "n.A"
+        if (value === '' || value === null || value === undefined) {
+          payload[dbFieldName] = null;
+        } else {
+          payload[dbFieldName] = parseFloat(value);
+        }
+      } else if (inputType === 'date') {
+        // For date inputs: empty stays null, not "n.A"
+        if (value === '' || value === null || value === undefined) {
+          payload[dbFieldName] = null;
+        } else {
+          payload[dbFieldName] = value;
+        }
+      } else {
+        // For checkboxes with "Not Measured" / "Not Assessed": save those values
+        if (isCheckbox && (value === 'Not Measured' || value === 'Not Assessed')) {
+          payload[dbFieldName] = value;
+        } else if (value === '-' || value === '' || value === 'n.A' || value === null || value === undefined) {
+          // For text/select inputs: convert "-", empty, or "n.A" to "n.A"
+          payload[dbFieldName] = 'n.A';
+        } else {
+          payload[dbFieldName] = value;
+        }
+      }
+      
+      console.log(`  → Database field: ${dbFieldName} = ${JSON.stringify(payload[dbFieldName])}`);
+    });
+      
+    console.log('Payload to submit:', payload);
+      
+    try {
+      const res = await fetch('/api/p1report', {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json', 
+          Authorization: `Bearer ${token}` 
+        },
+        body: JSON.stringify(payload)
+      });
+      
+      const data = await res.json();
+      
+      if (!res.ok) {
+        console.error('API Error:', data);
+        alert('Error: ' + (data.error || 'Submit failed'));
+        return;
+      }
+      
+      console.log('Successfully saved P1 report with ID:', data.id);
+      alert('Patient report updated successfully!');
+      
+      // Redirect to doctor dashboard after successful save
+      window.location.href = 'doctor.html';
+    } catch (error) {
+      console.error('Submit error:', error);
+      alert('Network error occurred while saving: ' + error.message);
+    }
+  }
+
+  // Debug: Log button states
+  console.log('Submit button found:', !!submitButton);
+  console.log('Form found:', !!form);
+  console.log('Current page:', currentPage, 'Total pages:', pages.length);
+
+  // Show/hide buttons on scroll
+  const buttonContainer = document.querySelector('.submit-button-container');
+  if (buttonContainer) {
+    buttonContainer.style.position = 'fixed';
+    buttonContainer.style.bottom = '20px';
+    buttonContainer.style.right = '20px';
+    buttonContainer.style.zIndex = '40';
+    buttonContainer.style.opacity = '1';
+    buttonContainer.style.visibility = 'visible';
+  }
+
+  // Function to toggle year input visibility
+  window.toggleYearInput = function() {
+    const septalMyectomy = document.getElementById('septal-myectomy-2');
+    const yearInput = document.getElementById('myectomy-year');
+    const yearLabel = document.querySelector('label[for="myectomy-year"]');
+    
+    if (septalMyectomy && yearInput) {
+      if (septalMyectomy.value === 'yes') {
+        yearInput.style.display = 'block';
+        if (yearLabel) yearLabel.style.display = 'block';
+        yearInput.placeholder = 'Enter number (e.g., 5 for "5 years ago")';
+      } else {
+        yearInput.style.display = 'none';
+        if (yearLabel) yearLabel.style.display = 'none';
+        yearInput.value = ''; // Clear the value when hidden
+      }
+    }
+  };
+
+  // Function to toggle smoking fields visibility
+  window.toggleSmokingFields = function() {
+    const smokingStatus = document.getElementById('smoking');
+    const smokingFieldsContainer = document.getElementById('smoking-fields-container');
+    
+    if (smokingStatus && smokingFieldsContainer) {
+      if (smokingStatus.value === 'Former' || smokingStatus.value === 'Current') {
+        smokingFieldsContainer.style.display = 'block';
+      } else {
+        smokingFieldsContainer.style.display = 'none';
+        // Clear values when hidden
+        document.getElementById('smoking-duration').value = '';
+        document.getElementById('cigarettes-per-day').value = '';
+      }
+    }
+  };
+
+  // Function to toggle diet other text field visibility
+  window.toggleDietOther = function() {
+    const dietSelect = document.getElementById('diet');
+    const dietOtherContainer = document.getElementById('diet-other-container');
+    
+    if (dietSelect && dietOtherContainer) {
+      if (dietSelect.value === 'Other') {
+        dietOtherContainer.style.display = 'block';
+      } else {
+        dietOtherContainer.style.display = 'none';
+        document.getElementById('diet-other-text').value = ''; // Clear the value when hidden
+      }
+    }
+  };
+
+
+  // Function to toggle 
+  window.toggleSeptal = function() {
+    const septalSelect = document.getElementById('septal-myectomy-2');
+    const rhythmYesContainer = document.getElementById('septal-yes-container');
+    
+    if (septalSelect && rhythmYesContainer) {
+      if (septalSelect.value === 'Yes') {
+        rhythmYesContainer.style.display = 'block';
+      } else {
+        rhythmYesContainer.style.display = 'none';
+        document.getElementById('myectomy-year').value = ''; // Clear the value when hidden
+      }
+    }
+  };
+
+
+  // Function to toggle rhythm and device procedures year field visibility
+  window.togglePacemaker = function() {
+    const rhytmSelect = document.getElementById('cardiac-pacemaker');
+    const rhythmYesContainer = document.getElementById('cardiac-pacemaker-yes-container');
+    
+    if (rhytmSelect && rhythmYesContainer) {
+      if (rhytmSelect.value === 'Yes') {
+        rhythmYesContainer.style.display = 'block';
+      } else {
+        rhythmYesContainer.style.display = 'none';
+        document.getElementById('cardiac-pacemaker-year').value = ''; // Clear the value when hidden
+      }
+    }
+  };
+
+
+  // Function to toggle cardiac ICD year field visibility
+  window.toggleCardiacICD = function() {
+    const icdSelect = document.getElementById('cardiac-icd');
+    const icdYesContainer = document.getElementById('cardiac-icd-yes-container');
+    
+    if (icdSelect && icdYesContainer) {
+      if (icdSelect.value === 'Yes') {
+        icdYesContainer.style.display = 'block';
+      } else {
+        icdYesContainer.style.display = 'none';
+        document.getElementById('cardiac-icd-year').value = ''; // Clear the value when hidden
+      }
+    }
+  };
+
+  // Function to toggle cardiac CRT year field visibility
+  window.toggleCardiacCRT = function() {
+    const crtSelect = document.getElementById('cardiac-crt');
+    const crtYesContainer = document.getElementById('cardiac-crt-yes-container');
+    
+    if (crtSelect && crtYesContainer) {
+      if (crtSelect.value === 'Yes') {
+        crtYesContainer.style.display = 'block';
+      } else {
+        crtYesContainer.style.display = 'none';
+        document.getElementById('cardiac-crt-year').value = ''; // Clear the value when hidden
+      }
+    }
+  };
+
+
+  // Function to toggle cardiac catheter year field visibility
+  window.toggleCardiacCatheter = function() {
+    const catheterSelect = document.getElementById('cardiac-catheter-ablation');
+    const catheterYesContainer = document.getElementById('cardiac-catheter-yes-container');
+    
+    if (catheterSelect && catheterYesContainer) {
+      if (catheterSelect.value === 'Yes') {
+        catheterYesContainer.style.display = 'block';
+      } else {
+        catheterYesContainer.style.display = 'none';
+        document.getElementById('cardiac-catheter-ablation-year').value = ''; // Clear the value when hidden
+      }
+    }
+  };
+
+  // Function to toggle cardiac maze procedure year field visibility
+  window.toggleCardiacMazeProcedure = function() {
+    const mazeSelect = document.getElementById('cardiac-maze-procedure');
+    const mazeYesContainer = document.getElementById('cardiac-maze-procedure-yes-container');
+    
+    if (mazeSelect && mazeYesContainer) {
+      if (mazeSelect.value === 'Yes') {
+        mazeYesContainer.style.display = 'block';
+      } else {
+        mazeYesContainer.style.display = 'none';
+        document.getElementById('cardiac-maze-procedure-year').value = ''; // Clear the value when hidden
+      }
+    }
+  };
+
+  // Function to toggle 
+  window.toggleLvad = function() {
+    const lvadSelect = document.getElementById('lvad-implementation');
+    const lvadYesContainer = document.getElementById('lvad-implementation-yes-container');
+    
+    if (lvadSelect && lvadYesContainer) {
+      if (lvadSelect.value === 'Yes') {
+        lvadYesContainer.style.display = 'block';
+      } else {
+        lvadYesContainer.style.display = 'none';
+        document.getElementById('lvad-implementation-year').value = ''; // Clear the value when hidden
+      }
+    }
+  };
+
+  // Function to toggle 
+  window.toggleHeartTransplant = function() {
+    const heartTransplantSelect = document.getElementById('heart-transplant');
+    const heartTransplantYesContainer = document.getElementById('heart-transplant-yes-container');
+    
+    if (heartTransplantSelect && heartTransplantYesContainer) {
+      if (heartTransplantSelect.value === 'Yes') {
+        heartTransplantYesContainer.style.display = 'block';
+      } else {
+        heartTransplantYesContainer.style.display = 'none';
+        document.getElementById('heart-transplant-year').value = ''; // Clear the value when hidden
+      }
+    }
+  };
+
+  // Function to toggle 
+  window.togglePulmonaryThromboendarterectomy = function() {
+    const pulmonaryThromboendarterectomySelect = document.getElementById('pulmonary-thromboendarterectomy');
+    const pulmonaryThromboendarterectomyYesContainer = document.getElementById('pulmonary-thromboendarterectomy-yes-container');
+    
+    if (pulmonaryThromboendarterectomySelect && pulmonaryThromboendarterectomyYesContainer) {
+      if (pulmonaryThromboendarterectomySelect.value === 'Yes') {
+        pulmonaryThromboendarterectomyYesContainer.style.display = 'block';
+      } else {
+        pulmonaryThromboendarterectomyYesContainer.style.display = 'none';
+        document.getElementById('pulmonary-thromboendarterectomy-year').value = ''; // Clear the value when hidden
+      }
+    }
+  };
+
+  // Function to toggle 
+  window.toggleAorticAneurysm = function() {
+    const aorticAneurysmSelect = document.getElementById('aortic-aneurysm');
+    const aorticAneurysmYesContainer = document.getElementById('aortic-aneurysm-yes-container');
+    
+    if (aorticAneurysmSelect && aorticAneurysmYesContainer) {
+      if (aorticAneurysmSelect.value === 'Yes') {
+        aorticAneurysmYesContainer.style.display = 'block';
+      } else {
+        aorticAneurysmYesContainer.style.display = 'none';
+        document.getElementById('aortic-aneurysm-year').value = ''; // Clear the value when hidden
+      }
+    }
+  };
+
+  // Function to toggle 
+  window.toggleThoracicSurgery = function() {
+    const thoracicSurgerySelect = document.getElementById('thoracic-surgery');
+    const thoracicSurgeryYesContainer = document.getElementById('thoracic-surgery-yes-container');
+    
+    if (thoracicSurgerySelect && thoracicSurgeryYesContainer) {
+      if (thoracicSurgerySelect.value === 'Yes') {
+        thoracicSurgeryYesContainer.style.display = 'block';
+      } else {
+        thoracicSurgeryYesContainer.style.display = 'none';
+        document.getElementById('thoracic-surgery-year').value = ''; // Clear the value when hidden
+      }
+    }
+  };
+
+  // Function to toggle 
+  window.toggleAbdominalSurgeries = function() {
+    const abdominalSurgeriesSelect = document.getElementById('abdominal-surgeries');
+    const abdominalSurgeriesYesContainer = document.getElementById('abdominal-surgeries-yes-container');
+    
+    if (abdominalSurgeriesSelect && abdominalSurgeriesYesContainer) {
+      if (abdominalSurgeriesSelect.value === 'Yes') {
+        abdominalSurgeriesYesContainer.style.display = 'block';
+      } else {
+        abdominalSurgeriesYesContainer.style.display = 'none';
+        document.getElementById('abdominal-surgeries-year').value = ''; // Clear the value when hidden
+      }
+    }
+  };
+
+  // Function to toggle 
+  window.toggleAce = function() {
+    const aceSelect = document.getElementById('ace-inhibitors');
+    const aceYesContainer = document.getElementById('ace-inhibitors-yes-container');
+    
+    if (aceSelect && aceYesContainer) {
+      if (aceSelect.value === 'Yes') {
+        aceYesContainer.style.display = 'block';
+      } else {
+        aceYesContainer.style.display = 'none';
+        document.getElementById('ace-inhibitors-drugs').value = ''; // Clear the value when hidden
+      }
+    }
+  };
+
+  // Function to toggle 
+  window.toggleArbs = function() {
+    const arbsSelect = document.getElementById('arbs-2');
+    const arbsYesContainer = document.getElementById('arb-yes-container');
+    
+    if (arbsSelect && arbsYesContainer) {
+      if (arbsSelect.value === 'Yes') {
+        arbsYesContainer.style.display = 'block';
+      } else {
+        arbsYesContainer.style.display = 'none';
+        document.getElementById('arb-drugs').value = ''; // Clear the value when hidden
+      }
+    }
+  };
+
+  // Function to toggle 
+  window.toggleBetaBlockers = function() {
+    const betaBlockersSelect = document.getElementById('beta-blockers');
+    const betaBlockersYesContainer = document.getElementById('beta-blockers-yes-container');
+    
+    if (betaBlockersSelect && betaBlockersYesContainer) {
+      if (betaBlockersSelect.value === 'Yes') {
+        betaBlockersYesContainer.style.display = 'block';
+      } else {
+        betaBlockersYesContainer.style.display = 'none';
+        document.getElementById('beta-blockers-drugs').value = ''; // Clear the value when hidden
+      }
+    }
+  };
+
+  // Function to toggle 
+  window.toggleCalciumblocker = function() {
+    const calciumblockerSelect = document.getElementById('calcium-channel-blockers');
+    const calciumblockerYesContainer = document.getElementById('calcium-channel-blockers-yes-container');
+    
+    if (calciumblockerSelect && calciumblockerYesContainer) {
+      if (calciumblockerSelect.value === 'Yes') {
+        calciumblockerYesContainer.style.display = 'block';
+      } else {
+        calciumblockerYesContainer.style.display = 'none';
+        document.getElementById('calcium-channel-blockers-drugs').value = ''; // Clear the value when hidden
+      }
+    }
+  };
+
+  // Function to toggle 
+  window.toggleDiuretics = function() {
+    const diureticsSelect = document.getElementById('diuretics-tablets');
+    const diureticsYesContainer = document.getElementById('diuretics-yes-container');
+    
+    if (diureticsSelect && diureticsYesContainer) {
+      if (diureticsSelect.value === 'Yes') {
+        diureticsYesContainer.style.display = 'block';
+      } else {
+        diureticsYesContainer.style.display = 'none';
+        document.getElementById('diuretics-tablets-drugs').value = ''; // Clear the value when hidden
+      }
+    }
+  };
+
+  // Function to toggle 
+  window.toggleOtherHeartFailureMedications = function() {
+    const otherHeartFailureMedicationsSelect = document.getElementById('other-heart-failure-medications');
+    const otherHeartFailureMedicationsYesContainer = document.getElementById('other-heart-failure-medications-yes-container');
+    
+    if (otherHeartFailureMedicationsSelect && otherHeartFailureMedicationsYesContainer) {
+      if (otherHeartFailureMedicationsSelect.value === 'Yes') {
+        otherHeartFailureMedicationsYesContainer.style.display = 'block';
+      } else {
+        otherHeartFailureMedicationsYesContainer.style.display = 'none';
+        document.getElementById('other-heart-failure-medications-drugs').value = ''; // Clear the value when hidden
+      }
+    }
+  };
+
+  // Function to toggle 
+  window.toggleNitrates = function() {
+    const nitratesSelect = document.getElementById('nitrates');
+    const nitratesYesContainer = document.getElementById('nitrates-yes-container');
+    
+    if (nitratesSelect && nitratesYesContainer) {
+      if (nitratesSelect.value === 'Yes') {
+        nitratesYesContainer.style.display = 'block';
+      } else {
+        nitratesYesContainer.style.display = 'none';
+        document.getElementById('nitrates-drugs').value = ''; // Clear the value when hidden
+      }
+    }
+  };
+
+  // Function to toggle 
+  window.toggleAntiArrhythmicDrugs = function() {
+    const antiArrhythmicDrugsSelect = document.getElementById('antiarryhthmic-drugs');
+    const antiArrhythmicDrugsYesContainer = document.getElementById('antiarrhythmic-drugs-yes-container');
+    
+    if (antiArrhythmicDrugsSelect && antiArrhythmicDrugsYesContainer) {
+      if (antiArrhythmicDrugsSelect.value === 'Yes') {
+        antiArrhythmicDrugsYesContainer.style.display = 'block';
+      } else {
+        antiArrhythmicDrugsYesContainer.style.display = 'none';
+        document.getElementById('antiarrhythmic-drugs-drugs').value = ''; // Clear the value when hidden
+      }
+    }
+  };
+
+  // Function to toggle 
+  window.toggleAntiPlateletMedication = function() {
+    const antiPlateletMedicationSelect = document.getElementById('antiplatelet-medication');
+    const antiPlateletMedicationYesContainer = document.getElementById('antiplatelet-medication-yes-container');
+    
+    if (antiPlateletMedicationSelect && antiPlateletMedicationYesContainer) {
+      if (antiPlateletMedicationSelect.value === 'Yes') {
+        antiPlateletMedicationYesContainer.style.display = 'block';
+      } else {
+        antiPlateletMedicationYesContainer.style.display = 'none';
+        document.getElementById('antiplatelet-medication-drugs').value = ''; // Clear the value when hidden
+      }
+    }
+  };
+
+  // Function to toggle 
+  window.toggleOralAnticoagulants = function() {
+    const oralAnticoagulantsSelect = document.getElementById('oral-anticoagulants');
+    const oralAnticoagulantsYesContainer = document.getElementById('oral-anticoagulants-yes-container');
+    
+    if (oralAnticoagulantsSelect && oralAnticoagulantsYesContainer) {
+      if (oralAnticoagulantsSelect.value === 'Yes') {
+        oralAnticoagulantsYesContainer.style.display = 'block';
+      } else {
+        oralAnticoagulantsYesContainer.style.display = 'none';
+        document.getElementById('oral-anticoagulants-drugs').value = ''; // Clear the value when hidden
+      }
+    }
+  };
+
+  // Function to toggle 
+  window.toggleStatins = function() {
+    const statinsSelect = document.getElementById('statins');
+    const statinsYesContainer = document.getElementById('statins-yes-container');
+    
+    if (statinsSelect && statinsYesContainer) {
+      if (statinsSelect.value === 'Yes') {
+        statinsYesContainer.style.display = 'block';
+      } else {
+        statinsYesContainer.style.display = 'none';
+        document.getElementById('statins-drugs').value = ''; // Clear the value when hidden
+      }
+    }
+  };
+
+  // Function to toggle 
+  window.toggleOtherLipidLoweringDrugs = function() {
+    const otherLipidLoweringDrugsSelect = document.getElementById('other-lipid-lowering-drugs');
+    const otherLipidLoweringDrugsYesContainer = document.getElementById('other-lipid-lowering-drugs-yes-container');
+    
+    if (otherLipidLoweringDrugsSelect && otherLipidLoweringDrugsYesContainer) {
+      if (otherLipidLoweringDrugsSelect.value === 'Yes') {
+        otherLipidLoweringDrugsYesContainer.style.display = 'block';
+      } else {
+        otherLipidLoweringDrugsYesContainer.style.display = 'none';
+        document.getElementById('other-lipid-lowering-drugs-drugs').value = ''; // Clear the value when hidden
+      }
+    }
+  };
+
+  // Function to toggle 
+  window.toggleMedicationForDiabetes = function() {
+    const medicationForDiabetesSelect = document.getElementById('medication-for-diabetes');
+    const medicationForDiabetesYesContainer = document.getElementById('medication-for-diabetes-yes-container');
+    
+    if (medicationForDiabetesSelect && medicationForDiabetesYesContainer) {
+      if (medicationForDiabetesSelect.value === 'Yes') {
+        medicationForDiabetesYesContainer.style.display = 'block';
+      } else {
+        medicationForDiabetesYesContainer.style.display = 'none';
+        document.getElementById('medication-for-diabetes-drugs').value = ''; // Clear the value when hidden
+      }
+    }
+  };
+
+  // Function to toggle 
+  window.toggleMedicationThyroid = function() {
+    const medicationThyroidSelect = document.getElementById('medication-thyroid');
+    const medicationThyroidYesContainer = document.getElementById('medication-thyroid-yes-container');
+    
+    if (medicationThyroidSelect && medicationThyroidYesContainer) {
+      if (medicationThyroidSelect.value === 'Yes') {
+        medicationThyroidYesContainer.style.display = 'block';
+      } else {
+        medicationThyroidYesContainer.style.display = 'none';
+        document.getElementById('medication-thyroid-drugs').value = ''; // Clear the value when hidden
+      }
+    }
+  };
+
+  // Function to toggle 
+  window.toggleMedicationAntidepressant = function() {
+    const medicationAntidepressantSelect = document.getElementById('medication-for-antidepressant');
+    const medicationAntidepressantYesContainer = document.getElementById('medication-for-antidepressant-yes-container');
+    
+    if (medicationAntidepressantSelect && medicationAntidepressantYesContainer) {
+      if (medicationAntidepressantSelect.value === 'Yes') {
+        medicationAntidepressantYesContainer.style.display = 'block';
+      } else {
+        medicationAntidepressantYesContainer.style.display = 'none';
+        document.getElementById('medication-for-antidepressant-drugs').value = ''; // Clear the value when hidden
+      }
+    }
+  };
+
+  // Function to toggle 
+  window.toggleAntiAnxiety = function() {
+    const antiAnxietySelect = document.getElementById('anti-anxiety');
+    const antiAnxietyYesContainer = document.getElementById('anti-anxiety-yes-container');
+    
+    if (antiAnxietySelect && antiAnxietyYesContainer) {
+      if (antiAnxietySelect.value === 'Yes') {
+        antiAnxietyYesContainer.style.display = 'block';
+      } else {
+        antiAnxietyYesContainer.style.display = 'none';
+        document.getElementById('anti-anxiety-drugs').value = ''; // Clear the value when hidden
+      }
+    }
+  };
+
+  
+  // Function to toggle 
+  window.toggleDiseasePresent = function() {
+    const diseasePresentSelect = document.getElementById('disease-present');
+    const diseasePresentYesContainer = document.getElementById('disease-present-yes-container');
+    
+    if (diseasePresentSelect && diseasePresentYesContainer) {
+      if (diseasePresentSelect.value === 'Yes') {
+        diseasePresentYesContainer.style.display = 'block';
+      } else {
+        diseasePresentYesContainer.style.display = 'none';
+        document.getElementById('disease-present-result').value = ''; // Clear the value when hidden
+      }
+    }
+  };
+
+    // Function to toggle 
+  window.toggleDiseasePresent2 = function() {
+    const diseasePresentSelect = document.getElementById('disease-present2');
+    const diseasePresentYesContainer = document.getElementById('disease-present2-yes-container');
+    
+    if (diseasePresentSelect && diseasePresentYesContainer) {
+      if (diseasePresentSelect.value === 'Yes') {
+        diseasePresentYesContainer.style.display = 'block';
+      } else {
+        diseasePresentYesContainer.style.display = 'none';
+        document.getElementById('disease-present2-result').value = ''; // Clear the value when hidden
+      }
+    }
+  };
+
+  // Function to toggle 
+  window.toggleDiseasePresent3 = function() {
+    const diseasePresentSelect = document.getElementById('disease-present3');
+    const diseasePresentYesContainer = document.getElementById('disease-present3-yes-container');
+    
+    if (diseasePresentSelect && diseasePresentYesContainer) {
+      if (diseasePresentSelect.value === 'Yes') {
+        diseasePresentYesContainer.style.display = 'block';
+      } else {
+        diseasePresentYesContainer.style.display = 'none';
+        document.getElementById('disease-present3-result').value = ''; // Clear the value when hidden
+      }
+    }
+  };
+
+  // Function to toggle 
+  window.toggleDiseasePresent4 = function() {
+    const diseasePresentSelect = document.getElementById('disease-present4');
+    const diseasePresentYesContainer = document.getElementById('disease-present4-yes-container');
+    
+    if (diseasePresentSelect && diseasePresentYesContainer) {
+      if (diseasePresentSelect.value === 'Yes') {
+        diseasePresentYesContainer.style.display = 'block';
+      } else {
+        diseasePresentYesContainer.style.display = 'none';
+        document.getElementById('disease-present4-result').value = ''; // Clear the value when hidden
+      }
+    }
+  };
+
+
+  // Initialize the toggle state on page load
+  const septalMyectomy = document.getElementById('septal-myectomy-2');
+  if (septalMyectomy) {
+    toggleYearInput(); // Set initial state
+  }
+});
+
+</script>
+
+<script src="/api/config.js"></script>
+<script type="module">
+import { createVoiceSession } from './dist/js/voice-agent.js'
+
+(async () => {
+
+  const css = `
+  .voice-chat { position: fixed; right: 20px; bottom: 20px; z-index: 60; }
+  .voice-card { background: #fff; border: 1.5px solid #325dba; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border-radius: 12px; padding: 12px; width: 320px; }
+  .voice-row { display: flex; align-items: center; gap: 8px; }
+  .voice-log { max-height: 200px; overflow: auto; font-size: 13px; color: #374151; padding: 8px; background:#f9fafb; border-radius: 8px; margin-bottom: 8px; }
+  .voice-log div { margin-bottom: 4px; padding: 2px 0; }
+  .pill { font-size: 12px; background:#E6F1FB; color:#0C447C; padding: 2px 8px; border-radius: 999px; font-weight: 600; }
+  .btn { border: 0; border-radius: 999px; padding: 8px 12px; cursor: pointer; font-weight: 600; font-size: 12px; }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .btn-primary { background:#658de6; color:#fff; }
+  .btn-secondary { background:#6b7280; color:#fff; }
+  .muted { color:#6b7280; font-size: 12px; }
+  .error { color: #dc2626; }
+  .success { color: #16a34a; }
+  #vc-status { font-size: 12px; margin-bottom: 8px; min-height: 14px; }
+  .vc-results { background:#f0f9f4; border:1px solid #1D9E75; border-radius:8px; padding:10px; font-size:12px; margin-bottom:8px; }
+  .vc-results h4 { margin:0 0 6px; font-size:12px; color:#085041; }
+  .vc-results dl { margin:0; display:grid; grid-template-columns:auto 1fr; gap:2px 8px; }
+  .vc-results dt { color:#6b7280; }
+  .vc-results dd { margin:0; color:#111827; font-weight:600; }
+  `
+  const style = document.createElement('style')
+  style.textContent = css
+  document.head.appendChild(style)
+
+  const root = document.createElement('div')
+  root.className = 'voice-chat'
+  root.innerHTML = `
+    <div class="voice-card">
+      <div class="voice-row" style="justify-content:space-between;margin-bottom:10px;">
+        <div class="pill">AI Assistant</div>
+      </div>
+
+      <div id="vc-status" class="muted"></div>
+      <div id="vc-results" class="vc-results" style="display:none;"></div>
+      <div id="vc-log" class="voice-log" style="display:none;"></div>
+      <div id="vc-button-row" style="display:flex;gap:8px;flex-direction:column;">
+        <button id="vc-start-btn" class="btn btn-primary" style="width:100%;">Start Chat</button>
+        <button id="vc-stop-btn" class="btn btn-secondary" style="width:100%;display:none;">Stop</button>
+      </div>
+      <audio id="vc-audio" style="display:none;"></audio>
+    </div>
+  `
+  document.body.appendChild(root)
+
+  const log = document.getElementById('vc-log')
+  const startBtn = document.getElementById('vc-start-btn')
+  const stopBtn = document.getElementById('vc-stop-btn')
+  const statusEl = document.getElementById('vc-status')
+  const resultsEl = document.getElementById('vc-results')
+  const audioEl = document.getElementById('vc-audio')
+
+  function append(role, text, className = '') {
+    const div = document.createElement('div')
+    if (className) div.className = className
+    div.textContent = `${role}: ${text}`
+    log.appendChild(div)
+    log.scrollTop = log.scrollHeight
+  }
+
+  function setStatus(text, kind = 'muted') {
+    statusEl.textContent = text
+    statusEl.className = kind
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, (c) => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]))
+  }
+
+  function renderToolResult(functionName, result) {
+    if (!result) return
+    if (functionName === 'get_biosignal_result' && result.ready) {
+      const m = result.measurements || {}
+      const rows = []
+      if (result.rhythm) rows.push(`<dt>Rhythm</dt><dd>${escapeHtml(result.rhythm)}</dd>`)
+      if (m.heart_rate_mean_bpm != null) rows.push(`<dt>Heart rate</dt><dd>${escapeHtml(m.heart_rate_mean_bpm)} bpm</dd>`)
+      if (Array.isArray(result.abnormalities) && result.abnormalities.length) {
+        rows.push(`<dt>Abnormalities</dt><dd>${result.abnormalities.map(escapeHtml).join(', ')}</dd>`)
+      }
+      resultsEl.innerHTML = `
+        <h4>${escapeHtml((result.signal_type || 'Signal').toUpperCase())} result</h4>
+        ${rows.length ? `<dl>${rows.join('')}</dl>` : ''}
+        ${result.summary ? `<div class="muted" style="margin-top:6px;">${escapeHtml(result.summary)}</div>` : ''}
+      `
+      resultsEl.style.display = 'block'
+    } else if (functionName === 'get_patient_context' && result.latest_diagnostic) {
+      const d = result.latest_diagnostic
+      const rows = []
+      if (d.risk_level) rows.push(`<dt>Risk level</dt><dd>${escapeHtml(d.risk_level)}</dd>`)
+      if (d.risk_percentage != null) rows.push(`<dt>Risk</dt><dd>${escapeHtml(d.risk_percentage)}%</dd>`)
+      resultsEl.innerHTML = `
+        <h4>Latest status</h4>
+        ${rows.length ? `<dl>${rows.join('')}</dl>` : ''}
+        ${d.summary ? `<div class="muted" style="margin-top:6px;">${escapeHtml(d.summary)}</div>` : ''}
+      `
+      resultsEl.style.display = 'block'
+    }
+  }
+
+  const BACKEND_URL = window.VOICE_AGENT_BACKEND_URL || ''
+
+  let USER_ID
+  let PATIENT_ID
+  async function fetchCurrentUser() {
+    const token = localStorage.getItem('token')
+    if (!token) throw new Error('No token found')
+    const resp = await fetch('/api/user', { headers: { 'Authorization': `Bearer ${token}` } })
+    const data = await resp.json()
+    USER_ID = Array.isArray(data) ? data[0]?.id : data?.id
+    if (!USER_ID) throw new Error('User ID not found')
+  }
+
+  try {
+    await fetchCurrentUser()
+    // Get patient ID from URL params (for doctor viewing patient's report)
+    const params = new URLSearchParams(location.search)
+    PATIENT_ID = params.get('patientId') || USER_ID
+
+    localStorage.setItem('userId', USER_ID)
+    localStorage.setItem('patientId', PATIENT_ID)
+  } catch (err) {
+    console.error('Error fetching user:', err)
+    startBtn.disabled = true
+    startBtn.textContent = 'Not authenticated'
+  }
+
+  const sessionId = `user_${USER_ID}`
+  let voiceSession = null
+
+  async function startSession() {
+    if (voiceSession) return
+    if (!BACKEND_URL) {
+      setStatus('Voice agent is not configured yet — ask an admin to set VOICE_AGENT_BACKEND_URL.', 'error')
+      return
+    }
+
+    log.style.display = 'block'
+    resultsEl.style.display = 'none'
+    resultsEl.innerHTML = ''
+    append('system', 'Connecting to voice assistant…', 'muted')
+
+    voiceSession = createVoiceSession({
+      backendUrl: BACKEND_URL,
+      token: localStorage.getItem('token'),
+      patientId: PATIENT_ID || USER_ID,
+      mode: 'general_chat',
+      sessionId: `${sessionId}_general_chat_${Date.now()}`,
+      audioEl,
+      onStatus: (text, kind) => { setStatus(text, kind); append('system', text, kind) },
+      onTranscript: (role, text) => append(role, text, role === 'assistant' ? 'success' : ''),
+      onToolResult: renderToolResult,
+    })
+
+    try {
+      await voiceSession.connect()
+      startBtn.style.display = 'none'
+      stopBtn.style.display = 'block'
+    } catch (e) {
+      console.error('Voice session connect failed:', e)
+      setStatus('Could not connect: ' + (e.message || 'unknown error'), 'error')
+      append('system', 'Could not connect: ' + (e.message || 'unknown error'), 'error')
+      voiceSession = null
+    }
+  }
+
+  async function stop() {
+    if (voiceSession) {
+      try { await voiceSession.disconnect() } catch (e) { console.error('Disconnect error:', e) }
+      voiceSession = null
+    }
+    setStatus('')
+    resultsEl.style.display = 'none'
+    resultsEl.innerHTML = ''
+    log.style.display = 'none'
+    log.innerHTML = ''
+    startBtn.style.display = 'block'
+    stopBtn.style.display = 'none'
+  }
+
+  startBtn.addEventListener('click', startSession)
+  stopBtn.addEventListener('click', stop)
+
+  console.log('Doctor AI Assistant loaded (Pipecat)')
+})()
+</script>
+
+</body>
+</html>

@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "rewrites": [
+    {
+      "source": "/api/feedback/:path*",
+      "destination": "/api/feedback/[...slug]"
+    },
+    {
+      "source": "/api/diagnostic/:path*",
+      "destination": "/api/diagnostic/[...slug]"
+    }
+  ]
+}

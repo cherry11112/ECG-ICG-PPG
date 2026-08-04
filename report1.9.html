@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="dist/css/style.css">
+    <title>Detailed Multi-AI Analysis Report</title>
+</head>
+<body class="text-gray-800 font-inter">
+    
+    <div class="fixed left-0 top-0 w-64 h-full p-4 z-50 sidebar-menu transition-transform" 
+    style="background: url('img/picture11.png') no-repeat center center / cover;">
+        <a href="#" class="flex items-center pb-4 border-b border-b-gray-800">
+            <img src="img/fraunhofer-logo.jpg" alt="" class="w-8 h-8 rounded object-cover">
+            <span class="text-lg font-bold text-black ml-3"></span>
+        </a>
+        <ul class="mt-4">
+            <li class="mb-1 group">
+                <a href="patient1.html" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">
+                    <i class="ri-home-2-line mr-3 text-lg"></i>
+                    <span class="text-sm">Dashboard</span>
+                </a>
+            </li>
+            <li class="mb-1 group active">
+                <a href="#" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100 sidebar-dropdown-toggle">
+                    <i class="ri-file-info-line mr-3 text-lg"></i>
+                    <span class="text-white">Reports</span>
+                </a>
+            </li>
+            <li class="mb-1 group">
+                <a href="#" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">
+                    <i class="ri-settings-2-line mr-3 text-lg"></i>
+                    <span class="text-sm">Settings</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="fixed top-0 left-0 w-full h-full bg-black/50 z-40 md:hidden sidebar-overlay"></div>
+
+    <main class="w-full md:w-[calc(100%-256px)] md:ml-64 bg-gray-50 min-h-screen transition-all main">
+        <div class="py-2 px-6 bg-white flex items-center shadow-md shadow-black/5 sticky top-0 left-0 z-30">
+            <button type="button" class="text-lg text-gray-600 sidebar-toggle">
+                <i class="ri-menu-line"></i>
+            </button>
+            <ul class="flex items-center text-sm ml-4">
+                <li class="mr-2">
+                    <a href="#" class="text-gray-400 hover:text-gray-600 font-medium">Dashboard</a>
+                </li>
+            </ul>
+            <ul class="ml-auto flex items-center">
+                <li class="dropdown ml-3">
+                    <button type="button" class="dropdown-toggle flex items-center">
+                        <img src="img/user-profile-icon-free-vector.jpg" alt="" class="w-8 h-8 rounded-full block object-cover align-middle">
+                    </button>                   
+                    <ul class="dropdown-menu shadow-md shadow-black/5 z-30 hidden py-1.5 rounded-md bg-white border border-gray-100 w-full max-w-[140px]">
+                        <li><a href="#">Profile</a></li>
+                        <li><a href="#">Logout</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <div class="p-6">
+            <div class="grid grid-cols-1 gap-6 mb-6">
+                <div class="bg-white rounded-md border border-gray-100 p-6 shadow-md shadow-black/5">
+                    <div class="flex justify-between mb-6">
+                        <div class="w-full">
+                            <div class="text font-semibold mb-3" style="font-size: 2rem;"> Detailed Multi-AI Analysis Report</div>
+                            <div class="text-lg font-small text-gray-300" style="color: gray;">
+                                Model-by-Model Breakdown and Recommendations Consensus
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Report Content Container -->
+                <div id="reportContainer">
+                    <div class="loading">
+                        <i class="ri-loader-4-line text-3xl" style="animation: spin 1s linear infinite;"></i>
+                        <p>Loading detailed analysis...</p>
+                    </div>
+                </div>
+
+                <!-- Navigation Buttons -->
+                <div class="submit-button-container mt-6 flex justify-between">
+                    <a href="report1.8.html" id="backButton">
+                        <button type="button" class="px-3 py-1 bg-white text-black border border-black rounded-sm text-sm">Back</button>
+                    </a>
+                    <div class="flex gap-2">
+                        <a href="patient1.html">
+                            <button type="button" class="px-3 py-1 bg-blue-600 text-white border border-blue-600 rounded-sm text-sm">Complete</button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="dist/js/report.js"></script>
+
+    <style>
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .model-section {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .model-header {
+            font-size: 16px;
+            font-weight: bold;
+            padding-bottom: 12px;
+            border-bottom: 3px solid;
+            margin-bottom: 15px;
+        }
+
+        .gemini-section { border-bottom-color: #ca8a04; }
+        .claude-section { border-bottom-color: #7c3aed; }
+
+        .metric-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+            margin: 12px 0;
+        }
+
+        .metric-item {
+            padding: 10px;
+            background: #f9fafb;
+            border-radius: 6px;
+            border-left: 4px solid #e5e7eb;
+        }
+
+        .metric-label {
+            font-weight: 600;
+            color: #6b7280;
+            font-size: 11px;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .metric-value {
+            font-size: 14px;
+            color: #1f2937;
+            font-weight: 500;
+        }
+
+        .recommendations-box {
+            background: #f0f9ff;
+            border-left: 4px solid #0284c7;
+            padding: 12px;
+            border-radius: 6px;
+            margin: 12px 0;
+            font-size: 13px;
+        }
+
+        .recommendations-box ul {
+            margin: 8px 0;
+            padding-left: 18px;
+        }
+
+        .recommendations-box li {
+            margin: 5px 0;
+            line-height: 1.4;
+        }
+
+        .consensus-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .consensus-section h2 {
+            margin: 0 0 16px 0;
+            font-size: 18px;
+        }
+
+        .comparison-analysis {
+            background: #fef3c7;
+            border: 1px solid #fcd34d;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 20px 0;
+            white-space: pre-wrap;
+            font-family: monospace;
+            font-size: 12px;
+            line-height: 1.5;
+            color: #78350f;
+            overflow-x: auto;
+        }
+        
+        @media (max-width: 768px) {
+            .model-section {
+                padding: 16px;
+                margin: 12px 0;
+            }
+            .model-header {
+                font-size: 14px;
+            }
+            .metric-row {
+                grid-template-columns: 1fr 1fr;
+            }
+            .comparison-analysis {
+                font-size: 11px;
+                padding: 12px;
+            }
+        }
+    </style>
+
+    <script type="module">
+        async function loadDetailedAnalysis() {
+            const container = document.getElementById('reportContainer');
+            const token = localStorage.getItem('token');
+            const patientId = localStorage.getItem('userId');
+
+            if (!token || !patientId) {
+                container.innerHTML = `<div class="error-container"><h3>Error: Not Authenticated</h3><p>Please log in to view multi-AI analysis.</p></div>`;
+                return;
+            }
+
+            try {
+                console.log('[report1.9] Fetching diagnostic data...');
+
+                const response = await fetch('/api/diagnostic/generate-diagnostic', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ patient_id: parseInt(patientId) })
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({}));
+                    throw new Error(`API Error ${response.status}: ${errorData.details || errorData.error || 'Unknown error'}`);
+                }
+
+                const data = await response.json();
+                const report = data.report;
+
+                if (!report) {
+                    throw new Error('No report data in response');
+                }
+
+                console.log('[report1.9] Report keys:', Object.keys(report));
+
+                // Parse multi_ai_diagnostics — may be stored as JSON string in DB
+                let multiAI = report.multi_ai_diagnostics || null;
+                if (typeof multiAI === 'string') {
+                    try { multiAI = JSON.parse(multiAI); } catch (_) { multiAI = null; }
+                }
+
+                // If still missing, build best-effort from top-level report fields
+                if (!multiAI) {
+                    multiAI = {
+                        gemini_result: report.gemini_result || null,
+                        claude_result: report.claude_result || null,
+                        consensus_risk_level: report.consensus_risk_level || null,
+                        consensus_risk_percentage: report.consensus_risk_percentage || null,
+                        agreement_score: report.agreement_score ?? null,
+                        models_agreement: report.models_agreement || null,
+                        comparison_analysis: report.comparison_analysis || null,
+                        errors: report.multi_ai_error
+                            ? [{ model: 'Multi-AI', error: report.multi_ai_error }]
+                            : []
+                    };
+                }
+
+                console.log('[report1.9] Multi-AI data:', {
+                    hasGemini: !!multiAI.gemini_result,
+                    hasClaude: !!multiAI.claude_result,
+                    consensusLevel: multiAI.consensus_risk_level,
+                    agreement: multiAI.agreement_score
+                });
+
+                container.innerHTML = renderDetailedAnalysis(multiAI, report);
+
+            } catch (error) {
+                console.error('[report1.9] Error:', error);
+                container.innerHTML = `
+                    <div class="error-container">
+                        <h3>Error Loading Multi-AI Analysis</h3>
+                        <p style="color: #666; margin: 10px 0; word-wrap: break-word;">${error.message}</p>
+                        <p style="font-size: 12px; color: #999;">Check console for more details.</p>
+                    </div>
+                `;
+            }
+        }
+
+        function renderModelSection(model, modelName, modelClass) {
+            if (!model) {
+                return `<div class="model-section ${modelClass}"><div class="model-header">${modelName}</div><p style="color: #9ca3af;"> Results not available for this model</p></div>`;
+            }
+
+            return `
+                <div class="model-section ${modelClass}">
+                    <div class="model-header">${modelName}</div>
+                    
+                    <div class="metric-row">
+                        <div class="metric-item">
+                            <div class="metric-label">Risk Level</div>
+                            <div class="metric-value">${model.risk_level || 'N/A'}</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-label">Risk Percentage</div>
+                            <div class="metric-value">${model.risk_percentage || 'N/A'}%</div>
+                        </div>
+                    </div>
+
+                    <div class="metric-row">
+                        <div class="metric-item">
+                            <div class="metric-label">Confidence Level</div>
+                            <div class="metric-value">${model.confidence_level || 'N/A'}%</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-label">Risk Factors</div>
+                            <div class="metric-value">${(model.risk_factors || []).length} identified</div>
+                        </div>
+                    </div>
+
+                    ${model.risk_factors && model.risk_factors.length > 0 ? `
+                        <div class="recommendations-box">
+                            <strong> Risk Factors:</strong>
+                            <ul>
+                                ${model.risk_factors.map(f => `<li>${f}</li>`).join('')}
+                            </ul>
+                        </div>
+                    ` : ''}
+
+                    ${model.urgent_concerns && model.urgent_concerns.length > 0 ? `
+                        <div class="recommendations-box" style="background: #fee; border-color: #dc2626;">
+                            <strong style="color: #991b1b;"> URGENT CONCERNS:</strong>
+                            <ul style="color: #991b1b;">
+                                ${model.urgent_concerns.map(c => `<li>${c}</li>`).join('')}
+                            </ul>
+                        </div>
+                    ` : ''}
+
+                    ${model.cardiac_recommendations && model.cardiac_recommendations.length > 0 ? `
+                        <div class="recommendations-box">
+                            <strong> Recommendations:</strong>
+                            <ul>
+                                ${model.cardiac_recommendations.slice(0, 5).map(r => `<li>${r}</li>`).join('')}
+                                ${model.cardiac_recommendations.length > 5 ? `<li><em>... and ${model.cardiac_recommendations.length - 5} more</em></li>` : ''}
+                            </ul>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        }
+
+        function renderDetailedAnalysis(multiAI, report) {
+            const hasGemini = !!multiAI.gemini_result;
+            const hasClaude = !!multiAI.claude_result;
+            const hasAnyResults = hasGemini || hasClaude;
+            
+            if (!hasAnyResults) {
+                return `
+                    <div style="background: #fff7ed; border: 1px solid #fed7aa; padding: 24px; border-radius: 8px; text-align: center;">
+                        <h3 style="color: #9a3412; margin-top: 0;">⚠️ No Model Results Available Yet</h3>
+                        <p style="color: #7c2d12;">The diagnostic has been generated but AI model results are missing. Please go back to <strong>report1.7</strong> and regenerate.</p>
+                        ${multiAI.errors && multiAI.errors.length > 0 ? `
+                            <div style="background: #fee; padding: 12px; border-radius: 6px; margin-top: 12px; text-align: left;">
+                                ${multiAI.errors.map(e => `<div style="font-size:13px;color:#991b1b;"><strong>${e.model}:</strong> ${e.error}</div>`).join('')}
+                            </div>` : ''}
+                    </div>
+                `;
+            }
+
+            let consensusHtml = '';
+            if (multiAI.consensus_risk_level && multiAI.agreement_score !== undefined) {
+                consensusHtml = `
+                    <div class="consensus-section">
+                        <h2 style="margin-top: 0;">Overall Clinical Consensus</h2>
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 20px; font-size: 14px;">
+                            <div>
+                                <div style="opacity: 0.8; margin-bottom: 8px;">Consensus Risk Level</div>
+                                <div style="font-size: 24px; font-weight: bold;">${multiAI.consensus_risk_level}</div>
+                            </div>
+                            <div>
+                                <div style="opacity: 0.8; margin-bottom: 8px;">Average Risk %</div>
+                                <div style="font-size: 24px; font-weight: bold;">${multiAI.consensus_risk_percentage}%</div>
+                            </div>
+                            <div>
+                                <div style="opacity: 0.8; margin-bottom: 8px;">Model Agreement</div>
+                                <div style="font-size: 24px; font-weight: bold;">${multiAI.agreement_score}%</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            return `
+                ${consensusHtml}
+
+                <!-- Individual Model Analyses -->
+                <h3 style="font-size: 20px; font-weight: bold; margin: 40px 0 20px 0; padding-bottom: 12px; border-bottom: 2px solid #1f2937;"> Individual AI Model Results</h3>
+
+                ${renderModelSection(multiAI.gemini_result, '🔵 Gemini Analysis', 'gemini-section')}
+                ${renderModelSection(multiAI.claude_result, '🟣 Claude Analysis', 'claude-section')}
+
+                <!-- Comparison Analysis -->
+                <h3 style="font-size: 20px; font-weight: bold; margin: 40px 0 20px 0; padding-bottom: 12px; border-bottom: 2px solid #1f2937;">Detailed Comparison</h3>
+                <div class="comparison-analysis">${multiAI.comparison_analysis || 'No detailed comparison available'}</div>
+
+                <!-- Errors if any -->
+                ${multiAI.errors && multiAI.errors.length > 0 ? `
+                    <div style="background: #fee; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                        <h3 style="color: #c33; margin-top: 0;"> Processing Notes</h3>
+                        <ul style="margin: 10px 0;">
+                            ${multiAI.errors.map(err => `<li><strong>${err.model}:</strong> ${err.error}</li>`).join('')}
+                        </ul>
+                    </div>
+                ` : ''}
+            `;
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', loadDetailedAnalysis);
+        } else {
+            loadDetailedAnalysis();
+        }
+    </script>
+
+</body>
+</html> 

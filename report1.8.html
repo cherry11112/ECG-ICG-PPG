@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="dist/css/style.css">
+    <title>Multi-AI Diagnostic Comparison</title>
+</head>
+<body class="text-gray-800 font-inter">
+    
+    <div class="fixed left-0 top-0 w-64 h-full p-4 z-50 sidebar-menu transition-transform" 
+    style="background: url('img/picture11.png') no-repeat center center / cover;">
+        <a href="#" class="flex items-center pb-4 border-b border-b-gray-800">
+            <img src="img/fraunhofer-logo.jpg" alt="" class="w-8 h-8 rounded object-cover">
+            <span class="text-lg font-bold text-black ml-3"></span>
+        </a>
+        <ul class="mt-4">
+            <li class="mb-1 group">
+                <a href="patient1.html" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">
+                    <i class="ri-home-2-line mr-3 text-lg"></i>
+                    <span class="text-sm">Dashboard</span>
+                </a>
+            </li>
+            <li class="mb-1 group active">
+                <a href="#" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100 sidebar-dropdown-toggle">
+                    <i class="ri-file-info-line mr-3 text-lg"></i>
+                    <span class="text-white">Reports</span>
+                </a>
+            </li>
+            <li class="mb-1 group">
+                <a href="#" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">
+                    <i class="ri-settings-2-line mr-3 text-lg"></i>
+                    <span class="text-sm">Settings</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="fixed top-0 left-0 w-full h-full bg-black/50 z-40 md:hidden sidebar-overlay"></div>
+
+    <main class="w-full md:w-[calc(100%-256px)] md:ml-64 bg-gray-50 min-h-screen transition-all main">
+        <div class="py-2 px-6 bg-white flex items-center shadow-md shadow-black/5 sticky top-0 left-0 z-30">
+            <button type="button" class="text-lg text-gray-600 sidebar-toggle">
+                <i class="ri-menu-line"></i>
+            </button>
+            <ul class="flex items-center text-sm ml-4">
+                <li class="mr-2">
+                    <a href="#" class="text-gray-400 hover:text-gray-600 font-medium">Dashboard</a>
+                </li>
+            </ul>
+            <ul class="ml-auto flex items-center">
+                <li class="dropdown ml-3">
+                    <button type="button" class="dropdown-toggle flex items-center">
+                        <img src="img/user-profile-icon-free-vector.jpg" alt="" class="w-8 h-8 rounded-full block object-cover align-middle">
+                    </button>                   
+                    <ul class="dropdown-menu shadow-md shadow-black/5 z-30 hidden py-1.5 rounded-md bg-white border border-gray-100 w-full max-w-[140px]">
+                        <li><a href="#">Profile</a></li>
+                        <li><a href="#">Logout</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <div class="p-6">
+            <div class="grid grid-cols-1 gap-6 mb-6">
+                <div class="bg-white rounded-md border border-gray-100 p-6 shadow-md shadow-black/5">
+                    <div class="flex justify-between mb-6">
+                        <div class="w-full">
+                            <div class="text font-semibold mb-3" style="font-size: 2rem;"> Multi-AI Diagnostic Comparison</div>
+                            <div class="text-lg font-small text-gray-300" style="color: gray;">
+                                Comparison of Gemini and Claude AI Diagnostic Results
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Report Content Container -->
+                <div id="reportContainer">
+                    <div class="loading">
+                        <i class="ri-loader-4-line text-3xl" style="animation: spin 1s linear infinite;"></i>
+                        <p>Loading diagnostic results...</p>
+                    </div>
+                </div>
+
+                <div class="submit-button-container mt-6 flex justify-between">
+                    <a href="report1.7.html">
+                        <button type="button" class="px-3 py-1 bg-white text-black border border-black rounded-sm text-sm">Back</button>
+                    </a>
+                    <div class="flex gap-2">
+                        <a href="report1.9.html">
+                            <button type="button" class="px-3 py-1 bg-blue-600 text-white border border-blue-600 rounded-sm text-sm">Next</button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="dist/js/report.js"></script>
+
+    <style>
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            overflow-x: auto;
+            display: block;
+        }
+        
+        @media (max-width: 768px) {
+            .comparison-table {
+                font-size: 13px;
+            }
+            .comparison-table td,
+            .comparison-table th {
+                padding: 8px;
+            }
+        }
+        
+        .comparison-table th {
+            background: #2d3748;
+            color: white;
+            padding: 12px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 13px;
+        }
+        
+        .comparison-table td {
+            padding: 12px;
+            border-bottom: 1px solid #e2e8f0;
+            text-align: center;
+        }
+        
+        .comparison-table tr:first-child td {
+            text-align: left;
+        }
+        
+        .comparison-table tr:nth-child(even) {
+            background: #f7fafc;
+        }
+        
+        .model-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 12px;
+            margin-right: 4px;
+        }
+        
+        .badge-gemini {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .badge-claude {
+            background: #e9d5ff;
+            color: #6b21a8;
+        }
+        
+        .agreement-indicator {
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .agreement-high {
+            color: #16a34a;
+        }
+        
+        .agreement-medium {
+            color: #ea580c;
+        }
+        
+        .agreement-low {
+            color: #dc2626;
+        }
+        
+        .consensus-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .consensus-box h2 {
+            margin: 0 0 16px 0;
+            font-size: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .consensus-box {
+                padding: 16px;
+            }
+            .consensus-box h2 {
+                font-size: 18px;
+            }
+        }
+    </style>
+
+    <script type="module">
+        async function loadComparison() {
+            const container = document.getElementById('reportContainer');
+            const token = localStorage.getItem('token');
+            const patientId = localStorage.getItem('userId');
+
+            if (!token || !patientId) {
+                container.innerHTML = `<div class="error-container"><h3>Error: Not Authenticated</h3><p>Please log in to view multi-AI analysis.</p></div>`;
+                return;
+            }
+
+            try {
+                console.log('[report1.8] Fetching diagnostic data...');
+
+                // POST returns cached result instantly if data unchanged, or generates fresh
+                const response = await fetch('/api/diagnostic/generate-diagnostic', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ patient_id: parseInt(patientId) })
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({}));
+                    throw new Error(`API Error ${response.status}: ${errorData.details || errorData.error || 'Unknown error'}`);
+                }
+
+                const data = await response.json();
+                const report = data.report;
+
+                if (!report) {
+                    throw new Error('No report data in response');
+                }
+
+                console.log('[report1.8] Report keys:', Object.keys(report));
+
+                // Parse multi_ai_diagnostics — may be stored as JSON string in DB
+                let multiAI = report.multi_ai_diagnostics || null;
+                if (typeof multiAI === 'string') {
+                    try { multiAI = JSON.parse(multiAI); } catch (_) { multiAI = null; }
+                }
+
+                // If still missing, build best-effort from top-level report fields
+                if (!multiAI) {
+                    multiAI = {
+                        gemini_result: report.gemini_result || null,
+                        claude_result: report.claude_result || null,
+                        consensus_risk_level: report.consensus_risk_level || null,
+                        consensus_risk_percentage: report.consensus_risk_percentage || null,
+                        agreement_score: report.agreement_score ?? null,
+                        models_agreement: report.models_agreement || null,
+                        comparison_analysis: report.comparison_analysis || null,
+                        errors: report.multi_ai_error
+                            ? [{ model: 'Multi-AI', error: report.multi_ai_error }]
+                            : []
+                    };
+                }
+
+                console.log('[report1.8] Multi-AI data:', {
+                    hasGemini: !!multiAI.gemini_result,
+                    hasClaude: !!multiAI.claude_result,
+                    consensusLevel: multiAI.consensus_risk_level,
+                    agreement: multiAI.agreement_score
+                });
+
+                container.innerHTML = renderComparison(multiAI);
+
+            } catch (error) {
+                console.error('[report1.8] Error:', error);
+                container.innerHTML = `
+                    <div class="error-container">
+                        <h3>Error Loading Multi-AI Analysis</h3>
+                        <p style="color: #666; margin: 10px 0; word-wrap: break-word;">${error.message}</p>
+                        <p style="font-size: 12px; color: #999;">Check console for more details.</p>
+                    </div>
+                `;
+            }
+        }
+
+        function getAgreementClass(score) {
+            if (score >= 80) return 'agreement-high';
+            if (score >= 60) return 'agreement-medium';
+            return 'agreement-low';
+        }
+
+        function renderComparison(multiAI) {
+            const hasGemini = !!multiAI.gemini_result;
+            const hasClaude = !!multiAI.claude_result;
+            const hasAnyResults = hasGemini || hasClaude;
+            
+            if (!hasAnyResults) {
+                return `
+                    <div style="background: #fff7ed; border: 1px solid #fed7aa; padding: 24px; border-radius: 8px; text-align: center;">
+                        <h3 style="color: #9a3412; margin-top: 0;">⚠️ No Model Results Available Yet</h3>
+                        <p style="color: #7c2d12;">The diagnostic has been generated but AI model results are missing. Please go back to <strong>report1.7</strong> and regenerate.</p>
+                        ${multiAI.errors && multiAI.errors.length > 0 ? `
+                            <div style="background: #fee; padding: 12px; border-radius: 6px; margin-top: 12px; text-align: left;">
+                                ${multiAI.errors.map(e => `<div style="font-size:13px;color:#991b1b;"><strong>${e.model}:</strong> ${e.error}</div>`).join('')}
+                            </div>` : ''}
+                    </div>
+                `;
+            }
+
+            let errorHtml = '';
+            if (multiAI.errors && multiAI.errors.length > 0) {
+                const isPartial = hasGemini || hasClaude;
+                errorHtml = `<div style="background:${isPartial ? '#fff7ed; border:1px solid #fed7aa' : '#fee'}; padding: 16px; border-radius: 8px; margin: 16px 0;">
+                    <h3 style="color: ${isPartial ? '#92400e' : '#c33'}; margin-top: 0; font-size:15px;">
+                        ⚠️ ${isPartial ? 'Partial Results — One Model Unavailable' : 'Model Errors'}
+                    </h3>
+                    <ul style="margin: 8px 0; font-size:13px;">
+                        ${multiAI.errors.map(err => `<li><strong>${err.model}:</strong> ${err.error}</li>`).join('')}
+                    </ul></div>`;
+            }
+
+            let consensusHtml = '';
+            if (multiAI.consensus_risk_level && multiAI.agreement_score !== undefined) {
+                consensusHtml = `
+                    <div class="consensus-box">
+                        <h2 style="margin-top: 0; font-size: 24px;">Overall Consensus</h2>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 20px; margin-top: 20px;">
+                            <div>
+                                <div style="font-size: 12px; opacity: 0.9;">Risk Level</div>
+                                <div style="font-size: 28px; font-weight: bold;">${multiAI.consensus_risk_level}</div>
+                            </div>
+                            <div>
+                                <div style="font-size: 12px; opacity: 0.9;">Risk Percentage</div>
+                                <div style="font-size: 28px; font-weight: bold;">${multiAI.consensus_risk_percentage}%</div>
+                            </div>
+                            <div>
+                                <div style="font-size: 12px; opacity: 0.9;">Model Agreement</div>
+                                <div style="font-size: 24px; font-weight: bold;">${multiAI.agreement_score}%</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            return `
+                ${consensusHtml}
+                ${errorHtml}
+                ${renderComparisonTable(multiAI)}
+                ${renderAgreementMetrics(multiAI)}
+                ${renderClaudeDiagnostic(multiAI.claude_result)}
+            `;
+        }
+
+        function renderComparisonTable(multiAI) {
+            const gemini = multiAI.gemini_result || {};
+            const claude = multiAI.claude_result || {};
+
+            return `
+                <div class="bg-white rounded-md border border-gray-100 p-6 shadow-md shadow-black/5" style="margin-top: 30px;">
+                    <h3 style="font-size: 18px; font-weight: bold; margin-top: 0; margin-bottom: 20px;">AI Model Risk Assessments</h3>
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 30%;">Metric</th>
+                                <th style="text-align: center; width: 50%;">
+                                    <span class="model-badge badge-gemini">GEMINI</span>
+                                </th>
+                                <th style="text-align: center; width: 50%;">
+                                    <span class="model-badge badge-claude">CLAUDE</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Risk Level</strong></td>
+                                <td style="text-align: center;">${gemini.risk_level || 'N/A'}</td>
+                                <td style="text-align: center;">${claude.risk_level || 'N/A'}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Risk Percentage</strong></td>
+                                <td style="text-align: center;">${gemini.risk_percentage || 'N/A'}%</td>
+                                <td style="text-align: center;">${claude.risk_percentage || 'N/A'}%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Confidence Level</strong></td>
+                                <td style="text-align: center;">${gemini.confidence_level || 'N/A'}%</td>
+                                <td style="text-align: center;">${claude.confidence_level || 'N/A'}%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Urgent Concerns</strong></td>
+                                <td style="text-align: center;">${(gemini.urgent_concerns?.length || 0)} items</td>
+                                <td style="text-align: center;">${(claude.urgent_concerns?.length || 0)} items</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Risk Factors</strong></td>
+                                <td style="text-align: center;">${(gemini.risk_factors?.length || 0)} items</td>
+                                <td style="text-align: center;">${(claude.risk_factors?.length || 0)} items</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        }
+
+        function renderAgreementMetrics(multiAI) {
+            const agreement = multiAI.models_agreement || {};
+
+            return `
+                <div class="bg-white rounded-md border border-gray-100 p-6 shadow-md shadow-black/5" style="margin-top: 30px;">
+                    <h3 style="font-size: 18px; font-weight: bold; margin-top: 0; margin-bottom: 20px;">Model Agreement Analysis</h3>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                        <div style="padding: 15px; background: #f5f5f5; border-radius: 8px; border-left: 4px solid #fbbf24;">
+                            <div style="font-weight: bold; margin-bottom: 8px;">Gemini ↔ Claude</div>
+                            <div class="agreement-indicator ${agreement.gemini_claude_agreement ? 'agreement-high' : 'agreement-low'}">
+                                ${agreement.gemini_claude_agreement ? ' In Agreement' : ' Divergent'}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderClaudeDiagnostic(claudeResult) {
+            if (!claudeResult) {
+                return '';
+            }
+
+            const risk = claudeResult.risk_level || 'N/A';
+            const riskPct = claudeResult.risk_percentage ?? 'N/A';
+            const confidence = claudeResult.confidence_level ?? 'N/A';
+            const summary = claudeResult.summary || '';
+            const clinicalAssessment = claudeResult.clinical_assessment || '';
+            const detailedRecs = claudeResult.detailed_recommendations || '';
+            const monitoringPlan = claudeResult.monitoring_plan || '';
+            const followUp = claudeResult.follow_up_timeline || '';
+            const prognosis = claudeResult.prognosis_note || '';
+
+            const conditions = claudeResult.condition_risk_assessments || {};
+            const riskFactors = Array.isArray(claudeResult.risk_factors) ? claudeResult.risk_factors : [];
+            const keyFindings = Array.isArray(claudeResult.key_findings) ? claudeResult.key_findings : [];
+            const urgentConcerns = Array.isArray(claudeResult.urgent_concerns) ? claudeResult.urgent_concerns : [];
+            const cardiacRecs = Array.isArray(claudeResult.cardiac_recommendations) ? claudeResult.cardiac_recommendations : [];
+            const lifestyleChanges = Array.isArray(claudeResult.lifestyle_modifications) ? claudeResult.lifestyle_modifications : [];
+
+            return `
+                <div class="bg-white rounded-md border border-gray-100 p-6 shadow-md shadow-black/5" style="margin-top: 30px;">
+                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
+                        <span class="model-badge badge-claude" style="font-size: 14px; padding: 6px 12px;">CLAUDE AI</span>
+                        <h3 style="font-size: 18px; font-weight: bold; margin: 0;">Full Diagnostic Report</h3>
+                    </div>
+
+                    <!-- Overall Risk Assessment -->
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 20px;">
+                        <div style="padding: 15px; background: linear-gradient(135deg, #e9d5ff 0%, #d8b4fe 100%); border-radius: 8px;">
+                            <div style="font-size: 12px; color: #6b21a8; font-weight: 600; margin-bottom: 5px;">Overall Risk Level</div>
+                            <div style="font-size: 24px; font-weight: bold; color: #6b21a8;">${risk}</div>
+                        </div>
+                        <div style="padding: 15px; background: linear-gradient(135deg, #f3e8ff 0%, #ede9fe 100%); border-radius: 8px;">
+                            <div style="font-size: 12px; color: #6b21a8; font-weight: 600; margin-bottom: 5px;">Risk Percentage</div>
+                            <div style="font-size: 24px; font-weight: bold; color: #6b21a8;">${riskPct}%</div>
+                        </div>
+                        <div style="padding: 15px; background: linear-gradient(135deg, #e9d5ff 0%, #d8b4fe 100%); border-radius: 8px;">
+                            <div style="font-size: 12px; color: #6b21a8; font-weight: 600; margin-bottom: 5px;">Confidence Level</div>
+                            <div style="font-size: 24px; font-weight: bold; color: #6b21a8;">${confidence}%</div>
+                        </div>
+                    </div>
+
+                    <!-- Executive Summary -->
+                    ${summary ? `
+                        <div style="margin-bottom: 20px; padding: 15px; background: #f9f5ff; border-left: 4px solid #d8b4fe; border-radius: 4px;">
+                            <h4 style="margin-top: 0; color: #6b21a8;">Executive Summary</h4>
+                            <p style="margin: 0; color: #333; line-height: 1.6;">${summary}</p>
+                        </div>
+                    ` : ''}
+
+                    <!-- Urgent Concerns -->
+                    ${urgentConcerns.length > 0 ? `
+                        <div style="margin-bottom: 20px; padding: 15px; background: #fee; border-left: 4px solid #dc2626; border-radius: 4px;">
+                            <h4 style="margin-top: 0; color: #991b1b;">🚨 Urgent Concerns</h4>
+                            <ul style="margin: 0; padding-left: 20px; color: #7c2d12;">
+                                ${urgentConcerns.map(concern => `<li>${concern}</li>`).join('')}
+                            </ul>
+                        </div>
+                    ` : ''}
+
+                    <!-- Condition Risk Assessments -->
+                    <div style="margin-bottom: 20px;">
+                        <h4 style="margin-top: 0; margin-bottom: 12px; color: #333;">Condition-Specific Risk Assessments (19 Conditions)</h4>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px;">
+                            ${Object.entries(conditions).map(([condition, level]) => `
+                                <div style="padding: 10px; background: #f5f5f5; border-radius: 6px; border-left: 3px solid ${
+                                    level === 'Very High' ? '#dc2626' :
+                                    level === 'High' ? '#ea580c' :
+                                    level === 'Moderate' ? '#f59e0b' :
+                                    level === 'Low' ? '#10b981' :
+                                    '#6b7280'
+                                };">
+                                    <div style="font-size: 12px; color: #666; margin-bottom: 4px;">${condition.replace(/_/g, ' ').toUpperCase()}</div>
+                                    <div style="font-size: 13px; font-weight: 600; color: #333;">${level}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <!-- Key Findings -->
+                    ${keyFindings.length > 0 ? `
+                        <div style="margin-bottom: 20px; padding: 15px; background: #f0f9ff; border-left: 4px solid #0284c7; border-radius: 4px;">
+                            <h4 style="margin-top: 0; color: #0c4a6e;">Key Clinical Findings</h4>
+                            <ul style="margin: 0; padding-left: 20px; color: #164e63;">
+                                ${keyFindings.map(finding => `<li>${finding}</li>`).join('')}
+                            </ul>
+                        </div>
+                    ` : ''}
+
+                    <!-- Risk Factors -->
+                    ${riskFactors.length > 0 ? `
+                        <div style="margin-bottom: 20px; padding: 15px; background: #fef3c7; border-left: 4px solid #f59e0b; border-radius: 4px;">
+                            <h4 style="margin-top: 0; color: #92400e;">Identified Risk Factors</h4>
+                            <ul style="margin: 0; padding-left: 20px; color: #b45309;">
+                                ${riskFactors.map(factor => `<li>${factor}</li>`).join('')}
+                            </ul>
+                        </div>
+                    ` : ''}
+
+                    <!-- Clinical Assessment -->
+                    ${clinicalAssessment ? `
+                        <div style="margin-bottom: 20px; padding: 15px; background: #f5f5f5; border-radius: 4px;">
+                            <h4 style="margin-top: 0; color: #333;">Clinical Assessment</h4>
+                            <p style="margin: 0; color: #555; line-height: 1.6; white-space: pre-wrap;">${clinicalAssessment}</p>
+                        </div>
+                    ` : ''}
+
+                    <!-- Cardiac Recommendations -->
+                    ${cardiacRecs.length > 0 ? `
+                        <div style="margin-bottom: 20px; padding: 15px; background: #f0fdf4; border-left: 4px solid #10b981; border-radius: 4px;">
+                            <h4 style="margin-top: 0; color: #065f46;">Cardiac-Specific Recommendations</h4>
+                            <ul style="margin: 0; padding-left: 20px; color: #166534;">
+                                ${cardiacRecs.map(rec => `<li>${rec}</li>`).join('')}
+                            </ul>
+                        </div>
+                    ` : ''}
+
+                    <!-- Detailed Recommendations -->
+                    ${detailedRecs ? `
+                        <div style="margin-bottom: 20px; padding: 15px; background: #f5f5f5; border-radius: 4px;">
+                            <h4 style="margin-top: 0; color: #333;">Detailed Recommendations</h4>
+                            <p style="margin: 0; color: #555; line-height: 1.6; white-space: pre-wrap;">${detailedRecs}</p>
+                        </div>
+                    ` : ''}
+
+                    <!-- Lifestyle Modifications -->
+                    ${lifestyleChanges.length > 0 ? `
+                        <div style="margin-bottom: 20px; padding: 15px; background: #fef2f2; border-left: 4px solid #f97316; border-radius: 4px;">
+                            <h4 style="margin-top: 0; color: #7c2d12;">Recommended Lifestyle Modifications</h4>
+                            <ul style="margin: 0; padding-left: 20px; color: #9a3412;">
+                                ${lifestyleChanges.map(mod => `<li>${mod}</li>`).join('')}
+                            </ul>
+                        </div>
+                    ` : ''}
+
+                    <!-- Monitoring Plan -->
+                    ${monitoringPlan ? `
+                        <div style="margin-bottom: 20px; padding: 15px; background: #f5f5f5; border-radius: 4px;">
+                            <h4 style="margin-top: 0; color: #333;">Monitoring Plan</h4>
+                            <p style="margin: 0; color: #555; line-height: 1.6; white-space: pre-wrap;">${monitoringPlan}</p>
+                        </div>
+                    ` : ''}
+
+                    <!-- Follow-up Timeline -->
+                    ${followUp ? `
+                        <div style="margin-bottom: 20px; padding: 15px; background: #f9f5ff; border-left: 4px solid #d8b4fe; border-radius: 4px;">
+                            <h4 style="margin-top: 0; color: #6b21a8;">Follow-up Timeline</h4>
+                            <p style="margin: 0; color: #555; line-height: 1.6; white-space: pre-wrap;">${followUp}</p>
+                        </div>
+                    ` : ''}
+
+                    <!-- Prognosis Note -->
+                    ${prognosis ? `
+                        <div style="margin-bottom: 20px; padding: 15px; background: #f5f5f5; border-radius: 4px;">
+                            <h4 style="margin-top: 0; color: #333;">Prognosis Note</h4>
+                            <p style="margin: 0; color: #555; line-height: 1.6; white-space: pre-wrap;">${prognosis}</p>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', loadComparison);
+        } else {
+            loadComparison();
+        }
+    </script>
+
+</body>
+</html>
+
+
+

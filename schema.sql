@@ -1,0 +1,444 @@
+-- Users table
+create table if not exists users (
+  id serial primary key,
+  full_name text not null,
+  username text unique not null,
+  password_hash text not null,
+  role text not null check (role in ('doctor','patient')),
+  created_at timestamptz not null default now()
+);
+
+-- TODO(voice-agent): chat_memory table removed — it was n8n's own conversation-memory
+-- store (n8n wrote to it directly, not through this app's API). If the Claude/Pipecat
+-- agent needs persisted session memory, design that storage in Stage 2+.
+
+-- Session Answers (temporary storage for voice feedback collection)
+-- Stores individual question answers during voice session collection
+-- Only committed to feedback_form table when all 27 questions are answered
+create table if not exists session_answers (
+  id serial primary key,
+  patient_id integer not null references users(id) on delete cascade,
+  session_id text not null,
+  question_id text not null,
+  answer_value text,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  UNIQUE(session_id, question_id)
+);
+
+-- Index for faster session lookups
+create index if not exists idx_session_answers_session on session_answers(session_id);
+create index if not exists idx_session_answers_patient_session on session_answers(patient_id, session_id);
+
+-- Doctor reports for patients
+create table if not exists reports (
+  id serial primary key,
+  patient_id integer not null references users(id) on delete cascade,
+  doctor_id integer not null references users(id) on delete cascade,
+  sick_status text,
+  notes text,
+  diagnosis text,
+  created_at timestamptz not null default now()
+);
+
+
+-- column feedback form mapped from patient1.html
+create table if not exists feedback_form (
+  id serial primary key,
+  patient_id integer not null references users(id) on delete cascade,
+  created_at timestamptz not null default now(),
+
+  dyspnea text,
+  orthopnea text,
+  paroxysmal_nocturnal_dyspnea text,
+  cyanosis text,
+  jugular_venous_distension text,
+  nighttime_urination_count integer,
+  chest_pain text,
+  arm_pain text,
+  leg_pain text,
+  jaw_pain text,
+  back_pain text,
+  stomach_pain text,
+  headache text,
+  numb_arms_legs text,
+  visual_disturbances text,
+  palpitations text,
+  sweating text,
+  leg_swelling text,
+  abdominal_bloating text,
+  weight_kg numeric,
+  walk_6min_distance_m numeric,
+  blood_pressure_systolic integer,
+  blood_pressure_diastolic integer,
+  fatigue_level integer,
+  sleep_quality integer,
+  anxious text,
+  erectile_dysfunction text,
+  free_comment text
+);
+
+-- P1report.html multiPageForm exact-column mapping
+create table if not exists report_form (
+  id serial primary key,
+  patient_id integer not null references users(id) on delete cascade,
+  created_at timestamptz not null default now(),
+
+  -- Page 1: General Information
+  reporttype text,
+  date_of_birth date,
+  gender text,
+  age integer,
+  bmi numeric,
+  weight numeric,
+  height numeric,
+  ethnicity text,
+  smoking text,
+  smoking_duration numeric,
+  cigarettes_per_day integer,
+  alcohol text,
+  diet text,
+  diet_other_text text,
+
+  -- Page 2: Family History
+  heart_attack text,
+  sudden_death text,
+  stroke text,
+  heart_failure text,
+  heart_rhythm text,
+  heart_defect text,
+  blood_pressure text,
+  diabetes text,
+  cholesterol text,
+  cancer text,
+  other_illness_text text,
+  nyha text,
+  acc_stage text,
+
+  -- Page 3: Non-cardiac Diseases
+  diabetes_type_1 text,
+  diabetes_type_2 text,
+  metabolic_syndrome text,
+  dyslipidemia text,
+  anemia text,
+  thyroid_dysfunction text,
+  significant_kidney_disease text,
+  on_dialysis text,
+  coagulation_liver_disease text,
+  chronic_liver_disease text,
+
+  -- Page 4: Hereditary Diseases
+  heart_disease text,
+  diabetes1 text,
+  cardiac text,
+  hypercholesterolemia text,
+  arrhythmia text,
+  cardiomyopathy text,
+  aortic_dissection text,
+  tumors text,
+  cardiomyophaties text,
+  cardiac_amyloidosis text,
+  qt_syndrome text,
+  tachycardia text,
+  heart_valve text,
+  hr_pulmonary_hypertension text,
+  faf text,
+  underdeveloped_heart text,
+
+  -- Page 5-6: Cardio Diagnostic & Lab Results
+  timing_and_type_input text,
+  hfpef text,
+  hfref text,
+  troponin_i numeric,
+  troponin_t numeric,
+  ci numeric,
+  nt numeric,
+  crp numeric,
+  ddimer numeric,
+  homocysteine numeric,
+  ldl numeric,
+  hdl numeric,
+  triglycerides numeric,
+  hba1c numeric,
+  bun numeric,
+  creatinine numeric,
+  blood_ph numeric,
+  ketones text,
+  ck_mb text,
+  ck_mb_not_measured text,
+  sodium numeric,
+  potassium numeric,
+  calcium numeric,
+  calcium_not_assessed text,
+  magnesium numeric,
+  magnesium_not_assessed text,
+  chloride numeric,
+  chloride_not_assessed text,
+  tsh numeric,
+  tsh_not_assessed text,
+  free_t3 numeric,
+  free_t3_not_assessed text,
+  free_t4 numeric,
+  free_t4_not_assessed text,
+  testosterone numeric,
+  testosterone_not_assessed text,
+  ferritin numeric,
+  transferrin_saturation numeric,
+  myoglobin numeric,
+  myoglobin_not_measured text,
+  ldh numeric,
+  ldh_not_measured text,
+  bnp numeric,
+  bnp_not_measured text,
+  right_not_assessed text,
+
+  -- Page 8: Hemodynamic Pressure Profile
+  ci numeric,
+  ci_not_measured text,
+  systemic_vascular_resistance numeric,
+  systemic_vascular_resistance_not_measured text,
+  cvp numeric,
+  lvedp numeric,
+  ra numeric,
+  ra_not_measured text,
+  rv numeric,
+  rv_not_measured text,
+  pulmonary_artery numeric,
+  pulmonary_artery_not_measured text,
+  la numeric,
+  lv numeric,
+  aorta numeric,
+  pulmonary_capillary numeric,
+  pulmonary_capillary_not_measured text,
+  aortic_valve numeric,
+  aortic_valve_not_measured text,
+  mean_arterial_pressure numeric,
+  pasp numeric,
+  pasp_not_measured text,
+  systolic numeric,
+  diastolic numeric,
+  pulmonary_vascular_resistance numeric,
+  pulmonary_vascular_resistance_not_measured text,
+
+  -- Page 9: Echocardiography & Cardiac Structure
+  heart_size text,
+  lv_size text,
+  lv_ejection numeric,
+  lv_mass numeric,
+  lvmi numeric,
+  e_e numeric,
+  rve numeric,
+  ejection_time numeric,
+  cardiac_output numeric,
+  valvular_dysfunction text,
+  lv_hypertrophy text,
+  wall_motion_abn text,
+  pulmonary_capillary text,
+  rv_diameter numeric,
+  rv_wall numeric,
+  tapse text,
+  aortic_meter text,
+  ascending_aorta numeric,
+  inferior_vena_cava numeric,
+  ivc text,
+  valve_area text,
+  pgav text,
+  rv_fraction text,
+  vdsg text,
+  gls text,
+
+  -- Page 10: Imaging & Structural Findings
+  coronary_artery_calcium numeric,
+  periphral_artery text,
+  disease_present text,
+  disease_present_result text,
+  disease_present2 text,
+  disease_present2_result text,
+  disease_present3 text,
+  disease_present3_result text,
+  disease_present4 text,
+  disease_present4_result text,
+  asymptomatic_valvular text,
+  murmur_present text,
+  s3 text,
+  s4 text,
+
+  -- Diagnostics (from other pages)
+  time_left_diagnostic text,
+  arterial_disease text,
+  cac numeric,
+  ischemia text,
+  hypotension text,
+  prior_heart_attack text,
+  stroke1 text,
+  aorta_aneurysma text,
+  atherosclerosis text,
+  pulmonary_congestion text,
+  pleural_effusion text,
+  jugular_distension text,
+  constrictive_pericarditis text,
+  myocardial_infarction text,
+  bundle_branch_block text,
+  pulmonary_hypertension1 text,
+  vena_cava_obstruction text,
+  tricuspid_valve_stenosis text,
+  cardiomegaly text,
+  arrhythmias text,
+  bnp1 text,
+  lvesv text,
+  lvedv text,
+  pericardial_effusion text,
+  wall_motion_abnormalities text,
+  ankle_brachial text,
+  peripheral_artery_disease text,
+  coronary_artery_disease text,
+  congenital_heart_disease text,
+  endocarditis text,
+  myocarditis text,
+  pericarditis text,
+  heart_structural_abnormalities text,
+  abnormal_heart_sounds_s3 text,
+  abnormal_heart_sounds_s4 text,
+  murmurs_sounds text,
+  asymptomatic_valvular_disease text,
+  fractional_shortening text,
+  systemic_vascular_resistance text,
+  myoglobin text,
+  lactate text,
+  blood_sugar numeric,
+  testerone_level numeric,
+  t3 text,
+  t4 text,
+
+  -- Page 11-12: Medications
+  ace_inhibitors text,
+  ace_inhibitors_drug text,
+  arbs_2 text,
+  arb_drugs text,
+  beta_blockers text,
+  beta_blockers_drugs text,
+  calcium_channel_blockers text,
+  calcium_channel_blockers_drugs text,
+  diuretics_tablets text,
+  diuretics_drugs text,
+  other_heart_failure_medications text,
+  other_heart_failure_medications_drugs text,
+  nitrates text,
+  nitrates_drugs text,
+  antiarryhthmic_drugs text,
+  antiarrhythmic_drugs_drugs text,
+  antiplatelet_medication text,
+  antiplatelet_medication_drugs text,
+  oral_anticoagulants text,
+  oral_anticoagulants_drugs text,
+  statins text,
+  statins_drugs text,
+  other_lipid_lowering_drugs text,
+  other_lipid_lowering_drugs_drugs text,
+  medication_for_diabetes text,
+  medication_for_diabetes_drugs text,
+  medication_thyroid text,
+  medication_thyroid_drugs text,
+  medication_for_antidepressant text,
+  medication_antidepressant_drugs text,
+  anti_anxiety text,
+  anti_anxiety_drugs text,
+
+  -- Cardiac Procedures (septal myectomy, pacemaker, etc)
+  septal_myectomy text,
+  septal_myectomy_year text,
+  septal_myectomy_2 text,
+  septal_myectomy_year_2 text,
+  cardiac_pacemaker text,
+  cardiac_pacemaker_year text,
+  cardiac_icd text,
+  cardiac_icd_year text,
+  cardiac_crt text,
+  cardiac_crt_year text,
+  cardiac_catheter_ablation text,
+  cardiac_catheter_ablation_year text,
+  cardiac_maze_procedure text,
+  cardiac_maze_procedure_year text,
+  lvad_implementation text,
+  lvad_implementation_year text,
+  heart_transplant text,
+  heart_transplant_year text,
+  pulmonary_thromboendarterectomy text,
+  pulmonary_thromboendarterectomy_year text,
+  aortic_aneurysm text,
+  aortic_aneurysm_year text,
+  thoracic_surgery text,
+  thoracic_surgery_year text,
+  abdominal_surgeries text,
+  abdominal_surgeries_year text
+);
+
+-- Diagnostic Results from AI Analysis (n8n workflow generated)
+create table if not exists diagnostic_results (
+  id serial primary key,
+  patient_id integer not null references users(id) on delete cascade,
+  created_at timestamptz not null default now(),
+  
+  -- Report Metadata
+  generated_at timestamptz,
+  report_version text default '1.7',
+  analysis_model text default 'Gemini 2.0',
+  
+  -- Risk Assessment
+  risk_level text,
+  risk_percentage integer,
+  risk_factors jsonb,
+  
+  -- Key Clinical Findings
+  key_findings jsonb,
+  cardiac_recommendations jsonb,
+  lifestyle_modifications jsonb,
+  
+  -- Clinical Plan
+  monitoring_plan text,
+  follow_up_timeline text,
+  urgent_concerns jsonb,
+  confidence_level integer,
+  
+  -- Condition-Specific Risk Assessments (Cardiac Monitoring)
+  condition_risk_assessments jsonb,
+  
+  -- Comprehensive Clinical Assessment & Recommendations
+  clinical_assessment text,
+  detailed_recommendations text,
+  
+  -- Summary
+  summary text,
+  diagnostic_summary text,
+  prognosis_note text,
+  
+  -- Data Sources
+  has_feedback_data boolean,
+  has_report_data boolean,
+  has_ecg_data boolean,
+  
+  -- Raw Data References
+  ecg_findings jsonb,
+  vitals jsonb,
+  labs jsonb,
+  demographics jsonb,
+  symptoms jsonb,
+  
+  -- Multi-AI Diagnostic Results (Gemini + Claude)
+  gemini_result jsonb,
+  claude_result jsonb,
+  agreement_score integer,
+  consensus_risk_level text,
+  consensus_risk_percentage integer,
+  comparison_analysis text,
+  multi_ai_errors jsonb,
+  multi_ai_available boolean default false,
+  
+  -- Cloudflare Storage
+  cloudflare_html_url text,
+  cloudflare_json_url text
+);
+
+
+
+

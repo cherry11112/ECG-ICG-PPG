@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="dist/css/style.css">
+    <title>Cardiovascular Diagnostic Report</title>
+</head>
+<body class="text-gray-800 font-inter">
+    
+    <div class="fixed left-0 top-0 w-64 h-full p-4 z-50 sidebar-menu transition-transform" 
+    style="background: url('img/picture11.png') no-repeat center center / cover;">
+        <a href="#" class="flex items-center pb-4 border-b border-b-gray-800">
+            <img src="img/fraunhofer-logo.jpg" alt="" class="w-8 h-8 rounded object-cover">
+            <span class="text-lg font-bold text-black ml-3"></span>
+        </a>
+        <ul class="mt-4">
+            <li class="mb-1 group">
+                <a href="patient1.html" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">
+                    <i class="ri-home-2-line mr-3 text-lg"></i>
+                    <span class="text-sm">Dashboard</span>
+                </a>
+            </li>
+            <li class="mb-1 group active">
+                <a href="#" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100 sidebar-dropdown-toggle">
+                    <i class="ri-file-info-line mr-3 text-lg"></i>
+                    <span class="text-white">Reports</span>
+                </a>
+            </li>
+            <li class="mb-1 group">
+                <a href="#" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">
+                    <i class="ri-settings-2-line mr-3 text-lg"></i>
+                    <span class="text-sm">Settings</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="fixed top-0 left-0 w-full h-full bg-black/50 z-40 md:hidden sidebar-overlay"></div>
+
+    <!-- start: Main -->
+    <main class="w-full md:w-[calc(100%-256px)] md:ml-64 bg-gray-50 min-h-screen transition-all main">
+        <div class="py-2 px-6 bg-white flex items-center shadow-md shadow-black/5 sticky top-0 left-0 z-30">
+            <button type="button" class="text-lg text-gray-600 sidebar-toggle">
+                <i class="ri-menu-line"></i>
+            </button>
+            <ul class="flex items-center text-sm ml-4">
+                <li class="mr-2">
+                    <a href="#" class="text-gray-400 hover:text-gray-600 font-medium">Dashboard</a>
+                </li>
+            </ul>
+            <ul class="ml-auto flex items-center">
+                <li class="dropdown ml-3">
+                    <button type="button" class="dropdown-toggle flex items-center">
+                        <img src="img/user-profile-icon-free-vector.jpg" alt="" class="w-8 h-8 rounded-full block object-cover align-middle">
+                    </button>                   
+                    <ul class="dropdown-menu shadow-md shadow-black/5 z-30 hidden py-1.5 rounded-md bg-white border border-gray-100 w-full max-w-[140px]">
+                        <li>
+                            <a href="#" class="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-blue-500 hover:bg-gray-50">Profile</a>
+                        </li>
+                        <li>
+                            <a href="index.html" id="logoutBtn" class="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-blue-500 hover:bg-gray-50">Logout</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <div class="p-6">
+            <div class="grid grid-cols-1 gap-6 mb-6">
+                <div class="bg-white rounded-md border border-gray-100 p-6 shadow-md shadow-black/5">
+                    <div class="flex justify-between mb-6">
+                        <div class="w-full">
+                            <div class="text font-semibold mb-3" style="font-size: 2rem;">Cardiovascular Diagnostic Report</div>
+                            <div class="text-lg font-small text-gray-300" style="color: gray;">
+                                Risk Assessment & Cardiac Recommendations
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Report Content Container -->
+                <div id="reportContainer">
+                    <div class="loading">
+                        <i class="ri-loader-4-line text-3xl" style="animation: spin 1s linear infinite;"></i>
+                        <p>Generating diagnostic report...</p>
+                    </div>
+                </div>
+
+                <!-- Navigation Buttons -->
+                <div class="submit-button-container mt-6 flex justify-between">
+                    <a href="report1.6.html" id="backButton">
+                        <button type="button" class="px-3 py-1 bg-white text-black border border-black rounded-sm text-sm">Back</button>
+                    </a>
+                    <div class="flex gap-2">
+                        <a href="report1.8.html">
+                            <button type="button" class="px-3 py-1 bg-blue-600 text-white border border-blue-600 rounded-sm text-sm">Next</button>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="dist/js/report.js"></script>
+
+    <style>
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+    </style>
+
+    <script type="module">
+        // Diagnostic Report Generator
+        async function generateDiagnosticReport() {
+            const container = document.getElementById('reportContainer');
+            const token = localStorage.getItem('token');
+            const patientId = localStorage.getItem('userId');
+
+            if (!token || !patientId) {
+                container.innerHTML = `
+                    <div class="error-container">
+                        <h3>Error: Not Authenticated</h3>
+                        <p>Please log in to view your diagnostic report.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            try {
+                // Call diagnostic report API
+                const response = await fetch('/api/diagnostic/generate-diagnostic', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        patient_id: parseInt(patientId)
+                    })
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({}));
+                    const errorMsg = errorData.details || errorData.error || `API Error: ${response.status}`;
+                    throw new Error(errorMsg);
+                }
+
+                const data = await response.json();
+                const report = data.report;
+
+                // Render the report
+                container.innerHTML = renderReport(report);
+
+            } catch (error) {
+                console.error('Error generating report:', error);
+                container.innerHTML = '';
+            }
+        }
+
+        function renderConditionRisks(report) {
+            if (!report.condition_risk_assessments) {
+                return `<div style="grid-column: 1/-1; padding: 20px; background: #fef3c7; border: 1px solid #fcd34d; border-radius: 6px; color: #92400e;">No cardiac condition assessments available from diagnostic analysis.</div>`;
+            }
+
+            const conditions = {
+                'myocardial_infarction': { label: 'Myocardial Infarction', desc: 'Heart attack risk assessment' },
+                'stroke': { label: 'Stroke', desc: 'Cerebrovascular accident risk' },
+                'sudden_cardiac_death': { label: 'Sudden Cardiac Death', desc: 'Unexpected cardiac fatality risk' },
+                'coronary_artery_disease': { label: 'Coronary Artery Disease', desc: 'Blood vessel narrowing risk' },
+                'heart_failure': { label: 'Heart Failure', desc: 'Reduced cardiac function risk' },
+                'atrial_fibrillation': { label: 'Atrial Fibrillation', desc: 'Irregular heart rhythm risk' },
+                'hypertrophic_cardiomyopathy': { label: 'Hypertrophic Cardiomyopathy', desc: 'Thickened heart muscle risk' },
+                'dilated_cardiomyopathy': { label: 'Dilated Cardiomyopathy', desc: 'Enlarged heart muscle risk' },
+                'pulmonary_embolism': { label: 'Pulmonary Embolism', desc: 'Lung blood clot risk' },
+                'aortic_dissection': { label: 'Aortic Dissection', desc: 'Aorta tear risk' },
+                'endocarditis': { label: 'Endocarditis Risk', desc: 'Heart lining infection risk' },
+                'peripheral_artery_disease': { label: 'Peripheral Artery Disease', desc: 'Limb blood vessel narrowing' },
+                'complete_heart_block': { label: 'Complete Heart Block', desc: 'Total electrical block risk' },
+                'cardiac_arrest': { label: 'Cardiac Arrest', desc: 'Complete heart function loss risk' },
+                'angina_pectoris': { label: 'Angina Pectoris', desc: 'Chest pain from reduced blood flow' },
+                'pulmonary_hypertension': { label: 'Pulmonary Hypertension', desc: 'Elevated lung artery pressure' },
+                'pericarditis': { label: 'Pericarditis Risk', desc: 'Heart sac inflammation risk' },
+                'pulmonary_edema': { label: 'Pulmonary Edema', desc: 'Fluid in lungs risk' },
+                'peripheral_edema': { label: 'Peripheral Edema', desc: 'Fluid retention in extremities' }
+            };
+
+            let html = '';
+            const assessments = report.condition_risk_assessments || {};
+            
+            // Check if we have any actual assessment data
+            const hasData = Object.keys(assessments).length > 0 && 
+                           Object.values(assessments).some(v => v && v !== 'Not assessed' && v !== 'null');
+            
+            if (!hasData) {
+                return `<div style="grid-column: 1/-1; padding: 20px; background: #fef3c7; border: 1px solid #fcd34d; border-radius: 6px; color: #92400e; font-size: 14px;"><strong>⚠️ Note:</strong> Cardiac condition assessments are not yet available. Please ensure your diagnostic report has been fully generated by the AI system.</div>`;
+            }
+            
+            Object.keys(conditions).forEach(key => {
+                const displayName = conditions[key].label;
+                const description = conditions[key].desc;
+                const riskLevel = assessments[key];
+                
+                if (!riskLevel || riskLevel === 'Not assessed') return; // Skip not assessed items
+                
+                const badgeClass = `badge-${riskLevel.toLowerCase().replace(/\s+/g, '-')}`;
+                
+                html += `
+                    <div class="p-4 bg-white rounded border border-gray-200" style="display: flex; flex-direction: column; gap: 8px; word-wrap: break-word; overflow-wrap: break-word; word-break: break-word;">
+                        <span class="text-sm font-medium text-gray-700" style="word-wrap: break-word; overflow-wrap: break-word; word-break: break-word;">${displayName}</span>
+                        <span style="font-size: 12px; color: #6b7280; font-style: italic; word-wrap: break-word; overflow-wrap: break-word; word-break: break-word;">${description}</span>
+                        <span class="risk-badge ${badgeClass}" style="margin: 0; padding: 6px 8px; font-size: 11px; text-align: center; word-wrap: break-word; overflow-wrap: break-word; word-break: break-word;">${riskLevel}</span>
+                    </div>
+                `;
+            });
+
+            return html || `<div style="grid-column: 1/-1; padding: 20px; background: #fef3c7; border: 1px solid #fcd34d; border-radius: 6px; color: #92400e; font-size: 14px;"><strong> Note:</strong> No cardiac condition risks identified - all monitored conditions show normal/low risk profiles.</div>`;
+        }
+
+        function renderReport(report) {
+            const riskLevelClass = `risk-level-${report.risk_level.toLowerCase().replace(' ', '-')}`;
+            const badgeClass = `badge-${report.risk_level.toLowerCase().replace(' ', '-')}`;
+
+            let urgentSection = '';
+            if (report.urgent_concerns && report.urgent_concerns.length > 0) {
+                urgentSection = `
+                    <div class="urgent-alert" style="max-width: 100%; box-sizing: border-box; display: block; width: 100%; height: auto; min-height: auto;">
+                        <h3 style="word-wrap: break-word; overflow-wrap: break-word; max-width: 100%; display: block; margin: 0 0 16px 0; line-height: 1.5; font-size: 16px;"><i class="ri-alert-fill"></i> URGENT CONCERNS</h3>
+                        <ul style="margin: 0; max-width: 100%; box-sizing: border-box; display: flex; flex-direction: column; width: 100%; padding-left: 20px; height: auto; min-height: auto; list-style-type: disc;">
+                            ${report.urgent_concerns.map(c => `<li style="margin: 10px 0; word-wrap: break-word; overflow-wrap: break-word; word-break: break-word; max-width: 100%; display: list-item; line-height: 1.6; font-size: 14px;"> ${c}</li>`).join('')}
+                        </ul>
+                        <p style="font-weight: 600; color: #991b1b; word-wrap: break-word; overflow-wrap: break-word; word-break: break-word; max-width: 100%; display: block; margin: 16px 0 0 0; line-height: 1.6; font-size: 14px;"> Please seek immediate medical attention if applicable.</p>
+                    </div>
+                `;
+            }
+
+            let findingsSection = '';
+            if (report.key_findings && report.key_findings.length > 0) {
+                findingsSection = `
+                    <div class="bg-gray-100 p-6 rounded-lg border border-gray-300 mb-6" style="max-width: 100%; box-sizing: border-box; display: block; width: 100%;">
+                        <div class="text-xl font-semibold mb-4" style="color: #333; word-wrap: break-word; overflow-wrap: break-word; display: block; margin-bottom: 16px; line-height: 1.4;">Key Findings</div>
+                        <div class="space-y-3" style="display: flex; flex-direction: column; gap: 12px;">
+                            ${report.key_findings.map(f => `
+                                <div class="finding-item" style="max-width: 100%; word-wrap: break-word; overflow-wrap: break-word; word-break: break-word; display: block; line-height: 1.5;">
+                                    <i class="ri-alert-line"></i> ${f}
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+
+            return `
+                ${urgentSection}
+                ${findingsSection}
+                
+                <!-- Risk Assessment Summary -->
+                <div class="bg-gray-100 p-6 rounded-lg border border-gray-300" style="margin-bottom: 40px; max-width: 100%; box-sizing: border-box; display: block; width: 100%;">
+                    <div class="text-xl font-semibold mb-4" style="color: #333; word-wrap: break-word; overflow-wrap: break-word; display: block; margin-bottom: 16px; line-height: 1.4;">Risk Assessment</div>
+                    <div class="${riskLevelClass} p-6 rounded-lg" style="max-width: 100%; box-sizing: border-box; display: block; width: 100%;">
+                        <div class="flex justify-between items-baseline mb-6" style="padding-bottom: 16px; border-bottom: 1px solid rgba(0,0,0,0.1); flex-wrap: wrap; max-width: 100%; display: flex; gap: 16px; align-items: flex-start;">
+                            <div style="max-width: 100%; word-wrap: break-word; overflow-wrap: break-word; display: block; flex: 1; min-width: 200px;">
+                                <div class="metric-label" style="max-width: 100%; display: block; margin-bottom: 8px;">Cardiovascular Risk Level</div>
+                                <span class="risk-badge ${badgeClass}" style="font-size: 16px; max-width: 100%; display: inline-block; word-wrap: break-word; white-space: normal;">${report.risk_level}</span>
+                            </div>
+                            <div class="metric-value" style="text-align: right; max-width: 100%; word-wrap: break-word; display: block; white-space: nowrap;">${report.risk_percentage}%</div>
+                        </div>
+                        
+                        <div style="margin-top: 20px; padding-top: 16px; border-top: 1px solid rgba(0,0,0,0.1); max-width: 100%; box-sizing: border-box; display: block; width: 100%;">
+                            <div class="metric-label" style="margin-bottom: 8px; max-width: 100%; word-wrap: break-word; display: block;">Confidence Level</div>
+                            <div class="confidence-bar" style="max-width: 100%; display: block;">
+                                <div class="confidence-fill" style="width: ${report.confidence_level}%;"></div>
+                            </div>
+                            <div style="font-size: 12px; color: #6b7280; margin-top: 4px; max-width: 100%; word-wrap: break-word; display: block; line-height: 1.4;">Model Confidence: ${report.confidence_level}%</div>
+                        </div>
+                        
+                        <p style="margin-top: 20px; margin-bottom: 0; padding-top: 16px; border-top: 1px solid rgba(0,0,0,0.1); font-style: italic; color: #374151; word-wrap: break-word; overflow-wrap: break-word; word-break: break-word; max-width: 100%; display: block; line-height: 1.6;">${report.summary}</p>
+                    </div>
+                </div>
+
+                ${report.multi_ai_diagnostics ? `
+                <!-- Multi-AI Consensus Results -->
+                <div class="bg-gradient-to-r from-purple-50 to-blue-50 p-6 rounded-lg border-2 border-purple-300" style="margin-bottom: 40px; max-width: 100%; box-sizing: border-box; display: block; width: 100%;">
+                    <div class="text-xl font-semibold mb-4" style="color: #333; word-wrap: break-word; overflow-wrap: break-word; display: block; margin-bottom: 16px; line-height: 1.4;"> Multi-AI Consensus Analysis</div>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 16px;">
+                        ${report.multi_ai_diagnostics.consensus_risk_level ? `
+                        <div style="background: white; padding: 12px; border-radius: 6px; border-left: 4px solid #8b5cf6; text-align: center;">
+                            <div style="font-size: 11px; color: #6b7280; text-transform: uppercase; font-weight: 600; margin-bottom: 4px;">Consensus Level</div>
+                            <div style="font-size: 16px; font-weight: bold; color: #1f2937;">${report.multi_ai_diagnostics.consensus_risk_level}</div>
+                        </div>
+                        ` : ''}
+                        ${report.multi_ai_diagnostics.consensus_risk_percentage !== undefined ? `
+                        <div style="background: white; padding: 12px; border-radius: 6px; border-left: 4px solid #3b82f6; text-align: center;">
+                            <div style="font-size: 11px; color: #6b7280; text-transform: uppercase; font-weight: 600; margin-bottom: 4px;">Consensus %</div>
+                            <div style="font-size: 16px; font-weight: bold; color: #1f2937;">${report.multi_ai_diagnostics.consensus_risk_percentage}%</div>
+                        </div>
+                        ` : ''}
+                        ${report.multi_ai_diagnostics.agreement_score !== undefined ? `
+                        <div style="background: white; padding: 12px; border-radius: 6px; border-left: 4px solid #10b981; text-align: center;">
+                            <div style="font-size: 11px; color: #6b7280; text-transform: uppercase; font-weight: 600; margin-bottom: 4px;">Agreement</div>
+                            <div style="font-size: 16px; font-weight: bold; color: #1f2937;">${report.multi_ai_diagnostics.agreement_score}%</div>
+                        </div>
+                        ` : ''}
+                    </div>
+                    
+                    <div style="background: white; border-radius: 6px; padding: 12px; border: 1px solid #e5e7eb;">
+                        <div style="font-size: 12px; font-weight: 600; color: #1f2937; margin-bottom: 8px;">Model Results:</div>
+                        <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                            ${report.multi_ai_diagnostics.gemini_result ? `<span style="background: #fef3c7; padding: 6px 10px; border-radius: 4px; font-size: 12px; border-left: 3px solid #ca8a04;">🔵 Gemini: ${report.multi_ai_diagnostics.gemini_result.risk_level} (${report.multi_ai_diagnostics.gemini_result.risk_percentage}%)</span>` : ''}
+                            ${report.multi_ai_diagnostics.claude_result ? `<span style="background: #e9d5ff; padding: 6px 10px; border-radius: 4px; font-size: 12px; border-left: 3px solid #7c3aed;">🟣 Claude: ${report.multi_ai_diagnostics.claude_result.risk_level} (${report.multi_ai_diagnostics.claude_result.risk_percentage}%)</span>` : ''}
+                        </div>
+                    </div>
+                </div>
+                ` : ''}
+
+                <!-- Condition-Specific Risk Assessments (Cardiac Monitoring) -->
+                <div class="bg-gray-100 p-6 rounded-lg border border-gray-300" style="margin-top: 60px; margin-bottom: 40px; max-width: 100%; box-sizing: border-box; display: block; width: 100%;">
+                    <div class="text-xl font-semibold" style="color: #333; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 2px solid #1f2937; word-wrap: break-word; overflow-wrap: break-word; display: block; line-height: 1.4;">Cardiac Condition Risk Assessment</div>
+                    <div id="condition-risk-assessments" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; margin-top: 16px; max-width: 100%; box-sizing: border-box; width: 100%; grid-auto-rows: auto; align-items: start;">
+                        ${renderConditionRisks(report)}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Generate report on page load
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', generateDiagnosticReport);
+        } else {
+            generateDiagnosticReport();
+        }
+    </script>
+
+</body>
+</html>

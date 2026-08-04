@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="dist/css/style.css">
+    <title>Patient Report</title>
+</head>
+<body class="text-gray-800 font-inter">
+    
+    <div class="fixed left-0 top-0 w-64 h-full p-4 z-50 sidebar-menu transition-transform" 
+    style="background: url('img/picture11.png') no-repeat center center / cover;">
+        <a href="#" class="flex items-center pb-4 border-b border-b-gray-800">
+            <img src="img/fraunhofer-logo.jpg" alt="" class="w-8 h-8 rounded object-cover">
+            <span class="text-lg font-bold text-black ml-3"></span>
+        </a>
+        <ul class="mt-4">
+            <li class="mb-1 group">
+                <a href="patient1.html" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">
+                    <i class="ri-home-2-line mr-3 text-lg"></i>
+                    <span class="text-sm">Dashboard</span>
+                </a>
+            </li>
+            <li class="mb-1 group active">
+                <a href="#" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100 sidebar-dropdown-toggle">
+                    <i class="ri-file-info-line mr-3 text-lg"></i>
+                    <span class="text-white">Reports</span>
+                </a>
+            </li>
+            <li class="mb-1 group">
+                <a href="#" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">
+                    <i class="ri-settings-2-line mr-3 text-lg"></i>
+                    <span class="text-sm">Settings</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="fixed top-0 left-0 w-full h-full bg-black/50 z-40 md:hidden sidebar-overlay"></div>
+    <!-- end: Sidebar -->
+
+    <!-- start: Main -->
+    <main class="w-full md:w-[calc(100%-256px)] md:ml-64 bg-gray-50 min-h-screen transition-all main">
+        <div class="py-2 px-6 bg-white flex items-center shadow-md shadow-black/5 sticky top-0 left-0 z-30">
+            <button type="button" class="text-lg text-gray-600 sidebar-toggle">
+                <i class="ri-menu-line"></i>
+            </button>
+            <ul class="flex items-center text-sm ml-4">
+                <li class="mr-2">
+                    <a href="#" class="text-gray-400 hover:text-gray-600 font-medium">Dashboard</a>
+                </li>
+            </ul>
+            <ul class="ml-auto flex items-center">
+                <li class="mr-1 dropdown">
+                    <button type="button" class="dropdown-toggle text-gray-400 w-8 h-8 rounded flex items-center justify-center hover:bg-gray-50 hover:text-gray-600">
+                        <i class="ri-search-line"></i>
+                    </button>
+                    <div class="dropdown-menu shadow-md shadow-black/5 z-30 hidden max-w-xs w-full bg-white rounded-md border border-gray-100">
+                        <form action="" class="p-4 border-b border-b-gray-100">
+                            <div class="relative w-full">
+                                <input type="text" class="py-2 pr-4 pl-10 bg-gray-50 w-full outline-none border border-gray-100 rounded-md text-sm focus:border-blue-500" placeholder="Search...">
+                                <i class="ri-search-line absolute top-1/2 left-4 -translate-y-1/2 text-gray-400"></i>
+                            </div>
+                        </form>
+                    </div>
+                </li>
+                <li class="dropdown">
+                    <button type="button" class="dropdown-toggle text-gray-400 w-8 h-8 rounded flex items-center justify-center hover:bg-gray-50 hover:text-gray-600">
+                        <i class="ri-notification-3-line"></i>
+                    </button>
+                    <div class="dropdown-menu shadow-md shadow-black/5 z-30 hidden max-w-xs w-full bg-white rounded-md border border-gray-100">
+                        <div class="flex items-center px-4 pt-4 border-b border-b-gray-100 notification-tab">
+                            <button type="button" data-tab="notification" data-tab-page="notifications" class="text-gray-400 font-medium text-[13px] hover:text-gray-600 border-b-2 border-b-transparent mr-4 pb-1 active">Notifications</button>
+                            <button type="button" data-tab="notification" data-tab-page="messages" class="text-gray-400 font-medium text-[13px] hover:text-gray-600 border-b-2 border-b-transparent mr-4 pb-1">Messages</button>
+                        </div>
+                        <div class="my-2">
+                            <ul class="max-h-64 overflow-y-auto" data-tab-for="notification" data-page="notifications">
+                                <li>
+                            <ul class="max-h-64 overflow-y-auto hidden" data-tab-for="notification" data-page="messages">
+                                <li>
+                                    <a href="#" class="py-2 px-4 flex items-center hover:bg-gray-50 group">
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+                <li class="dropdown ml-3">
+                    <button type="button" class="dropdown-toggle flex items-center">
+                        <img src="img/user-profile-icon-free-vector.jpg" alt="" class="w-8 h-8 rounded-full block object-cover align-middle">
+                    </button>                   
+                    <ul class="dropdown-menu shadow-md shadow-black/5 z-30 hidden py-1.5 rounded-md bg-white border border-gray-100 w-full max-w-[140px]">
+                        <li>
+                            <a href="#" class="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-blue-500 hover:bg-gray-50">Profile</a>
+                        </li>
+                        <li>
+                            <a href="index.html" id="logoutBtn" class="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-blue-500 hover:bg-gray-50">Logout</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <div class="p-6">
+            <div class="grid grid-cols-1 gap-6 mb-6">
+                <div class="bg-white rounded-md border border-gray-100 p-6 shadow-md shadow-black/5">
+                    <div class="flex justify-between mb-6">
+                        <div class="w-full">
+                            <div class="text font-semibold mb-3" style="font-size: 2rem;">ECG Analysis Report</div>
+                            <div class="text-lg font-small text-gray-300" style="color: gray;">
+                                Advanced Signal Analysis: Morphology, Blood Pressure
+                            </div>                       
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Blood Pressure Analysis -->
+                <div class="bg-gray-100 p-6 rounded-lg border border-gray-300">
+                    <div class="text-xl font-semibold mb-4" style="color: #333;">Blood Pressure Analysis</div>
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <!-- Systolic Blood Pressure -->
+                        <div class="bg-white p-4 rounded border">
+                            <div style="font-weight: 600; margin-bottom: 0.5rem; color: #333; font-size: 0.95rem;">Systolic BP (mmHg)</div>
+                            <div style="display: grid; gap: 0.75rem;">
+                                <div style="border-bottom: 1px solid #e5e7eb; padding-bottom: 0.5rem;">
+                                    <div style="color: #666; font-size: 0.85rem;">Mean</div>
+                                    <div id="systolicBpMean" style="font-size: 1.5rem; font-weight: bold; color: #1f2937;">--</div>
+                                </div>
+                                <div style="border-bottom: 1px solid #e5e7eb; padding-bottom: 0.5rem;">
+                                    <div style="color: #666; font-size: 0.85rem;">Max</div>
+                                    <div id="systolicBpMax" style="font-size: 1.5rem; font-weight: bold; color: #1f2937;">--</div>
+                                </div>
+                                <div>
+                                    <div style="color: #666; font-size: 0.85rem;">Min</div>
+                                    <div id="systolicBpMin" style="font-size: 1.5rem; font-weight: bold; color: #1f2937;">--</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Diastolic Blood Pressure -->
+                        <div class="bg-white p-4 rounded border">
+                            <div style="font-weight: 600; margin-bottom: 0.5rem; color: #333; font-size: 0.95rem;">Diastolic BP (mmHg)</div>
+                            <div style="display: grid; gap: 0.75rem;">
+                                <div style="border-bottom: 1px solid #e5e7eb; padding-bottom: 0.5rem;">
+                                    <div style="color: #666; font-size: 0.85rem;">Mean</div>
+                                    <div id="diastolicBpMean" style="font-size: 1.5rem; font-weight: bold; color: #1f2937;">--</div>
+                                </div>
+                                <div style="border-bottom: 1px solid #e5e7eb; padding-bottom: 0.5rem;">
+                                    <div style="color: #666; font-size: 0.85rem;">Max</div>
+                                    <div id="diastolicBpMax" style="font-size: 1.5rem; font-weight: bold; color: #1f2937;">--</div>
+                                </div>
+                                <div>
+                                    <div style="color: #666; font-size: 0.85rem;">Min</div>
+                                    <div id="diastolicBpMin" style="font-size: 1.5rem; font-weight: bold; color: #1f2937;">--</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Pulse Pressure -->
+                        <div class="bg-white p-4 rounded border">
+                            <div style="font-weight: 600; margin-bottom: 0.5rem; color: #333; font-size: 0.95rem;">Pulse Pressure (mmHg)</div>
+                            <div style="display: grid; gap: 0.75rem;">
+                                <div style="border-bottom: 1px solid #e5e7eb; padding-bottom: 0.5rem;">
+                                    <div style="color: #666; font-size: 0.85rem;">Mean</div>
+                                    <div id="pulsePressureMean" style="font-size: 1.5rem; font-weight: bold; color: #1f2937;">--</div>
+                                </div>
+                                <div style="border-bottom: 1px solid #e5e7eb; padding-bottom: 0.5rem;">
+                                    <div style="color: #666; font-size: 0.85rem;">Max</div>
+                                    <div id="pulsePressureMax" style="font-size: 1.5rem; font-weight: bold; color: #1f2937;">--</div>
+                                </div>
+                                <div>
+                                    <div style="color: #666; font-size: 0.85rem;">Min</div>
+                                    <div id="pulsePressureMin" style="font-size: 1.5rem; font-weight: bold; color: #1f2937;">--</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Mean Arterial Pressure -->
+                        <div class="bg-white p-4 rounded border">
+                            <div style="font-weight: 600; margin-bottom: 0.5rem; color: #333; font-size: 0.95rem;">Mean Arterial Pressure (mmHg)</div>
+                            <div style="display: grid; gap: 0.75rem;">
+                                <div style="border-bottom: 1px solid #e5e7eb; padding-bottom: 0.5rem;">
+                                    <div style="color: #666; font-size: 0.85rem;">Mean</div>
+                                    <div id="mapMean" style="font-size: 1.5rem; font-weight: bold; color: #1f2937;">--</div>
+                                </div>
+                                <div style="border-bottom: 1px solid #e5e7eb; padding-bottom: 0.5rem;">
+                                    <div style="color: #666; font-size: 0.85rem;">Max</div>
+                                    <div id="mapMax" style="font-size: 1.5rem; font-weight: bold; color: #1f2937;">--</div>
+                                </div>
+                                <div>
+                                    <div style="color: #666; font-size: 0.85rem;">Min</div>
+                                    <div id="mapMin" style="font-size: 1.5rem; font-weight: bold; color: #1f2937;">--</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ECG Morphology - Intervals -->
+                <div class="bg-gray-100 p-6 rounded-lg border border-gray-300">
+                    <div class="text-xl font-semibold mb-4" style="color: #333;">ECG Morphology - Intervals (seconds)</div>
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; max-width: 100%; width: 100%;">
+                        <div class="bg-white p-4 rounded border">
+                            <h3 class="font-semibold mb-3 text-center">P Interval</h3>
+                            <img id="pHistogramImg" src="" alt="P Histogram" style="width: 100%; height: auto; max-width: 100%; border-radius: 4px; min-height: 220px; max-height: 380px; object-fit: contain; background-color: #f5f5f5;">
+                        </div>
+                        <div class="bg-white p-4 rounded border">
+                            <h3 class="font-semibold mb-3 text-center">P-Q Interval</h3>
+                            <img id="pqHistogramImg" src="" alt="P-Q Histogram" style="width: 100%; height: auto; max-width: 100%; border-radius: 4px; min-height: 220px; max-height: 380px; object-fit: contain; background-color: #f5f5f5;">
+                        </div>
+                        <div class="bg-white p-4 rounded border">
+                            <h3 class="font-semibold mb-3 text-center">P-R Interval</h3>
+                            <img id="prHistogramImg" src="" alt="P-R Histogram" style="width: 100%; height: auto; max-width: 100%; border-radius: 4px; min-height: 220px; max-height: 380px; object-fit: contain; background-color: #f5f5f5;">
+                        </div>
+                        <div class="bg-white p-4 rounded border">
+                            <h3 class="font-semibold mb-3 text-center">P-T Interval</h3>
+                            <img id="ptHistogramImg" src="" alt="P-T Histogram" style="width: 100%; height: auto; max-width: 100%; border-radius: 4px; min-height: 220px; max-height: 380px; object-fit: contain; background-color: #f5f5f5;">
+                        </div>
+                        <div class="bg-white p-4 rounded border">
+                            <h3 class="font-semibold mb-3 text-center">Q-S Interval</h3>
+                            <img id="qsHistogramImg" src="" alt="Q-S Histogram" style="width: 100%; height: auto; max-width: 100%; border-radius: 4px; min-height: 220px; max-height: 380px; object-fit: contain; background-color: #f5f5f5;">
+                        </div>
+                        <div class="bg-white p-4 rounded border">
+                            <h3 class="font-semibold mb-3 text-center">Q-T Interval</h3>
+                            <img id="qtHistogramImg" src="" alt="Q-T Histogram" style="width: 100%; height: auto; max-width: 100%; border-radius: 4px; min-height: 220px; max-height: 380px; object-fit: contain; background-color: #f5f5f5;">
+                        </div>
+                        <div class="bg-white p-4 rounded border">
+                            <h3 class="font-semibold mb-3 text-center">T Interval</h3>
+                            <img id="tHistogramImg" src="" alt="T Histogram" style="width: 100%; height: auto; max-width: 100%; border-radius: 4px; min-height: 220px; max-height: 380px; object-fit: contain; background-color: #f5f5f5;">
+                        </div>
+                        <div class="bg-white p-4 rounded border">
+                            <h3 class="font-semibold mb-3 text-center">QTC Interval</h3>
+                            <img id="qtcHistogramImg" src="" alt="QTC Histogram" style="width: 100%; height: auto; max-width: 100%; border-radius: 4px; min-height: 220px; max-height: 380px; object-fit: contain; background-color: #f5f5f5;">
+                        </div>
+                        <div class="bg-white p-4 rounded border">
+                            <h3 class="font-semibold mb-3 text-center">R-T Interval</h3>
+                            <img id="rtHistogramImg" src="" alt="R-T Histogram" style="width: 100%; height: auto; max-width: 100%; border-radius: 4px; min-height: 220px; max-height: 380px; object-fit: contain; background-color: #f5f5f5;">
+                        </div>
+                        <div class="bg-white p-4 rounded border">
+                            <h3 class="font-semibold mb-3 text-center">R-R Interval</h3>
+                            <img id="rrHistogramImg" src="" alt="R-R Histogram" style="width: 100%; height: auto; max-width: 100%; border-radius: 4px; min-height: 220px; max-height: 380px; object-fit: contain; background-color: #f5f5f5;">
+                        </div>
+                        <div class="bg-white p-4 rounded border">
+                            <h3 class="font-semibold mb-3 text-center">S-T Interval</h3>
+                            <img id="stHistogramImg" src="" alt="S-T Histogram" style="width: 100%; height: auto; max-width: 100%; border-radius: 4px; min-height: 220px; max-height: 380px; object-fit: contain; background-color: #f5f5f5;">
+                        </div>
+                        <div class="bg-white p-4 rounded border">
+                            <h3 class="font-semibold mb-3 text-center">T Histogram</h3>
+                            <img id="tHistogramImg2" src="" alt="T Histogram" style="width: 100%; height: auto; max-width: 100%; border-radius: 4px; min-height: 220px; max-height: 380px; object-fit: contain; background-color: #f5f5f5;">
+                        </div>
+                        <div class="bg-white p-4 rounded border">
+                            <h3 class="font-semibold mb-3 text-center">P-P Interval</h3>
+                            <img id="ppHistogramImg" src="" alt="P-P Histogram" style="width: 100%; height: auto; max-width: 100%; border-radius: 4px; min-height: 220px; max-height: 380px; object-fit: contain; background-color: #f5f5f5;">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- GRACE-3 Risk Prediction (from https://www.grace-3.com/) -->
+                <div class="bg-blue-50 p-6 rounded-lg border-2 border-blue-300">
+                    <div style="display: flex; align-items: center; margin-bottom: 1.5rem;">
+                        <div style="font-size: 2rem; margin-right: 1rem;"></div>
+                        <div>
+                            <div class="text-2xl font-bold text-blue-900">GRACE-3 Risk Score</div>
+                            <div class="text-sm text-blue-700">Global Registry of Acute Coronary Events (NSTE-ACS Risk Assessment)</div>
+                        </div>
+                    </div>
+
+                    <div id="grace3Container" style="display: none;">
+                        <!-- GRACE-3 Main Metrics -->
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                            <!-- Risk Score -->
+                            <div class="bg-white p-4 rounded border-l-4 border-l-blue-500">
+                                <div style="font-weight: 600; color: #666; font-size: 0.9rem; margin-bottom: 0.5rem;">GRACE-3 Score</div>
+                                <div id="grace3Score" style="font-size: 2.5rem; font-weight: bold; color: #1f2937; margin-bottom: 0.25rem;">--</div>
+                                <div id="grace3Category" style="font-size: 0.9rem; color: #666; font-weight: 600;">--</div>
+                            </div>
+
+                            <!-- 1-Year Mortality Risk -->
+                            <div class="bg-white p-4 rounded border-l-4 border-l-red-500">
+                                <div style="font-weight: 600; color: #666; font-size: 0.9rem; margin-bottom: 0.5rem;">1-Year Mortality Risk</div>
+                                <div id="grace3OneYearMortality" style="font-size: 2.5rem; font-weight: bold; color: #dc2626;">--</div>
+                                <div style="font-size: 0.75rem; color: #999; margin-top: 0.25rem;">Risk of death within 1 year</div>
+                            </div>
+
+                            <!-- 1-Year Major Adverse Events -->
+                            <div class="bg-white p-4 rounded border-l-4 border-l-orange-500">
+                                <div style="font-weight: 600; color: #666; font-size: 0.9rem; margin-bottom: 0.5rem;">1-Year Adverse Event Risk</div>
+                                <div id="grace3OneYearMAE" style="font-size: 2.5rem; font-weight: bold; color: #ea580c;">--</div>
+                                <div style="font-size: 0.75rem; color: #999; margin-top: 0.25rem;">Risk of major cardiac events</div>
+                            </div>
+                        </div>
+
+                        <!-- Risk Interpretation -->
+                        <div class="bg-white p-4 rounded border border-gray-200 mb-4">
+                            <div style="font-weight: 600; margin-bottom: 0.75rem; color: #333;">Clinical Interpretation</div>
+                            <div id="grace3Interpretation" style="font-size: 0.95rem; line-height: 1.6; color: #555;">--</div>
+                        </div>
+
+                        <!-- Parameters Used -->
+                        <div class="bg-white p-4 rounded border border-gray-200">
+                            <div style="font-weight: 600; margin-bottom: 0.75rem; color: #333;">Parameters Used in Calculation</div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div><span style="font-weight: 600; color: #666;">Age:</span> <span id="grace3Age">--</span> years</div>
+                                <div><span style="font-weight: 600; color: #666;">Heart Rate:</span> <span id="grace3HR">--</span> bpm</div>
+                                <div><span style="font-weight: 600; color: #666;">Systolic BP:</span> <span id="grace3SBP">--</span> mmHg</div>
+                                <div><span style="font-weight: 600; color: #666;">Creatinine:</span> <span id="grace3Creatinine">--</span> mg/dL</div>
+                                <div><span style="font-weight: 600; color: #666;">Gender:</span> <span id="grace3Sex">--</span></div>
+                                <div><span style="font-weight: 600; color: #666;">Killip Class:</span> <span id="grace3Killip">--</span></div>
+                                <div><span style="font-weight: 600; color: #666;">Cardiac Arrest:</span> <span id="grace3CardiacArrest">--</span></div>
+                                <div><span style="font-weight: 600; color: #666;">ST Deviation:</span> <span id="grace3STDeviation">--</span></div>
+                                <div><span style="font-weight: 600; color: #666;">Troponin Elevation:</span> <span id="grace3Troponin">--</span></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Loading State -->
+                    <div id="grace3Loading" style="text-align: center; padding: 2rem;">
+                        <div style="font-size: 1.1rem; color: #666;">Loading GRACE-3 score calculation...</div>
+                    </div>
+
+                    <!-- No Data State -->
+                    <div id="grace3NoData" style="display: none; padding: 1.5rem; background: #fef2f2; border-radius: 0.5rem; border-left: 4px solid #dc2626;">
+                        <div style="color: #991b1b; font-weight: 600;">Insufficient Data</div>
+                        <div style="font-size: 0.9rem; color: #7f1d1d; margin-top: 0.5rem;">
+                            GRACE-3 score cannot be calculated. The following information is needed:
+                            <ul style="margin-top: 0.5rem; margin-left: 1.5rem; list-style: disc;">
+                                <li>Patient age</li>
+                                <li>Heart rate</li>
+                                <li>Systolic blood pressure</li>
+                                <li>Serum creatinine level</li>
+                                <li>Patient gender</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation Buttons -->
+                <div class="submit-button-container mt-6 flex justify-between">
+                    <a href="report1.5.html" id="backButton">
+                        <button type="button" class="px-3 py-1 bg-white text-black border border-black rounded-sm text-sm">Back</button>
+                    </a>
+                    <a href="report1.7.html" style="margin-right: 0.5rem;">
+                        <button type="button" class="px-3 py-1 bg-white text-black border border-black rounded-sm text-sm">Next</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+      </main>
+
+        <script src="https://unpkg.com/@popperjs/core@2"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="dist/js/report.js"></script>
+
+        <script type="module">
+          const CLOUDFLARE_CONFIG = {
+            ACCOUNT_ID: '24ad4e1c9f5d25c491c5910d289a5ab1',
+            BUCKET_NAME: 'signals-result',
+            R2_BUCKET_URL: 'https://r2-cors-proxy.cherry1112.workers.dev',
+            R2_DIRECT_URL: 'https://pub-a0dd8794f43d447abb764c83ae332144.r2.dev',
+            DATA_PREFIX: 'data/',
+            IMAGES_PREFIX: 'images/'
+          };
+
+          // Get JWT token from storage
+          function getAuthToken() {
+            return localStorage.getItem('auth_token') || sessionStorage.getItem('auth_token');
+          }
+
+          // Get patient ID from multiple sources
+          function getPatientId() {
+            return new URLSearchParams(window.location.search).get('patient_id') || 
+                   sessionStorage.getItem('patient_id') || 
+                   localStorage.getItem('patient_id');
+          }
+
+          // Make authenticated fetch with JWT token
+          async function authenticatedFetch(url, options = {}) {
+            const token = getAuthToken();
+            const headers = options.headers || {};
+            if (token) {
+              headers['Authorization'] = `Bearer ${token}`;
+            }
+            return fetch(url, { ...options, headers });
+          }
+
+          async function loadAdvancedResults() {
+            console.log('Loading advanced analysis results...');
+            
+            const r2DataPath = `${CLOUDFLARE_CONFIG.DATA_PREFIX}ecg_results.json`;
+            const r2DataUrl = `${CLOUDFLARE_CONFIG.R2_BUCKET_URL}/${r2DataPath}`;
+            
+            let ecgData = null;
+            try {
+              const r2Response = await fetch(r2DataUrl, {
+                mode: 'cors',
+                credentials: 'omit'
+              });
+              
+              if (!r2Response.ok) throw new Error(`HTTP ${r2Response.status}`);
+              
+              ecgData = await r2Response.json();
+              console.log('Data loaded from Cloudflare R2');
+            } catch (error) {
+              console.error('Could not load from R2:', error);
+              try {
+                const localResponse = await fetch('ecg_results.json');
+                if (localResponse.ok) {
+                  ecgData = await localResponse.json();
+                  console.log('Data loaded from local file');
+                }
+              } catch (e) {
+                console.error('Could not load data:', e);
+                return;
+              }
+            }
+            
+            // Load images
+            if (ecgData && ecgData.images) {
+              const imageMapping = {
+                // Peak interval histograms (Part 1)
+                'pHistogramImg': 'pHistogram',
+                'pqHistogramImg': 'pqHistogram',
+                'prHistogramImg': 'prHistogram',
+                'ptHistogramImg': 'ptHistogram',
+                'qsHistogramImg': 'qsHistogram',
+                'qtHistogramImg': 'qtHistogram',
+                'tHistogramImg': 'tHistogram',
+                // Peak interval histograms (Part 2)
+                'qtcHistogramImg': 'qtcHistogram',
+                'rtHistogramImg': 'rtHistogram',
+                'rrHistogramImg': 'rrHistogram',
+                'stHistogramImg': 'stHistogram',
+                'tHistogramImg2': 'tHistogram',
+                'ppHistogramImg': 'ppHistogram',
+                // ICG parameters
+                'pepHistogramImg': 'pepHistogram',
+                'pepOverBeatsImg': 'pepOverBeats',
+                'lvetHistogramImg': 'lvetHistogram',
+                'lvetOverBeatsImg': 'lvetOverBeats',
+                'coHistogramImg': 'coHistogram',
+                'coOverBeatsImg': 'coOverBeats',
+                // STFT (Short-Time Fourier Transform)
+                'ecgStftImg': 'ecgStftSubplot',
+                'ppgStftImg': 'ppgStftSubplot',
+                'icgStftImg': 'icgStftSubplot',
+                // MFCC (Mel-Frequency Cepstral Coefficients)
+                'ecgMfccImg': 'ecgMfccContinuousSubplot',
+                'ppgMfccImg': 'ppgMfccContinuousSubplot',
+                'icgMfccImg': 'icgMfccContinuousSubplot',
+                // Mel Spectrograms
+                'ecgMelImg': 'ecgMelSpectrogram',
+                'ppgMelImg': 'ppgMelSpectrogram',
+                'icgMelImg': 'icgMelSpectrogram',
+                // Scalograms (CWT with pywt)
+                'ecgCwtImg': 'ecgScalogramPywtSubplot',
+                'ppgCwtImg': 'ppgScalogramPywtSubplot',
+                'icgCwtImg': 'icgScalogramPywtSubplot'
+              };
+
+              Object.entries(imageMapping).forEach(([elementId, key]) => {
+                const element = document.getElementById(elementId);
+                if (element && ecgData.images[key]) {
+                  const fileName = ecgData.images[key];
+                  const encodedFileName = fileName.split('/').map(part => encodeURIComponent(part)).join('/');
+                  const imageUrl = `${CLOUDFLARE_CONFIG.R2_DIRECT_URL}/${CLOUDFLARE_CONFIG.IMAGES_PREFIX}${encodedFileName}`;
+                  element.src = imageUrl;
+                  element.addEventListener('click', () => window.open(imageUrl, '_blank'));
+                  element.onerror = () => {
+                    element.style.display = 'none';
+                    console.warn(`Failed to load: ${key} from ${imageUrl}`);
+                  };
+                }
+              });
+            }
+
+            // Load Blood Pressure data
+            if (ecgData && ecgData.metrics) {
+              const m = ecgData.metrics;
+              console.log('Metrics found:', m);
+              console.log('Systolic BP Mean:', m.systolic_bp_mean);
+              
+              const bloodPressureUpdates = {
+                'systolicBpMean': m.systolic_bp_mean !== undefined ? m.systolic_bp_mean : 'N/A',
+                'systolicBpMax': m.systolic_bp_max !== undefined ? m.systolic_bp_max : 'N/A',
+                'systolicBpMin': m.systolic_bp_min !== undefined ? m.systolic_bp_min : 'N/A',
+                'diastolicBpMean': m.diastolic_bp_mean !== undefined ? m.diastolic_bp_mean : 'N/A',
+                'diastolicBpMax': m.diastolic_bp_max !== undefined ? m.diastolic_bp_max : 'N/A',
+                'diastolicBpMin': m.diastolic_bp_min !== undefined ? m.diastolic_bp_min : 'N/A',
+                'pulsePressureMean': m.pulse_pressure_mean !== undefined ? m.pulse_pressure_mean : 'N/A',
+                'pulsePressureMax': m.pulse_pressure_max !== undefined ? m.pulse_pressure_max : 'N/A',
+                'pulsePressureMin': m.pulse_pressure_min !== undefined ? m.pulse_pressure_min : 'N/A',
+                'mapMean': m.mean_arterial_pressure_mean !== undefined ? m.mean_arterial_pressure_mean : 'N/A',
+                'mapMax': m.mean_arterial_pressure_max !== undefined ? m.mean_arterial_pressure_max : 'N/A',
+                'mapMin': m.mean_arterial_pressure_min !== undefined ? m.mean_arterial_pressure_min : 'N/A'
+              };
+              
+              Object.entries(bloodPressureUpdates).forEach(([id, value]) => {
+                const el = document.getElementById(id);
+                if (el) {
+                  el.textContent = typeof value === 'number' ? value.toFixed(1) : value;
+                  console.log(`Updated ${id}: ${el.textContent}`);
+                } else {
+                  console.warn(`Element not found: ${id}`);
+                }
+              });
+              console.log('Blood pressure data loaded');
+            } else {
+              console.error('No metrics data found in ecgData');
+            }
+          }
+
+          // Load GRACE-3 Risk Score
+          async function loadGRACE3Score() {
+            const grace3Loading = document.getElementById('grace3Loading');
+            const grace3Container = document.getElementById('grace3Container');
+            const grace3NoData = document.getElementById('grace3NoData');
+
+            try {
+              let patientId = getPatientId();
+
+              // If no patient ID, try to fetch from current user with JWT
+              if (!patientId) {
+                console.log('[GRACE-3] Fetching patient ID from user data...');
+                try {
+                  const userResponse = await authenticatedFetch('/api/user', { method: 'GET' });
+                  
+                  if (userResponse.ok) {
+                    const userDataArray = await userResponse.json();
+                    const userData = Array.isArray(userDataArray) ? userDataArray[0] : userDataArray;
+                    patientId = userData?.id;
+                    
+                    if (patientId) {
+                      sessionStorage.setItem('patient_id', patientId);
+                      console.log('[GRACE-3] Patient ID:', patientId);
+                    }
+                  } else {
+                    console.error('[GRACE-3] User fetch failed:', userResponse.status);
+                    const errorText = await userResponse.text();
+                    console.error('[GRACE-3] Response:', errorText);
+                  }
+                } catch (err) {
+                  console.error('[GRACE-3] Fetch user error:', err.message);
+                }
+              }
+
+              if (!patientId) {
+                showGRACE3Error('Patient ID Not Found', 
+                  'Login required or add ?patient_id=YOUR_ID to URL');
+                return;
+              }
+
+              // Fetch diagnostic data with JWT
+              const diagnosticUrl = `/api/diagnostic?patient_id=${patientId}`;
+              const diagnosticResponse = await authenticatedFetch(diagnosticUrl);
+              
+              if (!diagnosticResponse.ok) {
+                const errorText = await diagnosticResponse.text();
+                console.error('[GRACE-3] API Error:', diagnosticResponse.status, errorText);
+                throw new Error(`Diagnostic API failed: ${diagnosticResponse.status}`);
+              }
+
+              const diagnosticData = await diagnosticResponse.json();
+              const diagnostic = diagnosticData.items?.[0] || diagnosticData.data;
+
+              if (!diagnostic) {
+                showGRACE3Error('No Diagnostic Found',
+                  'Please generate a diagnostic report first.');
+                return;
+              }
+
+              // If GRACE-3 score is missing, try to calculate it from available data
+              if (!diagnostic.grace3_score) {
+                console.log('[GRACE-3] Score missing, attempting to calculate from available data');
+                console.log('[GRACE-3] Full diagnostic data:', JSON.stringify(diagnostic, null, 2));
+                
+                // Call the calculation API endpoint to compute and save GRACE-3
+                try {
+                  const calcResponse = await authenticatedFetch('/api/diagnostic/calculate-grace3', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ patient_id: patientId })
+                  });
+                  
+                  const calcData = await calcResponse.json();
+                  
+                  if (!calcResponse.ok) {
+                    console.error('[GRACE-3] Calculation API error:', calcData);
+                    
+                    // Build user-friendly error message
+                    let errorMsg = 'Unable to calculate GRACE-3.';
+                    if (calcData.found) {
+                      const missing = Object.entries(calcData.found)
+                        .filter(([k, v]) => v === 'MISSING')
+                        .map(([k]) => k);
+                      errorMsg += ` Missing: ${missing.join(', ')}.`;
+                    }
+                    if (calcData.sources_checked) {
+                      console.log('[GRACE-3] Data sources checked:', calcData.sources_checked);
+                      errorMsg += ` Checked: Database, Vitals, ECG Findings, and R2 ECG Data.`;
+                    }
+                    
+                    showGRACE3Error('Missing Data', errorMsg);
+                    return;
+                  }
+
+                  if (calcData.grace3_score) {
+                    console.log('[GRACE-3] Score calculated:', calcData.grace3_score);
+                    displayGRACE3Score(calcData);
+                    grace3Container.style.display = 'block';
+                    grace3Loading.style.display = 'none';
+                    grace3NoData.style.display = 'none';
+                    return;
+                  }
+                } catch (calcErr) {
+                  console.error('[GRACE-3] Calculation error:', calcErr.message);
+                  showGRACE3Error('Calculation Error', calcErr.message);
+                  return;
+                }
+              }
+
+              // Display the score
+              displayGRACE3Score(diagnostic);
+              grace3Container.style.display = 'block';
+              grace3Loading.style.display = 'none';
+              grace3NoData.style.display = 'none';
+              console.log('[GRACE-3] Score displayed:', diagnostic.grace3_score);
+
+            } catch (err) {
+              console.error('[GRACE-3] Error:', err.message);
+              showGRACE3Error('Error Loading GRACE-3', err.message);
+            }
+          }
+
+          function showGRACE3Error(title, message) {
+            const grace3NoData = document.getElementById('grace3NoData');
+            document.getElementById('grace3Loading').style.display = 'none';
+            grace3NoData.style.display = 'block';
+            
+            const errorDiv = grace3NoData.querySelector('div:last-child');
+            if (errorDiv) {
+              errorDiv.innerHTML = `<strong>${title}</strong><br><div style="margin-top: 0.5rem; font-size: 0.9rem;">${message}</div>`;
+            }
+          }
+
+          function displayGRACE3Score(diagnostic) {
+            const params = diagnostic.grace3_parameters || {};
+            
+            // Ensure numeric values are actually numbers (handle database string returns)
+            // Use 1-year values to match official GRACE-3 website
+            const score = parseFloat(diagnostic.grace3_score) || 0;
+            const mortality = parseFloat(diagnostic.grace3_one_year_mortality) || parseFloat(diagnostic.grace3_mortality_6month) || 0;
+            const mae = parseFloat(diagnostic.grace3_one_year_major_adverse_event) || parseFloat(diagnostic.grace3_major_adverse_event_6month) || 0;
+            
+            const categoryColor = 
+              diagnostic.grace3_risk_category === 'VERY_HIGH' ? '#dc2626' :
+              diagnostic.grace3_risk_category === 'HIGH' ? '#ea580c' :
+              diagnostic.grace3_risk_category === 'MODERATE' ? '#f59e0b' : '#10b981';
+
+            // Update all elements
+            const updates = {
+              'grace3Score': score.toFixed(1),
+              'grace3Category': diagnostic.grace3_risk_category?.replace(/_/g, ' ') || 'UNKNOWN',
+              'grace3OneYearMortality': `${mortality.toFixed(2) || '--'}%`,
+              'grace3OneYearMAE': `${mae.toFixed(2) || '--'}%`,
+              'grace3Age': params.age || '--',
+              'grace3HR': params.heart_rate || '--',
+              'grace3SBP': params.systolic_bp || '--',
+              'grace3Creatinine': params.creatinine || '--',
+              'grace3Sex': params.sex === 'M' ? 'Male' : params.sex === 'F' ? 'Female' : '--',
+              'grace3Killip': params.killip_class || '--',
+              'grace3CardiacArrest': params.cardiac_arrest ? 'Yes' : 'No',
+              'grace3STDeviation': params.st_deviation ? 'Yes' : 'No',
+              'grace3Troponin': params.troponin_elevation ? 'Yes' : 'No'
+            };
+
+            Object.entries(updates).forEach(([id, value]) => {
+              const el = document.getElementById(id);
+              if (el) {
+                el.textContent = value;
+                if (id === 'grace3Category') el.style.color = categoryColor;
+              }
+            });
+
+            // Update interpretation
+            const riskText = {
+              'VERY_HIGH': 'Very High Risk: 1-year mortality > 5%. Immediate evaluation recommended.',
+              'HIGH': 'High Risk: 1-year mortality 3.5-5%. Close monitoring recommended.',
+              'MODERATE': 'Moderate Risk: 1-year mortality 2.5-3.5%. Standard management.',
+              'LOW_MODERATE': 'Low-Moderate Risk: 1-year mortality 1.5-2.5%. Outpatient management.',
+              'LOW': 'Low Risk: 1-year mortality < 1.5%. Conservative approach.'
+            }[diagnostic.grace3_risk_category] || 'Score calculated';
+
+            const interpEl = document.getElementById('grace3Interpretation');
+            if (interpEl) {
+              interpEl.innerHTML = `<strong>GRACE-3 Score: ${score.toFixed(1)}</strong><br>${riskText}`;
+            }
+            
+            // Store parameters for modal use
+            window.currentGrace3Params = params;
+          }
+
+          // Call both loading functions
+          if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => {
+              loadAdvancedResults();
+              loadGRACE3Score();
+            });
+          } else {
+            loadAdvancedResults();
+            loadGRACE3Score();
+          }
+        </script>
+  
+      </body>
+      </html>
+
+
+

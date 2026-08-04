@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="dist/css/style.css">
+    <title>User Dashboard</title>
+</head>
+<body class="text-gray-800 font-inter">
+    
+    <div class="fixed left-0 top-0 w-64 h-full p-4 z-50 sidebar-menu transition-transform" 
+    style="background: url('img/picture11.png') no-repeat center center / cover;">
+        <a href="#" class="flex items-center pb-4 border-b border-b-gray-800">
+            <img src="img/fraunhofer-logo.jpg" alt="" class="w-8 h-8 rounded object-cover">
+            <span class="text-lg font-bold text-black ml-3">Fraunhofer</span>
+        </a>
+        <ul class="mt-4">
+            <li class="mb-1 group active">
+                <a href="#" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">
+                    <i class="ri-home-2-line mr-3 text-lg"></i>
+                    <span class="text-white">Dashboard</span>
+                </a>
+            </li>
+            <li class="mb-1 group">
+                <a href="report1.html" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">
+                    <i class="ri-file-info-line mr-3 text-lg"></i>
+                    <span class="text-sm">Reports</span>
+                </a>
+            </li>
+            <li class="mb-1 group">
+                <a href="#" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">
+                    <i class="ri-settings-2-line mr-3 text-lg"></i>
+                    <span class="text-sm">Settings</span>
+                </a>
+            </li>                        
+        </ul>
+    </div>
+    <div class="fixed top-0 left-0 w-full h-full bg-black/50 z-40 md:hidden sidebar-overlay"></div>
+    <!-- end: Sidebar -->
+
+    <!-- start: Main -->
+    <main class="w-full md:w-[calc(100%-256px)] md:ml-64 bg-gray-50 min-h-screen transition-all main">
+        <div class="py-2 px-6 bg-white flex items-center shadow-md shadow-black/5 sticky top-0 left-0 z-30">
+            <button type="button" class="text-lg text-gray-600 sidebar-toggle">
+                <i class="ri-menu-line"></i>
+            </button>
+            <ul class="flex items-center text-sm ml-4">
+                <li class="mr-2">
+                    <a href="#" class="text-gray-400 hover:text-gray-600 font-medium">Dashboard</a>
+                </li>
+            </ul>
+            <ul class="ml-auto flex items-center">
+                <li class="mr-1 dropdown">
+                    <button type="button" class="dropdown-toggle text-gray-400 w-8 h-8 rounded flex items-center justify-center hover:bg-gray-50 hover:text-gray-600">
+                        <i class="ri-search-line"></i>
+                    </button>
+                    <div class="dropdown-menu shadow-md shadow-black/5 z-30 hidden max-w-xs w-full bg-white rounded-md border border-gray-100">
+                        <form action="" class="p-4 border-b border-b-gray-100">
+                            <div class="relative w-full">
+                                <input type="text" class="py-2 pr-4 pl-10 bg-gray-50 w-full outline-none border border-gray-100 rounded-md text-sm focus:border-blue-500" placeholder="Search...">
+                                <i class="ri-search-line absolute top-1/2 left-4 -translate-y-1/2 text-gray-400"></i>
+                            </div>
+                        </form>
+                    </div>
+                </li>
+                <li class="dropdown">
+                    <button type="button" class="dropdown-toggle text-gray-400 w-8 h-8 rounded flex items-center justify-center hover:bg-gray-50 hover:text-gray-600">
+                        <i class="ri-notification-3-line"></i>
+                    </button>
+                    <div class="dropdown-menu shadow-md shadow-black/5 z-30 hidden max-w-xs w-full bg-white rounded-md border border-gray-100">
+                        <div class="flex items-center px-4 pt-4 border-b border-b-gray-100 notification-tab">
+                            <button type="button" data-tab="notification" data-tab-page="notifications" class="text-gray-400 font-medium text-[13px] hover:text-gray-600 border-b-2 border-b-transparent mr-4 pb-1 active">Notifications</button>
+                            <button type="button" data-tab="notification" data-tab-page="messages" class="text-gray-400 font-medium text-[13px] hover:text-gray-600 border-b-2 border-b-transparent mr-4 pb-1">Messages</button>
+                        </div>
+                        <div class="my-2">
+                            <ul class="max-h-64 overflow-y-auto" data-tab-for="notification" data-page="notifications">
+                                <li>
+                            <ul class="max-h-64 overflow-y-auto hidden" data-tab-for="notification" data-page="messages">
+                                <li>
+                                    <a href="#" class="py-2 px-4 flex items-center hover:bg-gray-50 group">
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+                <li class="dropdown ml-3">
+                    <button type="button" class="dropdown-toggle flex items-center">
+                        <img src="img/user-profile-icon-free-vector.jpg" alt="" class="w-8 h-8 rounded-full block object-cover align-middle">
+                    </button>                   
+                    <ul class="dropdown-menu shadow-md shadow-black/5 z-30 hidden py-1.5 rounded-md bg-white border border-gray-100 w-full max-w-[140px]">
+                        <li>
+                            <a href="#" class="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-blue-500 hover:bg-gray-50">Profile</a>
+                        </li>
+                        <li>
+                            <a href="index.html" id="logoutBtn" class="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-blue-500 hover:bg-gray-50">Logout</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        
+        <div class="p-6">
+            <div class="grid grid-cols-1 gap-6 mb-6">
+
+        <div class="p-6">
+            <div class="grid grid-cols-1 gap-6 mb-6">
+                <!-- Welcome Back Section -->
+                <div class="bg-white rounded-md border border-gray-100 p-6 shadow-md shadow-black/5">
+                    <div class="flex justify-between mb-6">
+                        <div class="w-full">
+                            <div class="text-3xl font-semibold mb-3" style="font-size: 2rem;">
+                                Welcome Back, <span id="userName">[Username]</span>
+                              </div>
+                              <div class="text-lg font-medium text-gray-400" style="color: gray;">
+                                <span id="userName">We're glad to see you again!</span>
+                              </div>                    
+                        </div>
+                    </div>
+                </div>
+                
+<div class="bg-white rounded-md border border-gray-100 p-6 shadow-md shadow-black/5">
+  <div class="text-2xl font-semibold mb-6">Daily Feedback:</div>
+  <form id="feedbackForm">
+    <div class="grid grid-cols-2 gap-6">
+
+      <div class="space-y-4">
+
+        <label class="block font-medium">Dyspnea (shortness of breath) today:</label>
+        <select name="dyspnea" class="w-full p-2 border rounded">
+          <option value="">-</option>
+          <option value="No">No</option>
+          <option value="Yes, only with exertion">Yes, only with exertion</option>
+          <option value="Yes, at rest">Yes, at rest</option>
+        </select>
+
+        <label class="block font-medium">Orthopnea last night:</label>
+        <select name="orthopnea" class="w-full p-2 border rounded">
+          <option value="">-</option>
+          <option value="No">No</option>
+          <option value="Yes">Yes</option>
+        </select>
+
+        <label class="block font-medium">Paroxysmal nocturnal dyspnea:</label>
+        <select name="paroxysmal_nocturnal_dyspnea" class="w-full p-2 border rounded">
+          <option value="">-</option>
+          <option value="No">No</option>
+          <option value="Yes">Yes</option>
+        </select>
+
+        <label class="block font-medium">Cyanosis noticed today:</label>
+        <select name="cyanosis" class="w-full p-2 border rounded">
+          <option value="">-</option>
+          <option value="No">No</option>
+          <option value="Yes">Yes</option>
+        </select>
+
+        <label class="block font-medium">Jugular venous distension today:</label>
+        <select name="jugular_venous_distension" class="w-full p-2 border rounded">
+          <option value="">-</option>
+          <option value="No">No</option>
+          <option value="Yes">Yes</option>
+        </select>
+
+        <label class="block font-medium">Night time urinary frequency:</label>
+        <input type="number" name="nighttime_urination_count" class="w-full p-2 border rounded" placeholder="Number of times">
+
+        <label class="block font-medium">Chest pain today:</label>
+        <select name="chest_pain" class="w-full p-2 border rounded">
+          <option value="">-</option>
+          <option value="No">No</option>
+          <option value="Yes">Yes</option>
+        </select>
+
+        <label class="block font-medium">Arm pain today:</label>
+        <select name="arm_pain" class="w-full p-2 border rounded">
+          <option value="">-</option>
+          <option value="No">No</option>
+          <option value="Yes">Yes</option>
+        </select>
+
+        <label class="block font-medium">Leg pain today:</label>
+        <select name="leg_pain" class="w-full p-2 border rounded">
+          <option value="">-</option>
+          <option value="No">No</option>
+          <option value="Yes">Yes</option>
+        </select>
+
+        <label class="block font-medium">Jaw pain today:</label>
+        <select name="jaw_pain" class="w-full p-2 border rounded">
+          <option value="">-</option>
+          <option value="No">No</option>
+          <option value="Yes">Yes</option>
+        </select>
+
+        <label class="block font-medium">Back pain today:</label>
+        <select name="back_pain" class="w-full p-2 border rounded">
+          <option value="">-</option>
+          <option value="No">No</option>
+          <option value="Yes">Yes</option>
+        </select>
+
+        <label class="block font-medium">Stomach / upper abdomen pain today:</label>
+        <select name="stomach_pain" class="w-full p-2 border rounded">
+          <option value="">-</option>
+          <option value="No">No</option>
+          <option value="Yes">Yes</option>
+        </select>
+
+        <label class="block font-medium">Headache today:</label>
+        <select name="headache" class="w-full p-2 border rounded">
+          <option value="">-</option>
+          <option value="No">No</option>
+          <option value="Yes">Yes</option>
+        </select>
+      </div>
+
+      <!-- RIGHT COLUMN (13 questions) -->
+      <div class="space-y-4">
+        <!-- 14. Numb arms/legs -->
+        <label class="block font-medium">Numb legs or arms today:</label>
+        <select name="numb_arms_legs" class="w-full p-2 border rounded">
+          <option value="">-</option>
+          <option value="No">No</option>
+          <option value="Yes">Yes</option>
+        </select>
+
+        <!-- 15. Visual disturbances -->
+        <label class="block font-medium">Visual disturbances today:</label>
+        <select name="visual_disturbances" class="w-full p-2 border rounded">
+          <option value="">-</option>
+          <option value="No">No</option>
+          <option value="Yes">Yes</option>
+        </select>
+
+        <!-- 16. Palpitations -->
+        <label class="block font-medium">Palpitations today:</label>
+        <select name="palpitations" class="w-full p-2 border rounded">
+          <option value="">-</option>
+          <option value="No">No</option>
+          <option value="Yes">Yes</option>
+        </select>
+
+        <!-- 17. Sweating -->
+        <label class="block font-medium">Sweating today:</label>
+        <select name="sweating" class="w-full p-2 border rounded">
+          <option value="">-</option>
+          <option value="No">No</option>
+          <option value="Yes">Yes</option>
+        </select>
+
+        <!-- 18. Leg swelling -->
+        <label class="block font-medium">Leg swelling today:</label>
+        <select name="leg_swelling" class="w-full p-2 border rounded">
+          <option value="">None</option>
+          <option value="Mild">Mild</option>
+          <option value="Moderate">Moderate</option>
+          <option value="Severe">Severe</option>
+        </select>
+
+        <!-- 19. Abdominal bloating -->
+        <label class="block font-medium">Abdominal bloating today:</label>
+        <select name="abdominal_bloating" class="w-full p-2 border rounded">
+          <option value="">-</option>
+          <option value="No">No</option>
+          <option value="Yes">Yes</option>
+        </select>
+
+        <!-- 20. Weight -->
+        <label class="block font-medium">Morning weight (kg):</label>
+        <input type="number" name="weight_kg" class="w-full p-2 border rounded">
+
+        <!-- 21. 6-min walk -->
+        <label class="block font-medium">6-Minute Walk Distance (m):</label>
+        <input type="number" name="walk_6min_distance_m" class="w-full p-2 border rounded">
+        <div class="text-sm mt-1">
+          <input type="checkbox" name="walk_not_performed" id="walk_not_performed">
+          <label for="walk_not_performed">Not performed today</label>
+        </div>
+
+        <!-- 22. Blood pressure -->
+        <label class="block font-medium">Blood Pressure (mmHg):</label>
+        <div class="flex gap-2">
+          <input type="number" name="blood_pressure_systolic" class="w-1/2 p-2 border rounded" placeholder="Systolic">
+          <span class="flex items-center">/</span>
+          <input type="number" name="blood_pressure_diastolic" class="w-1/2 p-2 border rounded" placeholder="Diastolic">
+        </div>
+
+        <!-- 23. Fatigue level -->
+        <label class="block font-medium">Fatigue level today (0–10):</label>
+        <select name="fatigue_level" class="w-full p-2 border rounded">
+            <option value="n.A">-</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+        </select>
+
+        <!-- 24. Sleep quality -->
+        <label class="block font-medium">Sleep quality last night (0–10):</label>
+        <select name="sleep_quality" class="w-full p-2 border rounded">
+            <option value="n.A">-</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+        </select>
+
+        <!-- 25. Anxiety -->
+        <label class="block font-medium">Feeling anxious today:</label>
+        <select name="anxious" class="w-full p-2 border rounded">
+          <option value="">-</option>
+          <option value="No">No</option>
+          <option value="Yes">Yes</option>
+        </select>
+
+        <!-- 26. Erectile dysfunction -->
+        <label class="block font-medium">Erectile dysfunction today (if relevant):</label>
+        <select name="erectile_dysfunction" class="w-full p-2 border rounded">
+          <option value="">-</option>
+          <option value="No">No</option>
+          <option value="Yes">Yes</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Free comment (full width) -->
+    <div class="form-group mt-6">
+      <label class="block font-medium">Additional Comments:</label>
+      <textarea name="free_comment" rows="3" class="w-full p-2 border rounded" placeholder="Any other feedback"></textarea>
+    </div>
+
+        <!-- Submit Button -->
+        <div class="submit-button-container">
+            <button type="submit" id="submitBtn">
+            Submit
+        </button>
+    </div>
+    </form>
+            </div>
+        </div>
+    </main>        
+    <!-- end: Main -->
+
+<script src="https://unpkg.com/@popperjs/core@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="dist/js/script.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const name = localStorage.getItem('fullName') || localStorage.getItem('username') || '[Username]';
+  const el = document.getElementById('userName');
+  if (el) el.textContent = name;
+});
+
+// Check if user already submitted feedback today
+async function checkDailyFeedbackStatus() {
+  const token = localStorage.getItem('token');
+  if (!token) return false;
+  
+  try {
+    const resp = await fetch('/api/feedback', {
+      method: 'GET',
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    
+    if (!resp.ok) return false;
+    
+    const data = await resp.json();
+    const items = data.items || [];
+    
+    if (items.length === 0) return false;
+    
+    // Check if most recent feedback was submitted today
+    const latestFeedback = items[0];
+    const feedbackDate = new Date(latestFeedback.created_at).toDateString();
+    const today = new Date().toDateString();
+    
+    return feedbackDate === today;
+  } catch (err) {
+    console.error('Error checking feedback status:', err);
+    return false;
+  }
+}
+
+// Disable feedback if already submitted
+document.addEventListener('DOMContentLoaded', async () => {
+  const alreadySubmitted = await checkDailyFeedbackStatus();
+  
+  if (alreadySubmitted) {
+    const feedbackForm = document.getElementById('feedbackForm');
+    const submitBtn = document.getElementById('submitBtn');
+    
+    if (feedbackForm) {
+      // Disable all form inputs
+      feedbackForm.querySelectorAll('input, select, textarea').forEach(el => {
+        el.disabled = true;
+      });
+      
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Already submitted today';
+        submitBtn.style.cursor = 'not-allowed';
+        submitBtn.style.opacity = '0.5';
+      }
+    }
+    
+    // Add a notification message
+    const cardDiv = feedbackForm?.closest('.bg-white');
+    if (cardDiv) {
+      const notification = document.createElement('div');
+      notification.className = 'bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded mb-4';
+      notification.textContent = 'Daily feedback already submitted today. You can submit again tomorrow.';
+      cardDiv.insertBefore(notification, cardDiv.firstChild);
+    }
+  }
+});
+</script>
+<script type="module" src="dist/js/patient.js"></script>
+<script src="/api/config.js"></script>
+
+<script type="module">
+import { createVoiceSession } from './dist/js/voice-agent.js'
+
+(async () => {
+
+  const css = `
+  .voice-chat { position: fixed; right: 20px; bottom: 20px; z-index: 60; }
+  .voice-card { background: #fff; border: 1.5px solid #325dba; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border-radius: 12px; padding: 12px; width: 320px; }
+  .voice-row { display: flex; align-items: center; gap: 8px; }
+  .voice-log { max-height: 200px; overflow: auto; font-size: 13px; color: #374151; padding: 8px; background:#f9fafb; border-radius: 8px; margin-bottom: 8px; }
+  .voice-log div { margin-bottom: 4px; padding: 2px 0; }
+  .pill { font-size: 15px; background:#E6F1FB; color:#0C447C; padding: 4px 10px; border-radius: 999px; font-weight: 600; }
+  .btn { border: 0; border-radius: 999px; padding: 8px 12px; cursor: pointer; font-weight: 600; font-size: 12px; }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .btn-primary { background:#658de6; color:#fff; }
+  .btn-secondary { background:#6b7280; color:#fff; }
+  .muted { color:#6b7280; font-size: 12px; }
+  .error { color: #dc2626; }
+  .success { color: #16a34a; }
+  .mode-btn { display:flex; align-items:center; gap:10px; border-radius:10px; padding:9px 12px; cursor:pointer; text-align:left; width:100%; margin-bottom:7px; font-family:inherit; }
+  .mode-btn-feedback { border:1.5px solid #1D9E75; background:#E1F5EE; }
+  .mode-btn-data { border:1.5px solid #378ADD; background:#E6F1FB; }
+  .mode-btn-chat { border:1.5px solid #D85A30; background:#FAECE7; }
+  .mode-btn-title { font-size:13px; font-weight:600; }
+  .mode-btn-subtitle { font-size:11px; }
+  .mode-btn-feedback .mode-btn-title { color:#085041; }
+  .mode-btn-feedback .mode-btn-subtitle { color:#0F6E56; }
+  .mode-btn-data .mode-btn-title { color:#0C447C; }
+  .mode-btn-data .mode-btn-subtitle { color:#185FA5; }
+  .mode-btn-chat .mode-btn-title { color:#712B13; }
+  .mode-btn-chat .mode-btn-subtitle { color:#993C1D; }
+  .mode-label { font-size:12px; font-weight:500; color:#6b7280; margin-bottom:8px; }
+  #vc-status { font-size: 12px; margin-bottom: 8px; min-height: 14px; }
+  .vc-results { background:#f0f9f4; border:1px solid #1D9E75; border-radius:8px; padding:10px; font-size:12px; margin-bottom:8px; }
+  .vc-results h4 { margin:0 0 6px; font-size:12px; color:#085041; }
+  .vc-results dl { margin:0; display:grid; grid-template-columns:auto 1fr; gap:2px 8px; }
+  .vc-results dt { color:#6b7280; }
+  .vc-results dd { margin:0; color:#111827; font-weight:600; }
+  `
+  const style = document.createElement('style')
+  style.textContent = css
+  document.head.appendChild(style)
+
+  const root = document.createElement('div')
+  root.className = 'voice-chat'
+  root.innerHTML = `
+    <div class="voice-card">
+      <div class="voice-row" style="justify-content:space-between;margin-bottom:15px;">
+        <div class="pill">Conversational Wellness Agent
+        </div>
+      </div>
+
+      <div id="vc-mode-select">
+        <div class="mode-label">(Free Speech Feedback)</div>
+        <button class="mode-btn mode-btn-feedback" id="mode-feedback">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0F6E56" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          <div><div class="mode-btn-title">Daily feedback</div><div class="mode-btn-subtitle">Answer today's 27 questions</div></div>
+        </button>
+        <button class="mode-btn mode-btn-chat" id="mode-chat">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#993C1D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+          <div><div class="mode-btn-title">General questions</div><div class="mode-btn-subtitle">Ask anything</div></div>
+        </button>
+      </div>
+
+      <div id="vc-status" class="muted"></div>
+      <div id="vc-results" class="vc-results" style="display:none;"></div>
+      <div id="vc-log" class="voice-log" style="display:none;"></div>
+      <div id="vc-stop-row" style="display:none;margin-top:8px;">
+        <button id="vc-stop-btn" class="btn btn-secondary" style="width:100%;">Stop Session</button>
+      </div>
+      <audio id="vc-audio" style="display:none;"></audio>
+    </div>
+  `
+  document.body.appendChild(root)
+
+  const log = document.getElementById('vc-log')
+  const modeSelect = document.getElementById('vc-mode-select')
+  const stopRow = document.getElementById('vc-stop-row')
+  const stopBtn = document.getElementById('vc-stop-btn')
+  const statusEl = document.getElementById('vc-status')
+  const resultsEl = document.getElementById('vc-results')
+  const audioEl = document.getElementById('vc-audio')
+
+  function append(role, text, className = '') {
+    const div = document.createElement('div')
+    if (className) div.className = className
+    div.textContent = `${role}: ${text}`
+    log.appendChild(div)
+    log.scrollTop = log.scrollHeight
+  }
+
+  function setStatus(text, kind = 'muted') {
+    statusEl.textContent = text
+    statusEl.className = kind
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, (c) => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]))
+  }
+
+  // Renders a lightweight results card when the assistant looks up biosignal
+  // or patient-status data, alongside the spoken response (not instead of it).
+  function renderToolResult(functionName, result) {
+    if (!result) return
+    if (functionName === 'get_biosignal_result' && result.ready) {
+      const m = result.measurements || {}
+      const rows = []
+      if (result.rhythm) rows.push(`<dt>Rhythm</dt><dd>${escapeHtml(result.rhythm)}</dd>`)
+      if (m.heart_rate_mean_bpm != null) rows.push(`<dt>Heart rate</dt><dd>${escapeHtml(m.heart_rate_mean_bpm)} bpm</dd>`)
+      if (Array.isArray(result.abnormalities) && result.abnormalities.length) {
+        rows.push(`<dt>Abnormalities</dt><dd>${result.abnormalities.map(escapeHtml).join(', ')}</dd>`)
+      }
+      resultsEl.innerHTML = `
+        <h4>${escapeHtml((result.signal_type || 'Signal').toUpperCase())} result</h4>
+        ${rows.length ? `<dl>${rows.join('')}</dl>` : ''}
+        ${result.summary ? `<div class="muted" style="margin-top:6px;">${escapeHtml(result.summary)}</div>` : ''}
+      `
+      resultsEl.style.display = 'block'
+    } else if (functionName === 'get_patient_context' && result.latest_diagnostic) {
+      const d = result.latest_diagnostic
+      const rows = []
+      if (d.risk_level) rows.push(`<dt>Risk level</dt><dd>${escapeHtml(d.risk_level)}</dd>`)
+      if (d.risk_percentage != null) rows.push(`<dt>Risk</dt><dd>${escapeHtml(d.risk_percentage)}%</dd>`)
+      resultsEl.innerHTML = `
+        <h4>Latest status</h4>
+        ${rows.length ? `<dl>${rows.join('')}</dl>` : ''}
+        ${d.summary ? `<div class="muted" style="margin-top:6px;">${escapeHtml(d.summary)}</div>` : ''}
+      `
+      resultsEl.style.display = 'block'
+    }
+  }
+
+  const BACKEND_URL = window.VOICE_AGENT_BACKEND_URL || ''
+
+  let USER_ID
+  async function fetchCurrentUser() {
+    const token = localStorage.getItem('token')
+    if (!token) throw new Error('No token found')
+    const resp = await fetch('/api/user', { headers: { 'Authorization': `Bearer ${token}` } })
+    const data = await resp.json()
+    USER_ID = Array.isArray(data) ? data[0]?.id : data?.id
+    if (!USER_ID) throw new Error('User ID not found')
+  }
+
+  await fetchCurrentUser()
+  localStorage.setItem('userId', USER_ID)
+  localStorage.setItem('patientId', USER_ID)
+  const sessionId = `user_${USER_ID}`
+
+  let selectedMode = null  // 'daily_feedback' | 'general_chat'
+  let voiceSession = null
+
+  // --- Mode selection handlers ---
+  function selectMode(mode) {
+    if (voiceSession) return
+    if (!BACKEND_URL) {
+      setStatus('Voice agent is not configured yet — ask an admin to set VOICE_AGENT_BACKEND_URL.', 'error')
+      return
+    }
+    selectedMode = mode
+    modeSelect.style.display = 'none'
+    log.style.display = 'block'
+    stopRow.style.display = 'block'
+    startSession(mode)
+  }
+
+  document.getElementById('mode-feedback').addEventListener('click', () => selectMode('daily_feedback'))
+  document.getElementById('mode-chat').addEventListener('click', () => selectMode('general_chat'))
+  stopBtn.addEventListener('click', stop)
+
+  async function startSession(mode) {
+    resultsEl.style.display = 'none'
+    resultsEl.innerHTML = ''
+    append('system', 'Connecting to voice assistant…', 'muted')
+
+    voiceSession = createVoiceSession({
+      backendUrl: BACKEND_URL,
+      token: localStorage.getItem('token'),
+      patientId: USER_ID,
+      mode,
+      sessionId: `${sessionId}_${mode}_${Date.now()}`,
+      audioEl,
+      onStatus: (text, kind) => { setStatus(text, kind); append('system', text, kind) },
+      onTranscript: (role, text) => append(role, text, role === 'assistant' ? 'success' : ''),
+      onToolResult: renderToolResult,
+    })
+
+    try {
+      await voiceSession.connect()
+    } catch (e) {
+      console.error('Voice session connect failed:', e)
+      setStatus('Could not connect: ' + (e.message || 'unknown error'), 'error')
+      append('system', 'Could not connect: ' + (e.message || 'unknown error'), 'error')
+    }
+  }
+
+  async function stop() {
+    if (voiceSession) {
+      try { await voiceSession.disconnect() } catch (e) { console.error('Disconnect error:', e) }
+      voiceSession = null
+    }
+    selectedMode = null
+    setStatus('')
+    resultsEl.style.display = 'none'
+    resultsEl.innerHTML = ''
+    // Reset UI back to mode selector
+    log.style.display = 'none'
+    log.innerHTML = ''
+    stopRow.style.display = 'none'
+    modeSelect.style.display = 'block'
+  }
+
+  console.log('Voice Chat widget loaded (Pipecat)')
+})()
+</script>
+
+
+</body>
+</html>

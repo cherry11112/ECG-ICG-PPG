@@ -1,0 +1,394 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="dist/css/style.css">
+    <title>User Dashboard</title>
+</head>
+<body class="text-gray-800 font-inter">
+    
+    <div class="fixed left-0 top-0 w-64 h-full p-4 z-50 sidebar-menu transition-transform" 
+    style="background: url('img/picture11.png') no-repeat center center / cover;">
+        <a href="#" class="flex items-center pb-4 border-b border-b-gray-800">
+            <img src="img/fraunhofer-logo.jpg" alt="" class="w-8 h-8 rounded object-cover">
+            <span class="text-lg font-bold text-black ml-3"></span>
+        </a>
+        <ul class="mt-4">
+            <li class="mb-1 group">
+                <a href="patient1.html" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">
+                    <i class="ri-home-2-line mr-3 text-lg"></i>
+                    <span class="text-sm">Dashboard</span>
+                </a>
+            </li>
+            <li class="mb-1 group active">
+                <a href="#" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100 sidebar-dropdown-toggle">
+                    <i class="ri-file-info-line mr-3 text-lg"></i>
+                    <span class="text-white">Reports</span>
+                </a>
+            </li>
+            <li class="mb-1 group">
+                <a href="#" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">
+                    <i class="ri-settings-2-line mr-3 text-lg"></i>
+                    <span class="text-sm">Settings</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="fixed top-0 left-0 w-full h-full bg-black/50 z-40 md:hidden sidebar-overlay"></div>
+    <!-- end: Sidebar -->
+
+    <!-- start: Main -->
+    <main class="w-full md:w-[calc(100%-256px)] md:ml-64 bg-gray-50 min-h-screen transition-all main">
+        <div class="py-2 px-6 bg-white flex items-center shadow-md shadow-black/5 sticky top-0 left-0 z-30">
+            <button type="button" class="text-lg text-gray-600 sidebar-toggle">
+                <i class="ri-menu-line"></i>
+            </button>
+            <ul class="flex items-center text-sm ml-4">
+                <li class="mr-2">
+                    <a href="#" class="text-gray-400 hover:text-gray-600 font-medium">Dashboard</a>
+                </li>
+            </ul>
+            <ul class="ml-auto flex items-center">
+                <li class="mr-1 dropdown">
+                    <button type="button" class="dropdown-toggle text-gray-400 w-8 h-8 rounded flex items-center justify-center hover:bg-gray-50 hover:text-gray-600">
+                        <i class="ri-search-line"></i>
+                    </button>
+                    <div class="dropdown-menu shadow-md shadow-black/5 z-30 hidden max-w-xs w-full bg-white rounded-md border border-gray-100">
+                        <form action="" class="p-4 border-b border-b-gray-100">
+                            <div class="relative w-full">
+                                <input type="text" class="py-2 pr-4 pl-10 bg-gray-50 w-full outline-none border border-gray-100 rounded-md text-sm focus:border-blue-500" placeholder="Search...">
+                                <i class="ri-search-line absolute top-1/2 left-4 -translate-y-1/2 text-gray-400"></i>
+                            </div>
+                        </form>
+                    </div>
+                </li>
+                <li class="dropdown">
+                    <button type="button" class="dropdown-toggle text-gray-400 w-8 h-8 rounded flex items-center justify-center hover:bg-gray-50 hover:text-gray-600">
+                        <i class="ri-notification-3-line"></i>
+                    </button>
+                    <div class="dropdown-menu shadow-md shadow-black/5 z-30 hidden max-w-xs w-full bg-white rounded-md border border-gray-100">
+                        <div class="flex items-center px-4 pt-4 border-b border-b-gray-100 notification-tab">
+                            <button type="button" data-tab="notification" data-tab-page="notifications" class="text-gray-400 font-medium text-[13px] hover:text-gray-600 border-b-2 border-b-transparent mr-4 pb-1 active">Notifications</button>
+                            <button type="button" data-tab="notification" data-tab-page="messages" class="text-gray-400 font-medium text-[13px] hover:text-gray-600 border-b-2 border-b-transparent mr-4 pb-1">Messages</button>
+                        </div>
+                        <div class="my-2">
+                            <ul class="max-h-64 overflow-y-auto" data-tab-for="notification" data-page="notifications">
+                                <li>
+                            <ul class="max-h-64 overflow-y-auto hidden" data-tab-for="notification" data-page="messages">
+                                <li>
+                                    <a href="#" class="py-2 px-4 flex items-center hover:bg-gray-50 group">
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+                <li class="dropdown ml-3">
+                    <button type="button" class="dropdown-toggle flex items-center">
+                        <img src="img/user-profile-icon-free-vector.jpg" alt="" class="w-8 h-8 rounded-full block object-cover align-middle">
+                    </button>                   
+                    <ul class="dropdown-menu shadow-md shadow-black/5 z-30 hidden py-1.5 rounded-md bg-white border border-gray-100 w-full max-w-[140px]">
+                        <li>
+                            <a href="#" class="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-blue-500 hover:bg-gray-50">Profile</a>
+                        </li>
+                        <li>
+                            <a href="#" id="logoutBtn" class="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-blue-500 hover:bg-gray-50">Logout</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+
+<!------------------------------------------->
+        
+        <div class="p-6">
+            <div class="grid grid-cols-1 gap-6 mb-6">
+
+        <div class="p-6">
+            <div class="grid grid-cols-1 gap-6 mb-6">
+                <!-- Welcome Back Section -->
+                <div class="bg-white rounded-md border border-gray-100 p-6 shadow-md shadow-black/5">
+                    <div class="flex justify-between mb-6">
+                        <div class="w-full">
+                            <div class="text font-semibold mb-3" style="font-size: 2rem;">Informations</div>
+                            <div class="text-lg font-small text-gray-300" style="color: gray;">
+                                <span id="userName">Here's your report</span>
+                            </div>                       
+                        </div>
+                    </div>
+                </div>               
+                
+                <!------------------------------------------------->
+
+                
+            
+        <div class="bg-white rounded-md border border-gray-100 p-6 shadow-md shadow-black/5">
+            <div class="flex justify-between mb-6">
+                <div>
+                    <div class="text-1xl font-semibold mb-1" style="margin-left: 1rem; font-size:30px; margin-bottom: -2rem;">Patient Data:</div>                    
+                </div>
+            </div>
+            <hr>
+            
+            <div class="p-6">
+			    <div class="grid grid-cols-1 gap-6 mb-6">
+                <div class="text-2xl font-semibold mb-1" style="color: chocolate; ">Current Medications:</div>
+                   <div class="page-2">
+
+                    <div class="current-medications-section">
+                        <p><strong>A. Blood pressure / heart failure / anti-anginal</strong><br>
+                            ACE inhibitors (e.g. lisinopril, ramipril): <span id="ace-inhibitors-display">Loading...</span>
+                            <span id="ace-inhibitors-drugs-display" style="display:none;"></span><br>
+                            Angiotensin II receptor blockers (ARBs): <span id="arbs-2-display">Loading...</span>
+                            <span id="arb-drugs-display" style="display:none;"></span><br>
+                            Beta-blockers (e.g. metoprolol, bisoprolol, atenolol): <span id="beta-blockers-display">Loading...</span>
+                            <span id="beta-blockers-drugs-display" style="display:none;"></span><br>
+                            Calcium channel blockers(e.g. amlodipine, diltiazem): <span id="calcium-channel-blockers-display">Loading...</span>
+                            <span id="calcium-channel-blockers-drugs-display" style="display:none;"></span><br>
+                            Diuretics (water tablets)(e.g. furosemide, torasemide): <span id="diuretics-tablets-display">Loading...</span>
+                            <span id="diuretics-tablets-drugs-display" style="display:none;"></span><br>
+                            Other heart failure medications(e.g. ARNI / sacubitril-valsartan, digoxin): <span id="other-heart-failure-medications-display">Loading...</span>
+                            <span id="other-heart-failure-medications-drugs-display" style="display:none;"></span><br>
+                            Nitrates / anti-anginal medication(e.g. nitroglycerin spray, isosorbide mononitrate): <span id="nitrates-display">Loading...</span>
+                            <span id="nitrates-drugs-display" style="display:none;"></span>
+                        </p>
+                    </div>
+
+                    <div class="current-medications-section">
+                        <p><strong>B. Rhythm / antiarrhythmic medication</strong><br>
+                            Antiarrhythmic drugs (other than beta-blockers)(e.g. amiodarone, sotalol): <span id="antiarryhthmic-drugs-display">Loading...</span>
+                            <span id="antiarryhthmic-drugs-drugs-display" style="display:none;"></span>
+                        </p>
+                    </div>
+
+                    
+                    <div class="current-medications-section">
+                        <p><strong>C. Blood thinners & antiplatelet medication</strong><br>
+                            Antiplatelet medication(e.g. aspirin, clopidogrel): <span id="antiplatelet-medication-display">Loading...</span>
+                            <span id="antiplatelet-medication-drugs-display" style="display:none;"></span><br>
+                            Anticoagulant medication(e.g. warfarin, dabigatran): <span id="oral-anticoagulants-display">Loading...</span>
+                            <span id="oral-anticoagulants-drugs-display" style="display:none;"></span>     
+                        </p>
+                    </div>
+
+                    <div class="current-medications-section">
+                        <p><strong>D. Cholesterol / lipid-lowering medication</strong><br>
+                            Statins(e.g. atorvastatin, simvastatin, rosuvastatin): <span id="statins-display">Loading...</span>
+                            <span id="statins-drugs-display" style="display:none;"></span><br>
+                            Other lipid-lowering drugs(e.g. ezetimibe, fibrates): <span id="other-lipid-lowering-drugs-display">Loading...</span>
+                            <span id="other-lipid-lowering-drugs-drugs-display" style="display:none;"></span>     
+                        </p>
+                    </div>
+
+                    <div class="current-medications-section">
+                        <p><strong>E. Metabolic / endocrine medication</strong><br>
+                            Medication for diabetes(e.g. metformin, insulin): <span id="medication-for-diabetes-display">Loading...</span>
+                            <span id="medication-for-diabetes-drugs-display" style="display:none;"></span><br>
+                            Medication for thyroid disease(e.g. levothyroxine, thyreostatics): <span id="medication-thyroid-display">Loading...</span>
+                            <span id="medication-thyroid-drugs-display" style="display:none;"></span>     
+                        </p>
+                    </div>
+
+                    <div class="current-medications-section">
+                        <p><strong>F. Psychiatric medication</strong><br>
+                            Antidepressants (SSRIs, SNRIs, TCAs, others)(e.g. sertraline, escitalopram): <span id="medication-for-antidepressant-display">Loading...</span>
+                            <span id="medication-for-antidepressant-drugs-display" style="display:none;"></span><br>
+                            Anti-anxiety / tranquilizers(e.g. benzodiazepines or others): <span id="anti-anxiety-display">Loading...</span>
+                            <span id="anti-anxiety-drugs-display" style="display:none;"></span>     
+                        </p>
+                    </div>
+
+                    <div class="current-medications-section">
+                        <p><strong>G. Other important medication</strong><br>
+                            Any other regular medication that might affect the heart, blood pressure, kidneys, or liver: <span id="other-medication-display">Loading...</span> 
+                        </p>
+                    </div>
+					
+                </div>
+		</div>
+
+				<br>
+			<div class="grid grid-cols-1 gap-6 mb-6">
+                    <div class="text-2xl font-semibold mb-1" style="color: chocolate; margin-top: 1rem;">Patient Last Cardio Evaluation:</div>
+                    <div class="page-2">
+                        
+                    <div class="last-cardio-section">
+                        <p><strong>A. Timing & Type of Last Evaluation</strong><br>
+                            Heart failure phenotype based on last diagnostic: <span id="timing-and-type-input">Loading...</span>
+                        </p>
+                    </div>
+                    
+                    <div class="last-cardio-section">
+                        <p><strong>B. Heart Failure & Ischemia Summary</strong><br>
+                            Heart failure phenotype based on last diagnostic: <span id="failure-phenotype">Loading...</span><br>
+                            Clinical ischemia present (angina / ischemia on test): <span id="clinical-ischemia">Loading...</span><br>
+                            Prior myocardial infarction (based on history / imaging): <span id="prior-myocardial">Loading...</span><br>
+                            Coronary artery disease (obstructive CAD, prior PCI/CABG): <span id="coronary-artery-disease">Loading...</span>
+                        </p>
+                    </div>
+
+                    <div class="last-cardio-section">
+                        <p><strong>C. Key Clinical Signs & Hemodynamics (at last evaluation)</strong><br>
+                            Hypotension (clinically relevant): <span id="hypotension">Loading...</span><br>
+                            Pulmonary congestion (clinical or imaging): <span id="pulmonary-congestion">Loading...</span><br>
+                            Pleural effusion: <span id="pleural-effusion">Loading...</span><br>
+                            Jugular venous distension: <span id="jugular-venous-distension">Loading...</span>
+                        </p>
+                    </div>
+                   
+                    <div class="last-cardio-section">
+                        <p><strong>D. Catheter / Hemodynamic Measurements</strong><br>
+                            Global hemodynamics<br>
+                            Cardiac Index (CI): <span id="cardiac-index">Loading...</span><br>
+                            Systemic vascular resistance (SVR): <span id="systemic-vascular-resistance">Loading...</span><br>
+                            Pressures <br>
+                            Right atrial pressure (mean): <span id="right-atrial-pressure">Loading...</span><br>
+                            Right ventricular pressure (systolic / diastolic): <span id="right-ventricular-pressure">Loading...</span><br>
+                            Pulmonary artery pressure (systolic / diastolic / Mean): <span id="pulmonary-artery-pressure">Loading...</span><br>
+                            Pulmonary capillary wedge pressure (PCWP): <span id="pulmonary-capillary-wedge-pressure">Loading...</span><br>
+                            Aortic pressure during cath (systolic / diastolic / mean): <span id="aortic-pressure-during-cath">Loading...</span><br>
+                            Pulmonary circulation <br>
+                            Pulmonary vascular resistance (PVR): <span id="pulmonary-vascular-resistance">Loading...</span><br>
+                            Pulmonary hypertension based on catheter data: <span id="pulmonary-hypertension-catheter">Loading...</span>
+                        </p>
+                    </div>
+                    
+                    <div class="last-cardio-section">
+                        <p><strong>E. Laboratory Results - Cardiac Biomarkers</strong><br>
+                            Troponin I (cTnI): <span id="troponin-i">Loading...</span><br>
+                            Troponin T (cTnT): <span id="troponin-t">Loading...</span><br>
+                            NT-proBNP: <span id="nt-probnp">Loading...</span><br>
+                            BNP: <span id="bnp">Loading...</span><br>
+                            CK-MB: <span id="ck-mb">Loading...</span><br>
+                            Myoglobin: <span id="myoglobin">Loading...</span><br>
+                            Lactate dehydrogenase (LDH): <span id="ldh">Loading...</span>
+                        </p>
+                    </div>
+                    
+                    <div class="last-cardio-section">
+                        <p><strong>F. Laboratory Results - Inflammation, Coagulation & Metabolic</strong><br>
+                            CRP: <span id="crp">Loading...</span><br>
+                            D-Dimer: <span id="ddimer">Loading...</span><br>
+                            Homocysteine: <span id="homocysteine">Loading...</span><br>
+                            Lipid Profile<br>
+                            LDL: <span id="ldl">Loading...</span><br>
+                            HDL: <span id="hdl">Loading...</span><br>
+                            Triglycerides: <span id="triglycerides">Loading...</span><br>
+                            Blood sugar control:<br>
+                            HbA1c: <span id="hba1c">Loading...</span><br>
+                            Renal function: <br>
+                            BUN: <span id="bun">Loading...</span><br>
+                            Creatinine: <span id="creatinine">Loading...</span>
+                        </p>
+                    </div>
+                    
+                    <div class="last-cardio-section">
+                        <p><strong>G. Electrolytes, Acid - Base & Hormones</strong><br>
+                            Blood pH: <span id="blood-ph">Loading...</span><br>
+                            Ketones: <span id="ketones">Loading...</span><br>
+                            Serum electrolytes:<br>
+                            Sodium (Na⁺): <span id="sodium">Loading...</span><br>
+                            Potassium (K⁺): <span id="potassium">Loading...</span><br>
+                            Calcium (Ca²⁺): <span id="calcium">Loading...</span><br>
+                            Magnesium (Mg²⁺): <span id="magnesium">Loading...</span><br>
+                            Chloride (Cl⁻): <span id="chloride">Loading...</span><br>
+                            Thyroid function (if assessed):<br>
+                            TSH: <span id="tsh">Loading...</span><br>
+                            Free T3: <span id="free-t3">Loading...</span><br>
+                            Free T4: <span id="free-t4">Loading...</span><br>
+                            Testosterone level (if relevant): <span id="testosterone">Loading...</span><br>
+                            Iron status (if available):<br>
+                            Ferritin: <span id="ferritin">Loading...</span><br>
+                            Transferrin saturation: <span id="transferrin-saturation">Loading...</span>
+                        </p>
+                    </div>
+                    
+                    <div class="last-cardio-section">
+                        <p><strong>H. Imaging / Structural & Vascular Findings</strong><br>
+                            Coronary artery calcium score: <span id="coronary-artery-calcium">Loading...</span><br>
+                            Peripheral artery disease (clinical / imaging): <span id="peripheral-artery">Loading...</span><br>
+                            Ankle-Brachial Index (ABI):<br>
+                            Right: <span id="right">Loading...</span><br>
+                            Left: <span id="left">Loading...</span>
+                        </p>
+                    </div>
+
+                    <div class="last-cardio-section">
+                        <p><strong>Other major structural diagnoses:</strong><br>
+                            Aortic aneurysm / aortic dissection: <span id="aortic-aneurysm">Loading...</span><br>
+                            Congenital heart disease: <span id="chd">Loading...</span><br>
+                            Endocarditis: <span id="endocarditis2">Loading...</span><br>
+                            Myocarditis: <span id="myocarditis">Loading...</span><br>
+                            Pericarditis / pericardial effusion / constrictive pericarditis: <span id="pericarditis2">Loading...</span>
+                        </p>
+                    </div>
+
+                    <div class="last-cardio-section">
+                        <p><strong>I. Valvular Heart Disease</strong><br>
+                            <strong>Valvular disease (clinically relevant)</strong><br>
+                            For each valve, mark presence and dominant lesion:<br>
+                            <strong>Aortic valve:</strong><br>
+                            Disease present: <span id="disease-present">Loading...</span><br>
+                            <span id="disease-present-result-display" style="display:none;"></span>
+                            <strong>Mitral valve:</strong><br>
+                            Disease present: <span id="disease-present2">Loading...</span><br>
+                            <span id="disease-present2-result-display" style="display:none;"></span>
+                            <strong>Tricuspid valve:</strong><br>
+                            Disease present: <span id="disease-present3">Loading...</span><br>
+                            <span id="disease-present3-result-display" style="display:none;"></span>
+                            <strong>Pulmonary valve:</strong><br>
+                            Disease present: <span id="disease-present4">Loading...</span><br>
+                            <span id="disease-present4-result-display" style="display:none;"></span>
+                            Asymptomatic valvular disease identified: <span id="asymptomatic-valvular">Loading...</span><br>
+                        </p>
+                        
+                        <p><strong>Auscultation findings</strong><br>
+                            Murmur present <span id="murmur-present">Loading...</span><br>
+                            Abnormal heart sound S3 <span id="s3">Loading...</span><br>
+                            Abnormal heart sound S4 <span id="s4">Loading...</span>
+                        </p>
+                    </div>
+                    
+                    <div class="last-cardio-section">
+                        <p><strong>G. Summary (Optional Free Text)</strong><br>
+                            <span id="summary"></span>
+                        </p>
+                    </div>
+
+                </div>
+                    
+             </div>
+
+			</div> 
+       <!-- Navigation Buttons -->
+       <div class="submit-button-container mt-6 flex justify-between">
+        <a href="report1.2.html" id="backButton">
+            <button type="button" class="px-3 py-1 bg-white text-black border border-black rounded-sm text-sm">Back</button>
+        </a>
+        <a href="report1.4.html" id="nextButtonLink">
+            <button type="button" id="nextButton" class="px-3 py-1 bg-white text-black border border-black rounded-sm text-sm">Next</button>
+        </a>
+    </div>
+              
+                    
+            </div>
+        </div>
+      </div>
+
+     </main>
+
+        <script src="https://unpkg.com/@popperjs/core@2"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="dist/js/report.js"></script>
+
+        <script type="module">
+        </script>
+  
+      </body>
+
+      </html>
