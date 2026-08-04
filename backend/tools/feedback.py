@@ -1,0 +1,117 @@
+"""Claude tools for the daily_feedback flow.
+
+These replace what n8n's AI agent used to do: call back into this app's own
+Node API (api/feedback/[...slug].js tools/save-answer and tools/finalize-session)
+to persist each answer and then commit the completed session to feedback_form.
+We call the existing endpoints rather than duplicating their INSERT/UPDATE logic
+in Python, so there's one source of truth for the write path (see Stage 1 audit).
+"""
+from __future__ import annotations
+
+import httpx
+
+from pipecat.adapters.schemas.function_schema import FunctionSchema
+
+from prompts import VALID_QUESTION_IDS
+
+_http: httpx.AsyncClient | None = None
+_base_url: str = ""
+_internal_api_key: str = ""
+
+
+def init_client(base_url: str, internal_api_key: str = "") -> None:
+    global _http, _base_url, _internal_api_key
+    _base_url = base_url.rstrip("/")
+    _internal_api_key = internal_api_key
+    if _http is None:
+        headers = {"x-internal-api-key": internal_api_key} if internal_api_key else {}
+        _http = httpx.AsyncClient(base_url=_base_url, headers=headers, timeout=15.0)
+
+
+async def close_client() -> None:
+    global _http
+    if _http is not None:
+        await _http.aclose()
+        _http = None
+
+
+async def save_feedback_answer(patient_id: int, session_id: str, question_id: str, answer_value: str) -> dict:
+    if _http is None:
+        raise RuntimeError("feedback tools client not initialized — call init_client() first")
+    resp = await _http.post(
+        "/api/feedback/tools/save-answer",
+        json={
+            "patient_id": patient_id,
+            "session_id": session_id,
+            "question_id": question_id,
+            "answer_value": answer_value,
+        },
+    )
+    resp.raise_for_status()
+    return resp.json()
+
+
+async def finalize_feedback_session(patient_id: int, session_id: str) -> dict:
+    if _http is None:
+        raise RuntimeError("feedback tools client not initialized — call init_client() first")
+    resp = await _http.post(
+        "/api/feedback/tools/finalize-session",
+        json={"patient_id": patient_id, "session_id": session_id},
+    )
+    resp.raise_for_status()
+    return resp.json()
+
+
+async def save_feedback_answer_handler(params) -> None:
+    result = await save_feedback_answer(
+        patient_id=int(params.arguments["patient_id"]),
+        session_id=str(params.arguments["session_id"]),
+        question_id=str(params.arguments["question_id"]),
+        answer_value=str(params.arguments["answer_value"]),
+    )
+    await params.result_callback(result)
+
+
+async def finalize_feedback_session_handler(params) -> None:
+    result = await finalize_feedback_session(
+        patient_id=int(params.arguments["patient_id"]),
+        session_id=str(params.arguments["session_id"]),
+    )
+    await params.result_callback(result)
+
+
+save_feedback_answer_schema = FunctionSchema(
+    name="save_feedback_answer",
+    description=(
+        "Save one answer from the daily symptom check-in. Call this once per "
+        "question, immediately after the patient answers it."
+    ),
+    properties={
+        "patient_id": {"type": "integer", "description": "The patient's numeric user id."},
+        "session_id": {"type": "string", "description": "The current voice session id."},
+        "question_id": {
+            "type": "string",
+            "enum": VALID_QUESTION_IDS,
+            "description": "Which question this answer is for.",
+        },
+        "answer_value": {
+            "type": "string",
+            "description": "The normalized answer (e.g. 'Yes', 'No', a number, or a short phrase).",
+        },
+    },
+    required=["patient_id", "session_id", "question_id", "answer_value"],
+)
+
+finalize_feedback_session_schema = FunctionSchema(
+    name="finalize_feedback_session",
+    description=(
+        "Commit the daily feedback session once all 27 questions have been answered. "
+        "If the session is incomplete, the result will say so and list what's missing — "
+        "keep collecting answers in that case rather than retrying this call immediately."
+    ),
+    properties={
+        "patient_id": {"type": "integer", "description": "The patient's numeric user id."},
+        "session_id": {"type": "string", "description": "The current voice session id."},
+    },
+    required=["patient_id", "session_id"],
+)
