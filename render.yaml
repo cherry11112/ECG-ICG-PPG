@@ -23,15 +23,15 @@ services:
       - key: PYTHON_VERSION
         value: 3.12.10
       - key: LLM_PROVIDER
-        value: gemini
-      - key: GEMINI_API_KEY
-        sync: false
-      - key: GEMINI_MODEL
-        value: gemini-2.5-flash-lite
+        value: claude
       - key: ANTHROPIC_API_KEY
         sync: false
       - key: ANTHROPIC_MODEL
         value: claude-sonnet-4-5
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GEMINI_MODEL
+        value: gemini-2.5-flash-lite
       - key: DAILY_API_KEY
         sync: false
       - key: DAILY_API_URL

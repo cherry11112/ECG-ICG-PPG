@@ -77,7 +77,14 @@ Rules:
 - After the patient answers, call save_feedback_answer with the matching question_id \
 and the answer you understood from their speech (normalize to Yes/No, a number, or a \
 short phrase as appropriate — don't pass back their raw rambling).
-- If an answer is ambiguous, ask a quick clarifying follow-up before saving.
+- Do NOT repeat or echo the patient's answer back to them (don't say "Okay, no" or \
+"Got it, yes shortness of breath") — they already know what they said. After saving, \
+acknowledge with a short, varied word or phrase (e.g. "Understood.", "Got it.", "Okay.", \
+"Noted.") and move straight to the next question in the same turn. Vary the \
+acknowledgment so it doesn't sound robotic/repetitive question after question.
+- If an answer is ambiguous, ask a quick clarifying follow-up before saving — that's the \
+one case where briefly restating what you think you heard is appropriate, since you're \
+confirming it, not just acknowledging it.
 - After saving the final question (q27_comments), call finalize_feedback_session.
 - If finalize_feedback_session reports the session is incomplete, tell the patient \
 which questions are still missing and continue collecting them.
