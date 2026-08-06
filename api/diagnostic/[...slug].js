@@ -1732,7 +1732,24 @@ async function handleGenerateDiagnostic(req, res) {
         errors: multiAIResults.errors,
         multiAIAvailable: multiAIResults.multiAIAvailable
       };
-      
+
+      // ALSO set these at the top level of fullReport — saveDiagnosticResult()
+      // (api/_db.js) reads gemini_result/claude_result/agreement_score/etc. from
+      // the top level of the object it's given, not from a nested
+      // multi_ai_diagnostics property. Without this, every diagnostic generated
+      // through this route silently saved null for all multi-AI columns, even
+      // when Gemini/Claude both succeeded above — the nested object was built
+      // but never actually reached the database. Kept the nested
+      // multi_ai_diagnostics object above too in case anything else reads it.
+      fullReport.gemini_result = multiAIResults.gemini_result;
+      fullReport.claude_result = multiAIResults.claude_result;
+      fullReport.agreement_score = multiAIResults.agreement_score;
+      fullReport.consensus_risk_level = multiAIResults.consensus_risk_level;
+      fullReport.consensus_risk_percentage = multiAIResults.consensus_risk_percentage;
+      fullReport.comparison_analysis = multiAIResults.comparison_analysis;
+      fullReport.multi_ai_errors = multiAIResults.errors;
+      fullReport.multi_ai_available = multiAIResults.multiAIAvailable;
+
       if (multiAIResults.agreement_score !== undefined) {
         console.log('[generate-diagnostic] Multi-AI diagnostics generated');
         console.log('[generate-diagnostic] Agreement score:', multiAIResults.agreement_score, '%');
