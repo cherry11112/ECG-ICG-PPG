@@ -30,7 +30,7 @@ if LLM_PROVIDER not in ("gemini", "claude"):
 ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
 ANTHROPIC_MODEL = os.environ.get("ANTHROPIC_MODEL", "claude-sonnet-4-5")
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "")
-GEMINI_MODEL = os.environ.get("GEMINI_MODEL", "gemini-2.5-flash")
+GEMINI_MODEL = os.environ.get("GEMINI_MODEL", "gemini-2.5-flash-lite")
 
 if LLM_PROVIDER == "gemini" and not GEMINI_API_KEY:
     raise RuntimeError("LLM_PROVIDER=gemini requires GEMINI_API_KEY")
