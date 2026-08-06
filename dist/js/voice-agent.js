@@ -71,11 +71,16 @@ export function createVoiceSession(opts) {
 
   async function connect() {
     onStatus?.('Requesting microphone…', 'info')
+    // 60s, not 15s: free-tier backend hosting (Render's free plan) sleeps after
+    // ~15 min idle and can take 30-60s to wake on the first request after that —
+    // a short timeout here aborts the connection before the backend even gets a
+    // chance to respond, which looks identical to a real failure from the UI.
+    onStatus?.('Connecting… this can take up to a minute if the server was idle', 'info')
     await client.startBotAndConnect({
       endpoint: `${backendUrl.replace(/\/$/, '')}/connect`,
       headers: new Headers({ Authorization: `Bearer ${token}` }),
       requestData: { patient_id: patientId, mode, session_id: sessionId },
-      timeout: 15000,
+      timeout: 60000,
     })
   }
 
