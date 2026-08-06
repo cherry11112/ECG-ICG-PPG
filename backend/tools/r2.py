@@ -145,7 +145,9 @@ async def get_biosignal_result(patient_id: int, signal_type: str) -> dict:
 
 
 async def get_biosignal_result_handler(params) -> None:
-    patient_id = int(params.arguments["patient_id"])
+    # patient_id comes from app_resources (JWT-verified at /connect), not the
+    # LLM's arguments — see the matching comment in tools/neon.py for why.
+    patient_id = int(params.app_resources["patient_id"])
     signal_type = str(params.arguments["signal_type"])
     result = await get_biosignal_result(patient_id, signal_type)
     await params.result_callback(result)
@@ -154,22 +156,19 @@ async def get_biosignal_result_handler(params) -> None:
 get_biosignal_result_schema = FunctionSchema(
     name="get_biosignal_result",
     description=(
-        "Fetch and numerically summarize a patient's biosignal result "
+        "Fetch and numerically summarize the current patient's biosignal result "
         "(ECG, PPG, ICG, or PCG) from object storage. Returns a concise summary "
         "(heart rate, rhythm, key measurements, flagged abnormalities) — never "
         "raw waveform data. Check get_patient_context first to confirm a result "
-        "is likely ready before calling this."
+        "is likely ready before calling this. Always refers to the patient this "
+        "session belongs to."
     ),
     properties={
-        "patient_id": {
-            "type": "integer",
-            "description": "The patient's numeric user id.",
-        },
         "signal_type": {
             "type": "string",
             "enum": list(SIGNAL_TYPES),
             "description": "Which biosignal to fetch.",
         },
     },
-    required=["patient_id", "signal_type"],
+    required=["signal_type"],
 )

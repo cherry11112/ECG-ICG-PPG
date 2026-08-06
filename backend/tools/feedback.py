@@ -63,9 +63,14 @@ async def finalize_feedback_session(patient_id: int, session_id: str) -> dict:
 
 
 async def save_feedback_answer_handler(params) -> None:
+    # patient_id and session_id come from app_resources (established once at
+    # /connect time, JWT-verified) — not from the LLM's tool-call arguments.
+    # Trusting LLM-supplied identity/session values here is exactly how a
+    # hallucinated or wrong patient_id ends up violating the DB's foreign key
+    # constraint (or worse, writing to the wrong patient's records).
     result = await save_feedback_answer(
-        patient_id=int(params.arguments["patient_id"]),
-        session_id=str(params.arguments["session_id"]),
+        patient_id=int(params.app_resources["patient_id"]),
+        session_id=str(params.app_resources["session_id"]),
         question_id=str(params.arguments["question_id"]),
         answer_value=str(params.arguments["answer_value"]),
     )
@@ -74,8 +79,8 @@ async def save_feedback_answer_handler(params) -> None:
 
 async def finalize_feedback_session_handler(params) -> None:
     result = await finalize_feedback_session(
-        patient_id=int(params.arguments["patient_id"]),
-        session_id=str(params.arguments["session_id"]),
+        patient_id=int(params.app_resources["patient_id"]),
+        session_id=str(params.app_resources["session_id"]),
     )
     await params.result_callback(result)
 
@@ -87,8 +92,6 @@ save_feedback_answer_schema = FunctionSchema(
         "question, immediately after the patient answers it."
     ),
     properties={
-        "patient_id": {"type": "integer", "description": "The patient's numeric user id."},
-        "session_id": {"type": "string", "description": "The current voice session id."},
         "question_id": {
             "type": "string",
             "enum": VALID_QUESTION_IDS,
@@ -99,7 +102,7 @@ save_feedback_answer_schema = FunctionSchema(
             "description": "The normalized answer (e.g. 'Yes', 'No', a number, or a short phrase).",
         },
     },
-    required=["patient_id", "session_id", "question_id", "answer_value"],
+    required=["question_id", "answer_value"],
 )
 
 finalize_feedback_session_schema = FunctionSchema(
@@ -109,9 +112,6 @@ finalize_feedback_session_schema = FunctionSchema(
         "If the session is incomplete, the result will say so and list what's missing — "
         "keep collecting answers in that case rather than retrying this call immediately."
     ),
-    properties={
-        "patient_id": {"type": "integer", "description": "The patient's numeric user id."},
-        "session_id": {"type": "string", "description": "The current voice session id."},
-    },
-    required=["patient_id", "session_id"],
+    properties={},
+    required=[],
 )

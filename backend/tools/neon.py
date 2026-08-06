@@ -104,7 +104,13 @@ async def get_patient_context(patient_id: int) -> dict:
 
 
 async def get_patient_context_handler(params) -> None:
-    patient_id = int(params.arguments["patient_id"])
+    # patient_id comes from the session's app_resources — set once at /connect
+    # time from a JWT-verified value (see server.py's authorize_connect_request)
+    # — never from the LLM's own tool-call arguments. The LLM cannot be trusted
+    # as an access-control boundary: letting it supply patient_id would mean a
+    # user could talk a model into fetching a different patient's health data
+    # just by asking, which defeats the whole point of gating /connect on auth.
+    patient_id = int(params.app_resources["patient_id"])
     result = await get_patient_context(patient_id)
     await params.result_callback(result)
 
@@ -112,16 +118,13 @@ async def get_patient_context_handler(params) -> None:
 get_patient_context_schema = FunctionSchema(
     name="get_patient_context",
     description=(
-        "Look up a patient's most recent symptom feedback, intake report, and "
-        "diagnostic status (including whether biosignal results like ECG are "
-        "ready) from the database. Call this before answering any question "
-        "about a patient's recorded health data."
+        "Look up the current patient's most recent symptom feedback, intake "
+        "report, and diagnostic status (including whether biosignal results "
+        "like ECG are ready) from the database. Call this before answering any "
+        "question about the patient's recorded health data. Always refers to "
+        "the patient this session belongs to — there is no way to look up a "
+        "different patient."
     ),
-    properties={
-        "patient_id": {
-            "type": "integer",
-            "description": "The patient's numeric user id.",
-        }
-    },
-    required=["patient_id"],
+    properties={},
+    required=[],
 )
