@@ -56,16 +56,29 @@ def _build_tts():
         )
 
 
+def _build_llm():
+    if config.LLM_PROVIDER == "gemini":
+        from pipecat.services.google.llm import GoogleLLMService, GoogleLLMSettings
+
+        return GoogleLLMService(
+            api_key=config.GEMINI_API_KEY,
+            settings=GoogleLLMSettings(model=config.GEMINI_MODEL),
+        )
+    else:
+        from pipecat.services.anthropic.llm import AnthropicLLMService, AnthropicLLMSettings
+
+        return AnthropicLLMService(
+            api_key=config.ANTHROPIC_API_KEY,
+            settings=AnthropicLLMSettings(model=config.ANTHROPIC_MODEL),
+        )
+
+
 def _build_llm_and_context(mode: str):
     from pipecat.adapters.schemas.tools_schema import ToolsSchema
     from pipecat.processors.aggregators.llm_context import LLMContext
     from pipecat.processors.aggregators.llm_response_universal import LLMContextAggregatorPair
-    from pipecat.services.anthropic.llm import AnthropicLLMService, AnthropicLLMSettings
 
-    llm = AnthropicLLMService(
-        api_key=config.ANTHROPIC_API_KEY,
-        settings=AnthropicLLMSettings(model=config.ANTHROPIC_MODEL),
-    )
+    llm = _build_llm()
 
     llm.register_function("get_patient_context", neon_tools.get_patient_context_handler)
     llm.register_function("get_biosignal_result", r2_tools.get_biosignal_result_handler)

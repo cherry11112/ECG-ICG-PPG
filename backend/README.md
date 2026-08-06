@@ -9,7 +9,14 @@ never talks to Deepgram/Cartesia/AssemblyAI/Daily/Anthropic/Neon/R2 directly.
 - **Transport:** Daily (`pipecat.transports.daily`)
 - **STT:** Deepgram (primary) or AssemblyAI (fallback) — set via `STT_PROVIDER`
 - **TTS:** Cartesia (primary) or Deepgram (fallback) — set via `TTS_PROVIDER`
-- **LLM:** Claude (`AnthropicLLMService`), 4 registered tools (see below)
+- **LLM:** Gemini (`GoogleLLMService`, default) or Claude (`AnthropicLLMService`) —
+  set via `LLM_PROVIDER`. Both are verified working (real API calls, both
+  construct with all 4 tools registered) — switching is a one-line env var
+  change, no code change. Note this is separate from the Node app's own
+  Gemini+Claude dual-diagnostic feature (`api/diagnostic/[...slug].js`) — that
+  already existed before this project and generates the AI diagnostic report;
+  this `LLM_PROVIDER` setting only controls which model the *voice agent*
+  itself reasons with.
 - **Server:** FastAPI (`server.py`) exposes `POST /connect`, which creates a Daily
   room + token and spawns `bot.py` as a subprocess per session
 - **Write path:** daily-feedback answers are saved by calling back into the
@@ -259,22 +266,53 @@ one — Railway can run multiple concurrent voice sessions, each holding a
 connection, and the pooler is what keeps that from exhausting Neon's direct
 connection limit.
 
-## Deployment (Railway)
+## Deployment
+
+Either platform runs Linux, so `daily-python` installs with no issue — the
+Windows limitation described above only affects local dev on Windows.
+
+### Render (used instead of Railway — Railway's free tier is a 5-day trial only)
+
+`render.yaml` at the repo root is a Blueprint that declares the whole service
+config explicitly (root directory, build/start commands, every env var name) —
+this exists specifically so nothing has to be clicked through by hand in a
+dashboard and silently misconfigured. That's literally what went wrong on
+Railway: its "Root Directory" setting defaulted to the repo root instead of
+`backend/`, so it ran the *root* `package.json`'s leftover `"start": "node"`
+script (an idle Node REPL) instead of the Python app, for days, with no error —
+just a hung connection, since nothing was ever listening on a port.
+
+1. Render dashboard → **New** → **Blueprint** → point at the GitHub repo.
+   Render reads `render.yaml` and creates the service pre-configured correctly.
+2. Every var marked `sync: false` in `render.yaml` needs a real value filled in
+   manually in Render's dashboard (Environment tab) — these are all secrets, so
+   they're deliberately never written into the committed file. Use the real
+   values from your local `backend/.env`.
+3. Set `FRONTEND_ORIGINS` to your real Vercel URL, `APP_API_BASE_URL` to your
+   real Vercel URL, `JWT_SECRET` to match Vercel's exactly.
+4. Deploy. Confirm `GET https://<render-url>/health` returns `{"status":"ok"}`.
+5. Set `VOICE_AGENT_BACKEND_URL` on the Vercel project to that Render URL
+   (with `https://`! — see the note above about the scheme-less-URL bug).
+
+Free tier note: Render's free web services **spin down after ~15 min of
+inactivity** and take 30-60s to wake on the next request — the first person to
+start a voice call after a quiet period will see a delay before `/connect`
+responds. Not ideal for real patients long-term, but fine for testing/demo; a
+paid Render plan removes this if it becomes a problem.
+
+### Railway (alternative, if you have a paid plan)
 
 1. Push `backend/` to a repo Railway can deploy from (or connect this whole
-   monorepo and set the service's root directory to `backend/`).
+   monorepo and **set the service's Root Directory to `backend/` — do not skip
+   this step**, see above for what happens if you do).
 2. Railway auto-detects Python via `runtime.txt` (pins 3.12) and `Procfile`
    (`web: uvicorn server:app --host 0.0.0.0 --port $PORT`) — no extra build
-   config needed.
+   config needed, as long as Root Directory is actually set correctly.
 3. Set every env var from `.env.example` in Railway's dashboard (Variables tab)
-   with real values — see the consolidated table in the top-level summary for
-   which ones are secret vs public.
-4. Set `FRONTEND_ORIGINS` to your real Vercel URL (not `*`) once you know it.
+   with real values.
+4. Set `FRONTEND_ORIGINS` and `APP_API_BASE_URL` to your real Vercel URL.
 5. Deploy. Confirm `GET https://<railway-url>/health` returns `{"status":"ok"}`.
-6. Set `VOICE_AGENT_BACKEND_URL` on the Vercel project to that same Railway URL.
-
-Railway runs Linux, so `daily-python` installs there with no issue — the
-Windows limitation described above only affects local dev on Windows.
+6. Set `VOICE_AGENT_BACKEND_URL` on the Vercel project to that Railway URL.
 
 ## Verified this session — what's real vs. still open
 

@@ -12,6 +12,7 @@ are correct (see README.md for a real end-to-end test against your own DB/bucket
 import os
 
 os.environ.setdefault("ANTHROPIC_API_KEY", "test-key")
+os.environ.setdefault("GEMINI_API_KEY", "test-key")
 os.environ.setdefault("DAILY_API_KEY", "test-key")
 os.environ.setdefault("DATABASE_URL", "postgres://user:pass@localhost/db")
 os.environ.setdefault("R2_ACCOUNT_ID", "test")
@@ -37,7 +38,7 @@ def main():
     print("TTS service:", type(tts).__name__)
 
     llm, context_aggregator = bot._build_llm_and_context("daily_feedback")
-    print("LLM service:", type(llm).__name__)
+    print(f"LLM service ({config.LLM_PROVIDER}):", type(llm).__name__)
     for name in (
         "get_patient_context",
         "get_biosignal_result",
@@ -46,6 +47,13 @@ def main():
     ):
         assert llm.has_function(name), f"tool {name} not registered"
     print("All 4 tools registered on the LLM service.")
+
+    # Also confirm the other LLM provider still constructs (both are supported,
+    # not just whichever LLM_PROVIDER happens to be set for this run).
+    other_provider = "claude" if config.LLM_PROVIDER == "gemini" else "gemini"
+    config.LLM_PROVIDER = other_provider
+    other_llm = bot._build_llm()
+    print(f"Alternate LLM provider ({other_provider}) also builds:", type(other_llm).__name__)
 
     from pipecat.audio.vad.silero import SileroVADAnalyzer
     from pipecat.processors.audio.vad_processor import VADProcessor

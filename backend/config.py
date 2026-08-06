@@ -19,9 +19,23 @@ def _require(name: str) -> str:
     return value
 
 
-# --- Core services -----------------------------------------------------------
-ANTHROPIC_API_KEY = _require("ANTHROPIC_API_KEY")
+# --- LLM: Gemini primary, Claude available as an alternative, switchable via env --
+# Same pattern as STT/TTS below. Defaults to gemini per your request; set
+# LLM_PROVIDER=claude to go back to Anthropic (e.g. for A/B comparison) without
+# touching code.
+LLM_PROVIDER = os.environ.get("LLM_PROVIDER", "gemini").strip().lower()
+if LLM_PROVIDER not in ("gemini", "claude"):
+    raise RuntimeError(f"LLM_PROVIDER must be 'gemini' or 'claude', got {LLM_PROVIDER!r}")
+
+ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
 ANTHROPIC_MODEL = os.environ.get("ANTHROPIC_MODEL", "claude-sonnet-4-5")
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "")
+GEMINI_MODEL = os.environ.get("GEMINI_MODEL", "gemini-2.5-flash")
+
+if LLM_PROVIDER == "gemini" and not GEMINI_API_KEY:
+    raise RuntimeError("LLM_PROVIDER=gemini requires GEMINI_API_KEY")
+if LLM_PROVIDER == "claude" and not ANTHROPIC_API_KEY:
+    raise RuntimeError("LLM_PROVIDER=claude requires ANTHROPIC_API_KEY")
 
 DAILY_API_KEY = _require("DAILY_API_KEY")
 DAILY_API_URL = os.environ.get("DAILY_API_URL", "https://api.daily.co/v1")
