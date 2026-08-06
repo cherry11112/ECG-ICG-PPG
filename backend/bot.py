@@ -90,6 +90,7 @@ def _build_llm_and_context(mode: str):
 
 async def run_bot(room_url: str, token: str, patient_id: int, session_id: str, mode: str) -> None:
     from pipecat.audio.vad.silero import SileroVADAnalyzer
+    from pipecat.frames.frames import LLMRunFrame
     from pipecat.pipeline.pipeline import Pipeline
     from pipecat.pipeline.runner import PipelineRunner
     from pipecat.pipeline.worker import PipelineParams, PipelineWorker
@@ -144,6 +145,18 @@ async def run_bot(room_url: str, token: str, patient_id: int, session_id: str, m
     @transport.event_handler("on_joined")
     async def on_joined(_transport, _data):
         logger.info(f"Bot joined room for session {session_id} (patient {patient_id}, mode {mode})")
+
+    @transport.event_handler("on_client_connected")
+    async def on_client_connected(_transport, _participant):
+        # The pipeline only reacts to STT output by default — nothing makes the bot
+        # speak first on its own. Without this, the agent just sits silently waiting
+        # for the patient to talk, which is backwards (they don't know what to say
+        # first). Queuing an LLMRunFrame tells the LLM to generate a turn from
+        # whatever's currently in context (just the system prompt at this point),
+        # which is what the "start the conversation yourself" instruction in each
+        # mode's prompt (prompts.py) is written to trigger.
+        logger.info(f"Client connected for session {session_id} — triggering opening greeting")
+        await worker.queue_frames([LLMRunFrame()])
 
     runner = PipelineRunner()
     try:
