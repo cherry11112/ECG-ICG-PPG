@@ -1008,7 +1008,7 @@ export async function saveDiagnosticResult(patientId, diagnosticData) {
         ${diagnosticData.agreement_score || null},
         ${diagnosticData.consensus_risk_level || null},
         ${diagnosticData.consensus_risk_percentage || null},
-        ${diagnosticData.comparison_analysis ? JSON.stringify(diagnosticData.comparison_analysis) : null},
+        ${diagnosticData.comparison_analysis || null},
         ${diagnosticData.multi_ai_errors ? JSON.stringify(diagnosticData.multi_ai_errors) : null},
         ${diagnosticData.multi_ai_available || false}
       )

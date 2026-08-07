@@ -190,14 +190,55 @@
             background: #fef3c7;
             border: 1px solid #fcd34d;
             border-radius: 8px;
-            padding: 16px;
+            padding: 16px 20px;
             margin: 20px 0;
-            white-space: pre-wrap;
-            font-family: monospace;
-            font-size: 12px;
+            font-size: 13px;
             line-height: 1.5;
             color: #78350f;
-            overflow-x: auto;
+        }
+
+        .comparison-analysis h4 {
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            margin: 16px 0 8px 0;
+            color: #92400e;
+        }
+
+        .comparison-analysis h4:first-child {
+            margin-top: 0;
+        }
+
+        .comparison-analysis p {
+            margin: 6px 0;
+        }
+
+        .comparison-analysis ul {
+            margin: 6px 0;
+            padding-left: 20px;
+        }
+
+        .comparison-analysis li {
+            margin: 4px 0;
+            line-height: 1.45;
+        }
+
+        .comparison-analysis .comparison-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            padding: 6px 0;
+            border-bottom: 1px solid #fde68a;
+        }
+
+        .comparison-analysis .comparison-row:last-of-type {
+            border-bottom: none;
+        }
+
+        .comparison-analysis .comparison-row strong {
+            min-width: 70px;
+            display: inline-block;
         }
         
         @media (max-width: 768px) {
@@ -296,6 +337,58 @@
                     </div>
                 `;
             }
+        }
+
+        function formatComparisonAnalysis(text) {
+            if (!text) return '<p style="color: #9ca3af;">No detailed comparison available</p>';
+
+            const lines = text.split('\n');
+            let html = '';
+            let listItems = null;
+
+            function closeList() {
+                if (listItems) {
+                    html += '<ul>' + listItems.join('') + '</ul>';
+                    listItems = null;
+                }
+            }
+
+            lines.forEach(line => {
+                const trimmed = line.trim();
+
+                if (!trimmed || /^─+$/.test(trimmed) || trimmed === 'Multi-AI Comparison Analysis:') {
+                    return;
+                }
+
+                // Section heading, e.g. "RISK ASSESSMENT COMPARISON:"
+                if (/^[A-Z][A-Z /]+:$/.test(trimmed)) {
+                    closeList();
+                    html += `<h4>${trimmed.replace(/:$/, '')}</h4>`;
+                    return;
+                }
+
+                // Model row, e.g. "Gemini | Risk: Very High (90%) | Confidence: 75%"
+                const rowMatch = trimmed.match(/^(\S+)\s*\|\s*Risk:\s*(.+?)\s*\((\d+)%\)\s*\|\s*Confidence:\s*(\d+)%$/);
+                if (rowMatch) {
+                    closeList();
+                    const [, name, risk, riskPct, conf] = rowMatch;
+                    html += `<div class="comparison-row"><strong>${name}</strong><span>Risk: ${risk} (${riskPct}%)</span><span>Confidence: ${conf}%</span></div>`;
+                    return;
+                }
+
+                // List item, e.g. "  - something" or "  [50%] something"
+                if (/^[-\[]/.test(trimmed)) {
+                    if (!listItems) listItems = [];
+                    listItems.push(`<li>${trimmed.replace(/^-\s*/, '')}</li>`);
+                    return;
+                }
+
+                closeList();
+                html += `<p>${trimmed}</p>`;
+            });
+
+            closeList();
+            return html;
         }
 
         function renderModelSection(model, modelName, modelClass) {
@@ -412,7 +505,7 @@
 
                 <!-- Comparison Analysis -->
                 <h3 style="font-size: 20px; font-weight: bold; margin: 40px 0 20px 0; padding-bottom: 12px; border-bottom: 2px solid #1f2937;">Detailed Comparison</h3>
-                <div class="comparison-analysis">${multiAI.comparison_analysis || 'No detailed comparison available'}</div>
+                <div class="comparison-analysis">${formatComparisonAnalysis(multiAI.comparison_analysis)}</div>
 
                 <!-- Errors if any -->
                 ${multiAI.errors && multiAI.errors.length > 0 ? `
