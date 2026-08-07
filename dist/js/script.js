@@ -3,11 +3,31 @@ const sidebarToggle = document.querySelector('.sidebar-toggle')
 const sidebarOverlay = document.querySelector('.sidebar-overlay')
 const sidebarMenu = document.querySelector('.sidebar-menu')
 const main = document.querySelector('.main')
-if(window.innerWidth < 768) {
-    main.classList.toggle('active')
-    sidebarOverlay.classList.toggle('hidden')
-    sidebarMenu.classList.toggle('-translate-x-full')
+
+// Keep the sidebar's hidden/visible state in sync with viewport width on an
+// ongoing basis, not just once at page load. The old code only checked
+// window.innerWidth a single time when the script ran — loading the page wide
+// and then shrinking the browser afterward (rather than loading it already
+// narrow) never re-ran that check, so the sidebar stayed fixed and visible at
+// its full width and overlapped the page content once the viewport dropped
+// below the breakpoint where main's margin-for-sidebar stops applying.
+const mobileMediaQuery = window.matchMedia('(max-width: 767px)')
+function syncSidebarToViewport(isMobile) {
+    if (isMobile) {
+        main.classList.add('active')
+        sidebarOverlay.classList.add('hidden')
+        sidebarMenu.classList.add('-translate-x-full')
+    } else {
+        main.classList.remove('active')
+        sidebarOverlay.classList.add('hidden')
+        sidebarMenu.classList.remove('-translate-x-full')
+    }
 }
+syncSidebarToViewport(mobileMediaQuery.matches)
+mobileMediaQuery.addEventListener('change', function (e) {
+    syncSidebarToViewport(e.matches)
+})
+
 sidebarToggle.addEventListener('click', function (e) {
     e.preventDefault()
     main.classList.toggle('active')

@@ -1634,24 +1634,43 @@ async function handleGenerateDiagnostic(req, res) {
             diagnostic_summary: cached.diagnostic_summary
           };
           
-          // Try to fetch multi_ai_diagnostics from Cloudflare if available
-          let multiAIDiagnostics = null;
-          if (cached.cloudflare_json_url) {
+          // Build multi_ai_diagnostics from the DB row itself first — these columns
+          // are the reliable source (see saveDiagnosticResult in api/_db.js) and
+          // are already in hand from the query above. Relying only on an R2 fetch
+          // here was the bug: cloudflare_json_url can be null (saveToCloudflare
+          // failing independently of the diagnostic itself succeeding), which
+          // silently left multi_ai_diagnostics unset even when gemini_result/
+          // claude_result were sitting right there in the same row — exactly what
+          // produced "No Model Results Available Yet" on report1.8/1.9 despite the
+          // database actually having good data.
+          if (cached.gemini_result || cached.claude_result) {
+            cachedReport.multi_ai_diagnostics = {
+              gemini_result: cached.gemini_result,
+              claude_result: cached.claude_result,
+              agreement_score: cached.agreement_score,
+              consensus_risk_level: cached.consensus_risk_level,
+              consensus_risk_percentage: cached.consensus_risk_percentage,
+              comparison_analysis: cached.comparison_analysis,
+              errors: cached.multi_ai_errors,
+              multiAIAvailable: cached.multi_ai_available
+            };
+          } else if (cached.cloudflare_json_url) {
+            // Fallback for older rows saved before this fix, where the DB columns
+            // are null but an R2 backup might still have the data.
             try {
-              console.log('[generate-diagnostic] Fetching multi-AI data from Cloudflare...');
+              console.log('[generate-diagnostic] Fetching multi-AI data from Cloudflare (DB columns empty)...');
               const cloudflareResponse = await fetch(cached.cloudflare_json_url);
               if (cloudflareResponse.ok) {
                 const fullReportFromCloudflare = await cloudflareResponse.json();
-                multiAIDiagnostics = fullReportFromCloudflare.multi_ai_diagnostics;
-                if (multiAIDiagnostics) {
-                  cachedReport.multi_ai_diagnostics = multiAIDiagnostics;
+                if (fullReportFromCloudflare.multi_ai_diagnostics) {
+                  cachedReport.multi_ai_diagnostics = fullReportFromCloudflare.multi_ai_diagnostics;
                 }
               }
             } catch (cfErr) {
               console.warn('[generate-diagnostic] Could not fetch multi-AI data from Cloudflare:', cfErr.message);
             }
           }
-          
+
           return res.status(200).json({
             success: true,
             cached: true,
