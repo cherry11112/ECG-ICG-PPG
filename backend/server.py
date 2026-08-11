@@ -29,7 +29,7 @@ app = FastAPI(title="ECG Voice Agent Backend")
 
 # The frontend (Vercel) calls this service cross-origin (Railway), so the browser
 # needs an explicit CORS allow — set FRONTEND_ORIGINS to a comma-separated list of
-# exact origins in production (e.g. "https://your-app.vercel.app").
+# exact origins in production .
 app.add_middleware(
     CORSMiddleware,
     allow_origins=config.FRONTEND_ORIGINS,

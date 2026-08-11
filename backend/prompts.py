@@ -10,43 +10,41 @@ going live with real patients.
 # question_id -> (feedback_form column, spoken prompt)
 # Order matters: this is the order the daily_feedback flow asks them in.
 DAILY_FEEDBACK_QUESTIONS = [
-    ("q1_dyspnea", "dyspnea", "Have you felt short of breath today?"),
-    ("q2_orthopnea", "orthopnea", "Do you feel short of breath when lying flat?"),
+    ("q1_dyspnea", "dyspnea", "Did you experience dyspnea or shortness of breath today?"),
+    ("q2_orthopnea", "orthopnea", "Did you have trouble breathing when lying flat last night?"),
     ("q3_paroxysmal_nocturnal_dyspnea", "paroxysmal_nocturnal_dyspnea",
-     "Have you woken up suddenly gasping for breath in the last few nights?"),
-    ("q4_cyanosis", "cyanosis", "Have you noticed any bluish color in your lips, fingers, or toes?"),
+     "Did you wake up at night with sudden shortness of breath?"),
+    ("q4_cyanosis", "cyanosis", "Did you notice any bluish lips or fingers today?"),
     ("q5_jugular_venous_distension", "jugular_venous_distension",
-     "Have you or anyone else noticed the veins in your neck looking swollen or bulging?"),
+     "Did your neck veins appear swollen today?"),
     ("q6_nighttime_urination", "nighttime_urination_count",
-     "How many times did you wake up to urinate last night?"),
-    ("q7_chest_pain", "chest_pain", "Have you had any chest pain today?"),
-    ("q8_arm_pain", "arm_pain", "Any pain in your arms today?"),
-    ("q9_leg_pain", "leg_pain", "Any pain in your legs today?"),
-    ("q10_jaw_pain", "jaw_pain", "Any pain in your jaw today?"),
-    ("q11_back_pain", "back_pain", "Any pain in your back today?"),
-    ("q12_stomach_pain", "stomach_pain", "Any pain in your stomach today?"),
-    ("q13_headache", "headache", "Have you had a headache today?"),
-    ("q14_numb_arms_legs", "numb_arms_legs", "Any numbness in your arms or legs today?"),
-    ("q15_visual_disturbances", "visual_disturbances", "Any changes in your vision today?"),
-    ("q16_palpitations", "palpitations", "Have you noticed your heart racing or pounding today?"),
-    ("q17_sweating", "sweating", "Have you had any unusual sweating today?"),
-    ("q18_leg_swelling", "leg_swelling", "Any swelling in your legs or ankles today?"),
-    ("q19_abdominal_bloating", "abdominal_bloating", "Any bloating in your abdomen today?"),
-    ("q20_weight", "weight_kg", "What is your weight today, in kilograms?"),
+     "How many times did you get up to urinate last night?"),
+    ("q7_chest_pain", "chest_pain", "Did you experience chest pain or pressure today?"),
+    ("q8_arm_pain", "arm_pain", "Did you have pain in your arms today?"),
+    ("q9_leg_pain", "leg_pain", "Did you experience leg pain today?"),
+    ("q10_jaw_pain", "jaw_pain", "Did you have jaw pain today?"),
+    ("q11_back_pain", "back_pain", "Did you experience back pain today?"),
+    ("q12_stomach_pain", "stomach_pain", "Did you feel pain in your stomach or upper abdomen today?"),
+    ("q13_headache", "headache", "Did you have a headache today?"),
+    ("q14_numb_arms_legs", "numb_arms_legs", "Did you notice numbness in your arms or legs today?"),
+    ("q15_visual_disturbances", "visual_disturbances", "Did you experience visual disturbances such as blurred or double vision today?"),
+    ("q16_palpitations", "palpitations", "Did you experience palpitations or an irregular heartbeat today?"),
+    ("q17_sweating", "sweating", "Did you have unusual or cold sweating today?"),
+    ("q18_leg_swelling", "leg_swelling", "Did your feet, ankles, or legs swell today?"),
+    ("q19_abdominal_bloating", "abdominal_bloating", "Did you experience abdominal swelling or bloating today?"),
+    ("q20_weight", "weight_kg", "What was your morning weight today in kilograms?"),
     ("q21_walk_6min", "walk_6min_distance_m",
-     "If you did a 6-minute walk test today, how far did you walk, in meters? "
-     "If you didn't do one, just say so."),
+     "How far did you walk in your 6-minute walk test today in meters, or was it not performed?"),
     ("q22_blood_pressure_systolic", "blood_pressure_systolic",
-     "What was your systolic blood pressure reading today — the top number?"),
+     "What was your blood pressure today? Please tell me the two numbers."),
     ("q22_blood_pressure_diastolic", "blood_pressure_diastolic",
-     "And the diastolic reading — the bottom number?"),
-    ("q23_fatigue", "fatigue_level", "On a scale of 1 to 10, how fatigued do you feel today?"),
-    ("q24_sleep_quality", "sleep_quality", "On a scale of 1 to 10, how would you rate last night's sleep?"),
-    ("q25_anxious", "anxious", "Have you been feeling anxious today?"),
+     "What was your blood pressure today? Please tell me the two numbers."),
+    ("q23_fatigue", "fatigue_level", "Rate your fatigue today from 0 (none) to 10 (worst)."),
+    ("q24_sleep_quality", "sleep_quality", "Rate your sleep quality last night from 0 (very poor) to 10 (very good)."),
+    ("q25_anxious", "anxious", "Did you feel anxious or unusually worried about your health today?"),
     ("q26_erectile_dysfunction", "erectile_dysfunction",
-     "This is a standard question we ask everyone: have you experienced any erectile dysfunction? "
-     "You're welcome to skip this one."),
-    ("q27_comments", "free_comment", "Is there anything else about how you're feeling that you'd like to add?"),
+     "Did you experience erectile dysfunction today, if relevant?"),
+    ("q27_comments", "free_comment", "Do you have any other comments or observations you would like to share today?"),
 ]
 
 VALID_QUESTION_IDS = [q[0] for q in DAILY_FEEDBACK_QUESTIONS]
@@ -74,13 +72,12 @@ MODE_PROMPTS = {
     "daily_feedback": f"""
 Current mode: DAILY FEEDBACK COLLECTION.
 You are walking a patient through their daily symptom check-in, one question at a time.
-There are 27 questions (28 tool calls — blood pressure is asked as two parts).
+There are 27 questions in the flow.
 
-Here is the exact, complete, ordered list of questions. Ask them using this wording — \
-you may adjust grammar slightly to fit conversation flow (e.g. contractions, or \
-referencing something they just said), but do not substitute your own questions, \
-skip any, reorder them, combine them, or invent additional ones. This list is the \
-only source of what to ask:
+Here is the exact, complete, ordered list of questions. Ask them using this wording \
+exactly as written, in the same order, and do not paraphrase, substitute, skip, \
+reorder, combine, or invent any other questions. This list is the only source of \
+what to ask:
 
 {_QUESTION_LIST_TEXT}
 

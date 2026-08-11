@@ -48,8 +48,7 @@ def main():
         assert llm.has_function(name), f"tool {name} not registered"
     print("All 4 tools registered on the LLM service.")
 
-    # Also confirm the other LLM provider still constructs (both are supported,
-    # not just whichever LLM_PROVIDER happens to be set for this run).
+    # Also confirm the other LLM provider still constructs (both are supported, not just whichever LLM_PROVIDER happens to be set for this run).
     other_provider = "claude" if config.LLM_PROVIDER == "gemini" else "gemini"
     config.LLM_PROVIDER = other_provider
     other_llm = bot._build_llm()
@@ -100,3 +99,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
