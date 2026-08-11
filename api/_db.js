@@ -871,9 +871,7 @@ export async function getPatientReports(patientId) {
   return rows;
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
 // Patients List
-// ─────────────────────────────────────────────────────────────────────────────
 
 export async function listPatients() {
   const { rows } = await sql`
@@ -954,9 +952,7 @@ export async function upsertFeedbackAnswer(patientId, questionId, answerValue, s
   };
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
 // Diagnostic Results (from n8n workflow + Gemini AI)
-// ─────────────────────────────────────────────────────────────────────────────
 
 export async function saveDiagnosticResult(patientId, diagnosticData) {
   try {
@@ -1051,11 +1047,9 @@ export async function getLatestDiagnosticResult(patientId) {
   }
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
 // Session Answer Management (Temporary storage for voice feedback collection)
 // Answers are stored here during the conversation and only committed to
 // feedback_form when all 27 questions are answered
-// ─────────────────────────────────────────────────────────────────────────────
 
 export async function saveSessionAnswer(patientId, sessionId, questionId, answerValue) {
   if (!QUESTION_ID_MAP[questionId]) {

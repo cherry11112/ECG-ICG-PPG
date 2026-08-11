@@ -4,11 +4,11 @@ import {
   getFeedbackFormByPatient,
   hasFeedbackToday,
   updateFeedbackAnswer,   // kept for the manual /save-answer endpoint
-  saveSessionAnswer,      // NEW: save to session_answers table
-  getSessionAnswers,      // NEW: retrieve session answers
-  isSessionComplete,      // NEW: check if all 27 questions answered
-  finalizeSessionAnswers, // NEW: commit session to feedback_form when complete
-  getPatientHealthData,   // NEW: fetch patient data for general chat context
+  saveSessionAnswer,      // save to session_answers table
+  getSessionAnswers,      // retrieve session answers
+  isSessionComplete,      // check if all 27 questions answered
+  finalizeSessionAnswers, // commit session to feedback_form when complete
+  getPatientHealthData,   // fetch patient data for general chat context
   QUESTION_ID_MAP,
 } from '../_db.js';
 import { requireAuth } from '../_auth.js';
@@ -253,7 +253,7 @@ export default async function handler(req, res) {
     }
   }
 
-  // ========== BASE PATH ENDPOINTS (Manual Form Submission) ==========
+  // BASE PATH ENDPOINTS (Manual Form Submission)
 
   if (pathString === '' || !pathString) {
     const auth = requireAuth(req);
@@ -335,7 +335,7 @@ export default async function handler(req, res) {
     }
   }
 
-  // ========== UNKNOWN PATHS ==========
+  // UNKNOWN PATHS 
   return res.status(404).json({
     error: 'Endpoint not found',
     path: `/api/feedback/${pathString}`,
