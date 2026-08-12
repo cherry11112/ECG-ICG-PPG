@@ -143,3 +143,5 @@ def build_system_prompt(mode: str) -> str:
     if not mode_prompt:
         raise ValueError(f"Unknown mode {mode!r}; expected one of {list(MODE_PROMPTS)}")
     return BASE_SYSTEM_PROMPT + mode_prompt
+
+

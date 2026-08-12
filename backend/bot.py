@@ -103,6 +103,7 @@ def _build_llm_and_context(mode: str):
 
 async def run_bot(room_url: str, token: str, patient_id: int, session_id: str, mode: str) -> None:
     from pipecat.audio.vad.silero import SileroVADAnalyzer
+    from pipecat.audio.vad.vad_analyzer import VADParams
     from pipecat.frames.frames import LLMRunFrame
     from pipecat.pipeline.pipeline import Pipeline
     from pipecat.pipeline.runner import PipelineRunner
@@ -129,7 +130,11 @@ async def run_bot(room_url: str, token: str, patient_id: int, session_id: str, m
     stt = _build_stt()
     tts = _build_tts()
     llm, context_aggregator = _build_llm_and_context(mode)
-    vad = VADProcessor(vad_analyzer=SileroVADAnalyzer())
+    # Use less-aggressive VAD params to avoid chopping off user speech.
+    # Defaults in the library are fairly high for `min_volume` and `confidence`,
+    # which can cause the detector to miss quieter syllables or cut turns short.
+    vad_params = VADParams(confidence=0.6, start_secs=0.12, stop_secs=0.35, min_volume=0.02)
+    vad = VADProcessor(vad_analyzer=SileroVADAnalyzer(params=vad_params))
 
     pipeline = Pipeline(
         [
