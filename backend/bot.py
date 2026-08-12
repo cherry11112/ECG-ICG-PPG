@@ -41,21 +41,11 @@ def _build_stt():
 
 def _build_tts():
     if config.TTS_PROVIDER == "cartesia":
-        from pipecat.services.cartesia.tts import (
-            CartesiaTTSService,
-            CartesiaTTSSettings,
-        )
+        from pipecat.services.cartesia.tts import CartesiaTTSService, CartesiaTTSSettings
 
-        # Use a small server-side buffer and pause frame processing while
-        # Cartesia is synthesizing to avoid mid-synthesis interruptions that
-        # can produce stuttered or truncated audio on the client. Also append
-        # a small silence after stop so browsers have time to finish playback.
         return CartesiaTTSService(
             api_key=config.CARTESIA_API_KEY,
             settings=CartesiaTTSSettings(voice=config.CARTESIA_VOICE_ID),
-            max_buffer_delay_ms=1000,
-            pause_frame_processing=True,
-            push_silence_after_stop=True,
         )
     else:
         from pipecat.services.deepgram.tts import DeepgramTTSService, DeepgramTTSSettings
@@ -113,7 +103,6 @@ def _build_llm_and_context(mode: str):
 
 async def run_bot(room_url: str, token: str, patient_id: int, session_id: str, mode: str) -> None:
     from pipecat.audio.vad.silero import SileroVADAnalyzer
-    from pipecat.audio.vad.vad_analyzer import VADParams
     from pipecat.frames.frames import LLMRunFrame
     from pipecat.pipeline.pipeline import Pipeline
     from pipecat.pipeline.runner import PipelineRunner
@@ -140,11 +129,7 @@ async def run_bot(room_url: str, token: str, patient_id: int, session_id: str, m
     stt = _build_stt()
     tts = _build_tts()
     llm, context_aggregator = _build_llm_and_context(mode)
-    # Use less-aggressive VAD params to avoid chopping off user speech.
-    # Defaults in the library are fairly high for `min_volume` and `confidence`,
-    # which can cause the detector to miss quieter syllables or cut turns short.
-    vad_params = VADParams(confidence=0.6, start_secs=0.12, stop_secs=0.35, min_volume=0.02)
-    vad = VADProcessor(vad_analyzer=SileroVADAnalyzer(params=vad_params))
+    vad = VADProcessor(vad_analyzer=SileroVADAnalyzer())
 
     pipeline = Pipeline(
         [
