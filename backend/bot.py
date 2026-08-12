@@ -50,13 +50,24 @@ def _build_tts():
         # Cartesia is synthesizing to avoid mid-synthesis interruptions that
         # can produce stuttered or truncated audio on the client. Also append
         # a small silence after stop so browsers have time to finish playback.
-        return CartesiaTTSService(
+        tts = CartesiaTTSService(
             api_key=config.CARTESIA_API_KEY,
             settings=CartesiaTTSSettings(voice=config.CARTESIA_VOICE_ID),
             max_buffer_delay_ms=1000,
-            pause_frame_processing=True,
             push_silence_after_stop=True,
         )
+        # Enable pausing frame processing during synthesis to avoid mid-synthesis
+        # interruptions (prevents stutter when user/noise arrives). Set on the
+        # instance because the Cartesia constructor sets its own defaults and
+        # passing pause_frame_processing earlier conflicted with the signature.
+        try:
+            tts._pause_frame_processing = True
+            tts._push_silence_after_stop = True
+        except Exception:
+            # best-effort; continue even if internals differ across pipecat versions
+            pass
+
+        return tts
     else:
         from pipecat.services.deepgram.tts import DeepgramTTSService, DeepgramTTSSettings
 
