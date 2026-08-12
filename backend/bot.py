@@ -41,11 +41,21 @@ def _build_stt():
 
 def _build_tts():
     if config.TTS_PROVIDER == "cartesia":
-        from pipecat.services.cartesia.tts import CartesiaTTSService, CartesiaTTSSettings
+        from pipecat.services.cartesia.tts import (
+            CartesiaTTSService,
+            CartesiaTTSSettings,
+        )
 
+        # Use a small server-side buffer and pause frame processing while
+        # Cartesia is synthesizing to avoid mid-synthesis interruptions that
+        # can produce stuttered or truncated audio on the client. Also append
+        # a small silence after stop so browsers have time to finish playback.
         return CartesiaTTSService(
             api_key=config.CARTESIA_API_KEY,
             settings=CartesiaTTSSettings(voice=config.CARTESIA_VOICE_ID),
+            max_buffer_delay_ms=1000,
+            pause_frame_processing=True,
+            push_silence_after_stop=True,
         )
     else:
         from pipecat.services.deepgram.tts import DeepgramTTSService, DeepgramTTSSettings
