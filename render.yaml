@@ -14,10 +14,9 @@
 services:
   - type: web
     name: ecg-voice-agent-backend
-    runtime: python
+    env: docker
     plan: free
-    rootDir: backend
-    buildCommand: pip install -r requirements.txt
+    dockerfilePath: backend/Dockerfile
     startCommand: uvicorn server:app --host 0.0.0.0 --port $PORT
     envVars:
       - key: PYTHON_VERSION

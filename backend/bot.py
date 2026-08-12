@@ -130,6 +130,8 @@ async def run_bot(room_url: str, token: str, patient_id: int, session_id: str, m
     from pipecat.pipeline.runner import PipelineRunner
     from pipecat.pipeline.worker import PipelineParams, PipelineWorker
     from pipecat.processors.audio.vad_processor import VADProcessor
+    from pipecat.processors.frame_processor import FrameProcessor, FrameDirection
+    from pipecat.frames.frames import TTSStartedFrame, TTSStoppedFrame, STTMuteFrame, Frame
     from pipecat.transports.daily.transport import DailyParams, DailyTransport
 
     await neon_tools.init_pool(config.DATABASE_URL)
@@ -157,6 +159,32 @@ async def run_bot(room_url: str, token: str, patient_id: int, session_id: str, m
     vad_params = VADParams(confidence=0.6, start_secs=0.12, stop_secs=0.35, min_volume=0.02)
     vad = VADProcessor(vad_analyzer=SileroVADAnalyzer(params=vad_params))
 
+    class MuteSTTDuringTTS(FrameProcessor):
+        """Pushes STTMuteFrame upstream when TTS starts/stops.
+
+        When a TTSStartedFrame is observed downstream, this processor mutes
+        the STT service (prevents STT from reacting to user/noise). When a
+        TTSStoppedFrame is observed, it unmutes STT.
+        """
+
+        async def process_frame(self, frame: Frame, direction: FrameDirection):
+            await super().process_frame(frame, direction)
+
+            # Only act on downstream TTS start/stop frames
+            if direction == FrameDirection.DOWNSTREAM:
+                if isinstance(frame, TTSStartedFrame):
+                    try:
+                        await self.push_frame(STTMuteFrame(mute=True), FrameDirection.UPSTREAM)
+                    except Exception:
+                        pass
+                elif isinstance(frame, TTSStoppedFrame):
+                    try:
+                        await self.push_frame(STTMuteFrame(mute=False), FrameDirection.UPSTREAM)
+                    except Exception:
+                        pass
+
+    mute_processor = MuteSTTDuringTTS()
+
     pipeline = Pipeline(
         [
             transport.input(),
@@ -165,6 +193,12 @@ async def run_bot(room_url: str, token: str, patient_id: int, session_id: str, m
             context_aggregator.user(),
             llm,
             tts,
+            # Mute STT while TTS is speaking to prevent user/noise from
+            # generating interruptions that truncate or stutter bot audio.
+            # This processor listens for TTSStartedFrame/TTSStoppedFrame and
+            # pushes STTMuteFrame upstream to mute/unmute the STT service.
+            # Placing it after `tts` ensures it observes start/stop frames.
+            mute_processor,
             transport.output(),
             context_aggregator.assistant(),
         ]
