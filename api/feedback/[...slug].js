@@ -4,7 +4,7 @@ import {
   getFeedbackFormByPatient,
   hasFeedbackToday,
   updateFeedbackAnswer,   // immediate, field-specific write into feedback_form
-  appendFeedbackFreeText, // append an AI follow-up answer into feedback_form.free_text
+  saveFollowupAnswer,     // append an AI follow-up answer into feedback_form.<column>_free_text
   saveSessionAnswer,      // save to session_answers table (session-progress audit trail)
   getSessionAnswers,      // retrieve session answers
   isSessionComplete,      // check if all 27 questions answered
@@ -144,30 +144,39 @@ export default async function handler(req, res) {
       const payload = await parseBody(req, res);
       if (!payload) return;
 
-      const { session_id, patient_id, question_context, answer_text } = payload;
+      const { session_id, patient_id, question_id, question_context, answer_text } = payload;
 
-      if (!session_id || !patient_id || !answer_text) {
+      if (!session_id || !patient_id || !question_id || !answer_text) {
         return res.status(400).json({
           error: 'Missing required fields',
-          required: ['session_id', 'patient_id', 'answer_text'],
+          required: ['session_id', 'patient_id', 'question_id', 'answer_text'],
           received: Object.keys(payload),
         });
       }
 
-      const result = await appendFeedbackFreeText(
+      if (!QUESTION_ID_MAP[question_id]) {
+        return res.status(400).json({
+          error: `Invalid question_id: "${question_id}"`,
+          valid_question_ids: Object.keys(QUESTION_ID_MAP),
+        });
+      }
+
+      const result = await saveFollowupAnswer(
         parseInt(patient_id),
+        question_id,
         question_context || null,
         answer_text,
         session_id
       );
 
-      console.log(`[tools/save-followup-answer] patient:${patient_id} (session:${session_id}) context:"${question_context || ''}"`);
+      console.log(`[tools/save-followup-answer] patient:${patient_id} q:${question_id} (session:${session_id}) context:"${question_context || ''}"`);
 
       return res.status(200).json({
         success: true,
-        message: 'Follow-up answer appended to free_text',
+        message: `Follow-up answer appended to ${result.column}`,
         session_id,
         patient_id,
+        question_id,
         question_context: question_context || null,
         answer_text,
         ...result,

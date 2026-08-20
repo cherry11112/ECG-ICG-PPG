@@ -160,15 +160,17 @@ function displayFeedbackData(feedbackList) {
     }
   });
 
-  // free_text holds AI follow-up answers collected during the voice check-in —
-  // separate from the structured fields above, shown in its own section.
-  const freeTextElement = document.getElementById('free_text');
-  if (freeTextElement) {
-    const freeText = latestFeedback.free_text;
-    freeTextElement.textContent = (freeText && freeText.trim())
-      ? freeText
-      : 'No follow-up notes for this check-in.';
-  }
+  // Each daily-feedback column has its own `<column>_free_text` companion holding
+  // any AI follow-up note collected for that specific question — shown inline next
+  // to the structured value it clarifies, not in one combined block.
+  Object.keys(feedbackMapping).forEach(fieldName => {
+    const freeTextField = `${fieldName}_free_text`;
+    const freeTextValue = latestFeedback[freeTextField];
+    const freeTextElement = document.getElementById(freeTextField);
+    if (freeTextElement) {
+      freeTextElement.textContent = (freeTextValue && freeTextValue.trim()) ? freeTextValue : '';
+    }
+  });
 
   console.log('Latest feedback displayed:', latestFeedback);
 }

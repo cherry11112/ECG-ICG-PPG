@@ -75,7 +75,16 @@ export async function ensureSchema() {
   `;
 
   // Migration: older deployments created feedback_form before free_text existed.
+  // (Superseded by the per-question `<column>_free_text` columns below — left in
+  // place, unused, rather than dropping a column that may already hold data.)
   await sql`ALTER TABLE feedback_form ADD COLUMN IF NOT EXISTS free_text text;`;
+
+  // Migration: one `<column>_free_text` companion per daily-feedback column, so an
+  // AI follow-up answer is stored right next to the structured answer it clarifies
+  // instead of in one shared blob.
+  for (const column of new Set(Object.values(QUESTION_ID_MAP))) {
+    await sql.query(`ALTER TABLE feedback_form ADD COLUMN IF NOT EXISTS ${column}_free_text text;`);
+  }
 
   //  P1 Report Form 
   await sql`
@@ -711,30 +720,41 @@ export async function updateFeedbackAnswer(patientId, questionId, answer, sessio
   };
 }
 
-// Append a follow-up answer to free_text rather than overwriting it, so multiple
-// follow-ups collected across a session all get preserved. `contextLabel` (e.g. the
-// follow-up question, or the daily question it relates to) is included inline so the
-// note is still meaningful when read back later without the original conversation.
-export async function appendFeedbackFreeText(patientId, contextLabel, answerText, sessionId) {
+// Append a follow-up answer to the specific question's own `<column>_free_text`
+// companion column — not a shared blob — so it stays right next to the structured
+// answer it clarifies. Appending (rather than overwriting) preserves multiple notes
+// if more than one follow-up ever lands on the same question across a session.
+export async function saveFollowupAnswer(patientId, questionId, contextLabel, answerText, sessionId) {
+  if (!QUESTION_ID_MAP[questionId]) {
+    throw new Error(
+      `Invalid question_id: "${questionId}". Valid IDs: ${Object.keys(QUESTION_ID_MAP).join(', ')}`
+    );
+  }
+
+  const baseColumn = QUESTION_ID_MAP[questionId];
+  const freeTextColumn = `${baseColumn}_free_text`;
   const feedbackId = await ensureTodayFeedbackRow(patientId);
   const note = contextLabel ? `${contextLabel}: ${answerText}` : String(answerText);
 
-  const { rows } = await sql`
-    UPDATE feedback_form
-    SET free_text = CASE
-      WHEN free_text IS NULL OR free_text = '' THEN ${note}
-      ELSE free_text || E'\n' || ${note}
-    END
-    WHERE id = ${feedbackId}
-    RETURNING free_text
-  `;
+  const { rows } = await sql.query(
+    `UPDATE feedback_form
+     SET ${freeTextColumn} = CASE
+       WHEN ${freeTextColumn} IS NULL OR ${freeTextColumn} = '' THEN $1
+       ELSE ${freeTextColumn} || E'\n' || $1
+     END
+     WHERE id = $2
+     RETURNING ${freeTextColumn} AS free_text`,
+    [note, feedbackId]
+  );
 
   console.log(
-    `[DB] patient:${patientId} session:${sessionId} free_text += "${note}" (row ${feedbackId})`
+    `[DB] patient:${patientId} session:${sessionId} q:${questionId} → ${freeTextColumn} += "${note}" (row ${feedbackId})`
   );
 
   return {
     feedback_id: feedbackId,
+    question_id: questionId,
+    column: freeTextColumn,
     free_text: rows[0]?.free_text,
     saved: true,
   };

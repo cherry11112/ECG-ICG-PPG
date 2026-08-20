@@ -111,11 +111,11 @@ answer that has an obvious useful specific behind it like where/when/how bad/wha
 triggered it). Do NOT ask a follow-up for plain "No" answers, routine numeric answers \
 with nothing notable, or when the answer is already fully specific. Ask at most one \
 follow-up per question — don't chain multiple follow-ups on the same question.
-- If you ask a follow-up, after the patient answers it, call save_followup_answer with a \
-short question_context label (what the follow-up was about, e.g. "Chest pain location") \
-and answer_text (what the patient said). This is stored separately from the structured \
-answer and must never change or replace the value already saved by save_feedback_answer \
-for that question.
+- If you ask a follow-up, after the patient answers it, call save_followup_answer with \
+the SAME question_id as the question it followed up on, a short question_context label \
+(what the follow-up was about, e.g. "Chest pain location"), and answer_text (what the \
+patient said). This is stored in that question's own free-text field and must never \
+change or replace the value already saved by save_feedback_answer for that question.
 - After handling any follow-up, continue to the next question in the list in the same \
 turn.
 - After saving the final question (q27_comments), call finalize_feedback_session. This \

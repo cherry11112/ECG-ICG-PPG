@@ -52,7 +52,7 @@ async def save_feedback_answer(patient_id: int, session_id: str, question_id: st
 
 
 async def save_followup_answer(
-    patient_id: int, session_id: str, question_context: str, answer_text: str
+    patient_id: int, session_id: str, question_id: str, question_context: str, answer_text: str
 ) -> dict:
     if _http is None:
         raise RuntimeError("feedback tools client not initialized — call init_client() first")
@@ -61,6 +61,7 @@ async def save_followup_answer(
         json={
             "patient_id": patient_id,
             "session_id": session_id,
+            "question_id": question_id,
             "question_context": question_context,
             "answer_text": answer_text,
         },
@@ -99,6 +100,7 @@ async def save_followup_answer_handler(params) -> None:
     result = await save_followup_answer(
         patient_id=int(params.app_resources["patient_id"]),
         session_id=str(params.app_resources["session_id"]),
+        question_id=str(params.arguments["question_id"]),
         question_context=str(params.arguments["question_context"]),
         answer_text=str(params.arguments["answer_text"]),
     )
@@ -138,10 +140,16 @@ save_followup_answer_schema = FunctionSchema(
     description=(
         "Save the patient's answer to an AI-generated follow-up question (a question "
         "not on the fixed 27-question list, asked to clarify or get more detail on a "
-        "prior answer). This is stored separately in free_text — it never overwrites "
-        "the structured answer already saved for the original question."
+        "prior answer). This is stored in that same question's own free-text column — "
+        "it never overwrites the structured answer already saved by save_feedback_answer "
+        "for that question."
     ),
     properties={
+        "question_id": {
+            "type": "string",
+            "enum": VALID_QUESTION_IDS,
+            "description": "The same question_id the follow-up relates to (the one just answered).",
+        },
         "question_context": {
             "type": "string",
             "description": (
@@ -155,7 +163,7 @@ save_followup_answer_schema = FunctionSchema(
             "description": "The patient's answer to the follow-up question.",
         },
     },
-    required=["question_context", "answer_text"],
+    required=["question_id", "question_context", "answer_text"],
 )
 
 finalize_feedback_session_schema = FunctionSchema(
