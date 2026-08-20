@@ -484,7 +484,7 @@ create table if not exists patient_documents (
     check (extraction_status in ('pending', 'processing', 'done', 'failed')),
   extraction_error text,
   document_type text,
-  extracted_json jsonb,
+  extracted_json json, -- json (not jsonb) preserves object key order, matching the document's layout
   extraction_model text,
   created_at timestamptz not null default now()
 );

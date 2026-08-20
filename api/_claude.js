@@ -14,8 +14,8 @@ document's content — if something is missing, illegible, or not applicable, om
 to null rather than filling it in. Do not add clinical interpretation or diagnosis of your own.
 
 Respond with ONLY a JSON object (no markdown fences, no commentary), using this shape as a flexible \
-guide — add, omit, or nest fields as the document's actual content calls for, since not every document \
-will have the same structure:
+guide to the KINDS of fields to look for — add, omit, or nest fields as the document's actual content \
+calls for, since not every document will have the same structure:
 
 {
   "document_type": "medical_report | lab_result | prescription | discharge_summary | doctor_note | imaging_report | other",
@@ -24,7 +24,15 @@ will have the same structure:
   "test_results": [],
   "measurements": {},
   "additional_information": null
-}`;
+}
+
+IMPORTANT — ordering: the example above is just illustrative; it is NOT the order to output fields in. \
+Instead, order every field, section, and list item in your JSON response the same way it appears in the \
+document itself, reading top to bottom (and left to right within a row) — e.g. if the document lists \
+medications before lab results, "medications" must come before "test_results" in your JSON, and within \
+"test_results" the individual results must appear in the same order the document lists them, not \
+alphabetically or by some other grouping. Only fall back to a sensible default order for information \
+that has no clear position in the document (e.g. a scanned form with no obvious reading order).`;
 
 function extractJsonFromText(text) {
   try {

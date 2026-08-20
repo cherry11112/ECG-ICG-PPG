@@ -459,12 +459,18 @@ export async function ensureSchema() {
         CHECK (extraction_status IN ('pending', 'processing', 'done', 'failed')),
       extraction_error text,
       document_type text,
-      extracted_json jsonb,
+      extracted_json json,
       extraction_model text,
       created_at timestamptz NOT NULL DEFAULT now()
     );
   `;
   await sql`CREATE INDEX IF NOT EXISTS idx_patient_documents_patient ON patient_documents(patient_id);`;
+
+  // Migration: jsonb reorders object keys on storage (Postgres does not preserve
+  // insertion order for jsonb), which silently scrambled the document-order display
+  // requirement — json stores the exact input text, key order included, so switch
+  // any pre-existing jsonb column over.
+  await sql`ALTER TABLE patient_documents ALTER COLUMN extracted_json TYPE json USING extracted_json::text::json;`;
 }
 
 // Users
