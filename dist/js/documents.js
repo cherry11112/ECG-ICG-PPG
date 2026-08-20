@@ -69,9 +69,86 @@
     }
   }
 
-  function renderExtractedJson(doc) {
-    if (!doc.extracted_json) return '';
-    return `<pre style="white-space:pre-wrap; word-break:break-word; font-size:12px; background:#f9fafb; border-radius:6px; padding:10px; margin-top:10px; max-height:240px; overflow:auto;">${escapeHtml(JSON.stringify(doc.extracted_json, null, 2))}</pre>`;
+  // Extracted data has no fixed shape (it varies per document type — see
+  // api/_claude.js's extraction prompt), so unlike the fixed 27 feedback fields
+  // this can't be hand-authored per-field spans. Instead it's rendered generically
+  // into the same "Label: value" paragraph style used everywhere else in the
+  // report1.*.html pages (see report1.html's <p><strong>...</strong> <span>...`
+  // rows), so it reads like part of the report rather than a JSON dump.
+  function humanizeKey(key) {
+    return String(key)
+      .replace(/_/g, ' ')
+      .replace(/([a-z0-9])([A-Z])/g, '$1 $2')
+      .replace(/\b\w/g, (c) => c.toUpperCase());
+  }
+
+  function isPlainObject(value) {
+    return value !== null && typeof value === 'object' && !Array.isArray(value);
+  }
+
+  // Renders a scalar or array value as inline HTML; returns null for anything
+  // empty (so the caller can skip the whole row rather than show a blank line).
+  function renderInlineValue(value) {
+    if (value === null || value === undefined || value === '') return null;
+    if (Array.isArray(value)) {
+      const items = value
+        .map((item) => {
+          if (isPlainObject(item)) {
+            const parts = Object.entries(item)
+              .map(([k, v]) => {
+                const rendered = renderInlineValue(v);
+                return rendered ? `${humanizeKey(k)}: ${rendered}` : null;
+              })
+              .filter(Boolean);
+            return parts.length ? parts.join(', ') : null;
+          }
+          return escapeHtml(String(item));
+        })
+        .filter(Boolean);
+      if (items.length === 0) return null;
+      return `<ul style="margin:4px 0 4px 1.1rem; padding:0;">${items.map((i) => `<li>${i}</li>`).join('')}</ul>`;
+    }
+    if (isPlainObject(value)) return null; // objects are rendered as their own subsection below
+    return escapeHtml(String(value));
+  }
+
+  function renderExtractedInfo(extractedJson) {
+    if (!extractedJson || typeof extractedJson !== 'object') {
+      return '<p style="color:#9ca3af; font-size:13px; margin-left:0;">No extracted information.</p>';
+    }
+
+    const topLevelRows = [];
+    const subsections = [];
+
+    Object.entries(extractedJson).forEach(([key, value]) => {
+      if (isPlainObject(value)) {
+        const rows = Object.entries(value)
+          .map(([k, v]) => {
+            const rendered = renderInlineValue(v);
+            return rendered ? `<p style="margin:2px 0 2px 0;"><strong>${humanizeKey(k)}:</strong> ${rendered}</p>` : null;
+          })
+          .filter(Boolean);
+        if (rows.length) {
+          subsections.push(
+            `<div style="margin-top:10px;">` +
+              `<div style="color:chocolate; font-weight:600; font-size:13px; margin-bottom:2px;">${humanizeKey(key)}</div>` +
+              rows.join('') +
+            `</div>`
+          );
+        }
+      } else {
+        const rendered = renderInlineValue(value);
+        if (rendered) {
+          topLevelRows.push(`<p style="margin:2px 0;"><strong>${humanizeKey(key)}:</strong> ${rendered}</p>`);
+        }
+      }
+    });
+
+    if (topLevelRows.length === 0 && subsections.length === 0) {
+      return '<p style="color:#9ca3af; font-size:13px; margin-left:0;">No extracted information.</p>';
+    }
+
+    return `<div style="font-size:14px; line-height:1.6; margin-top:10px;">${topLevelRows.join('')}${subsections.join('')}</div>`;
   }
 
   function renderDocumentCard(doc) {
@@ -91,7 +168,7 @@
           </div>
         </div>
         ${failed ? `<div style="color:#dc2626; font-size:12px; margin-top:8px;">Extraction failed: ${escapeHtml(doc.extraction_error || 'unknown error')}</div>` : ''}
-        ${renderExtractedJson(doc)}
+        ${doc.extracted_json ? renderExtractedInfo(doc.extracted_json) : ''}
       </div>
     `;
   }
