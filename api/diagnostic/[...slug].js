@@ -6,7 +6,7 @@
 //   POST /api/diagnostic/save-diagnostic - Save diagnostic results to database
 
 import { sql } from '@vercel/postgres';
-import { ensureSchema, saveDiagnosticResult, getPatientReports, getFeedbackFormByPatient, getP1ReportFormByPatient, getDiagnosticResultsByPatient } from '../_db.js';
+import { ensureSchema, saveDiagnosticResult, getPatientReports, getFeedbackFormByPatient, getP1ReportFormByPatient, getDiagnosticResultsByPatient, getPatientDocuments } from '../_db.js';
 import { requireAuth } from '../_auth.js';
 import { calculateAndStoreGRACE3Score, calculateGRACE3Score } from '../_grace3.js';
 
@@ -85,6 +85,27 @@ async function fetchECGResults() {
   } catch (err) {
     console.error('Error fetching ECG results from Cloudflare:', err);
     return null;
+  }
+}
+
+// Fetches this patient's uploaded documents (see api/documents/[...slug].js) so the
+// diagnostic prompt builders can use them as another context source, same as
+// feedback/report/ECG data. Reads from patient_documents directly (not R2) since
+// extracted_json is already mirrored into that column for exactly this purpose.
+async function fetchPatientDocuments(patientId) {
+  try {
+    const documents = await getPatientDocuments(patientId);
+    return documents
+      .filter((doc) => doc.extraction_status === 'done' && doc.extracted_json)
+      .map((doc) => ({
+        filename: doc.original_filename,
+        document_type: doc.document_type,
+        uploaded_at: doc.created_at,
+        extracted: doc.extracted_json,
+      }));
+  } catch (err) {
+    console.error('Error fetching patient documents:', err);
+    return [];
   }
 }
 
@@ -326,7 +347,7 @@ function truncateToCharBudget(obj, maxChars = 8000) {
  * Generate cardiovascular diagnostic report using Claude Haiku model.
  * Prompt is kept well under 180k tokens by slimming ECG and truncating patient data.
  */
-async function generateClaudeDiagnostic(patientData, ecgData) {
+async function generateClaudeDiagnostic(patientData, ecgData, documentsData = null) {
   if (!CLAUDE_API_KEY) {
     throw new Error('CLAUDE_API_KEY not configured');
   }
@@ -334,10 +355,14 @@ async function generateClaudeDiagnostic(patientData, ecgData) {
   const cleanedFeedback = truncateToCharBudget(cleanPatientData(patientData.feedback), 6000);
   const cleanedReport   = truncateToCharBudget(cleanPatientData(patientData.report),   6000);
   const cleanedECG      = slimECGForClaude(ecgData);  // already small — no full metrics blob
+  const cleanedDocuments = documentsData && documentsData.length
+    ? truncateToCharBudget({ documents: documentsData }, 4000)
+    : null;
 
   const feedbackStr = cleanedFeedback ? JSON.stringify(cleanedFeedback) : 'No abnormalities';
   const reportStr   = cleanedReport   ? JSON.stringify(cleanedReport)   : 'None';
   const ecgStr      = cleanedECG      ? JSON.stringify(cleanedECG)      : 'No abnormalities';
+  const documentsStr = cleanedDocuments ? JSON.stringify(cleanedDocuments) : 'None uploaded';
 
   const prompt = `You are a cardiovascular AI. Analyze this patient and respond with ONLY valid JSON (no markdown).
 
@@ -354,6 +379,8 @@ FINDINGS: ${feedbackStr}
 HISTORY: ${reportStr}
 
 ECG: ${ecgStr}
+
+UPLOADED DOCUMENTS: ${documentsStr}
 
 OUTPUT JSON format:
 {
@@ -652,7 +679,7 @@ function generateComparisonAnalysis(geminiResult, claudeResult) {
  * Main function: Generate multi-AI diagnostic with comparison across Gemini and Claude
  * Returns results from both models, agreement scores, and consensus analysis
  */
-async function generateMultiAIDiagnostic(patientData, ecgData, geminiResult) {
+async function generateMultiAIDiagnostic(patientData, ecgData, geminiResult, documentsData = null) {
   console.log('[multi-ai] Starting multi-AI diagnostic generation...');
   
   const hasClaudeKey = !!CLAUDE_API_KEY;
@@ -690,7 +717,7 @@ async function generateMultiAIDiagnostic(patientData, ecgData, geminiResult) {
   } else {
     try {
       console.log('[multi-ai] Generating Claude diagnostic...');
-      results.claude_result = await generateClaudeDiagnostic(patientData, ecgData);
+      results.claude_result = await generateClaudeDiagnostic(patientData, ecgData, documentsData);
       results.claude_generated_at = new Date().toISOString();
       console.log('[multi-ai] Claude diagnostic generated');
     } catch (err) {
@@ -739,7 +766,7 @@ async function generateMultiAIDiagnostic(patientData, ecgData, geminiResult) {
   return results;
 }
 
-async function generateDiagnosticReport(patientData, ecgData) {
+async function generateDiagnosticReport(patientData, ecgData, documentsData = null) {
   if (!GEMINI_API_KEY) {
     throw new Error('GEMINI_API_KEY not configured');
   }
@@ -748,6 +775,9 @@ async function generateDiagnosticReport(patientData, ecgData) {
   const cleanedFeedback = cleanPatientData(patientData.feedback);
   const cleanedReport = cleanPatientData(patientData.report);
   const cleanedECG = ecgData ? cleanPatientData(ecgData) : null;
+  const cleanedDocuments = documentsData && documentsData.length
+    ? truncateToCharBudget({ documents: documentsData }, 6000)
+    : null;
 
   const context = `
 You are a cardiovascular AI diagnostic assistant. Analyze the patient data provided and generate a professional diagnostic report.
@@ -765,6 +795,9 @@ ${cleanedReport ? JSON.stringify(cleanedReport, null, 2) : 'No abnormal history 
 
 ECG ANALYSIS RESULTS:
 ${cleanedECG ? JSON.stringify(cleanedECG, null, 2) : 'No ECG abnormalities detected'}
+
+UPLOADED DOCUMENT FINDINGS (AI-extracted from patient/doctor-uploaded files):
+${cleanedDocuments ? JSON.stringify(cleanedDocuments, null, 2) : 'No documents uploaded'}
 
 BLOOD PRESSURE ANALYSIS:
 ${formatBloodPressureMetrics(ecgData)}
@@ -1281,7 +1314,7 @@ If uncertain:
   }
 }
 
-function buildCompleteReport(diagnosticData, patientData, ecgData = null) {
+function buildCompleteReport(diagnosticData, patientData, ecgData = null, documentsData = null) {
   // Extract and map demographics
   const demographics = {
     age: patientData.report?.age || null,
@@ -1364,6 +1397,10 @@ function buildCompleteReport(diagnosticData, patientData, ecgData = null) {
       mapMin: metrics.mean_arterial_pressure_min || null
     };
   }
+
+  // Mirror ecg_findings' shape: a raw-data reference for a "has_X_data" source,
+  // not a value the risk-scoring prompt above still needs after this point.
+  const document_findings = (documentsData && documentsData.length) ? documentsData : null;
 
   // Generate prognosis_note from detailed_recommendations (if not already provided)
   let prognosis_note = diagnosticData.prognosis_note || null;
@@ -1470,6 +1507,7 @@ function buildCompleteReport(diagnosticData, patientData, ecgData = null) {
     labs,
     symptoms,
     ecg_findings,
+    document_findings,
     prognosis_note,
     diagnostic_summary,
     condition_risk_assessments,
@@ -1707,8 +1745,11 @@ async function handleGenerateDiagnostic(req, res) {
     console.log('[generate-diagnostic] Fetching ECG results from Cloudflare...');
     const ecgData = await fetchECGResults();
 
+    console.log('[generate-diagnostic] Fetching uploaded document data...');
+    const documentsData = await fetchPatientDocuments(patient_id);
+
     console.log('[generate-diagnostic] Generating diagnostic report with Gemini...');
-    const diagnosticReport = await generateDiagnosticReport(patientData, ecgData);
+    const diagnosticReport = await generateDiagnosticReport(patientData, ecgData, documentsData);
 
     // Build complete report with both Gemini data AND patient demographics/vitals/labs
     const fullReport = {
@@ -1717,9 +1758,10 @@ async function handleGenerateDiagnostic(req, res) {
       data_sources: {
         feedback_form: patientData.feedback !== null,
         report_form: patientData.report !== null,
-        ecg_analysis: ecgData !== null
+        ecg_analysis: ecgData !== null,
+        document_data: documentsData.length > 0
       },
-      ...buildCompleteReport(diagnosticReport, patientData, ecgData)
+      ...buildCompleteReport(diagnosticReport, patientData, ecgData, documentsData)
     };
 
     console.log('[generate-diagnostic] Report generated successfully, risk level:', fullReport.risk_level);
@@ -1731,7 +1773,7 @@ async function handleGenerateDiagnostic(req, res) {
     let multiAIResults = null;
     try {
       console.log('[generate-diagnostic] Generating multi-AI diagnostics (Gemini + Claude)...');
-      multiAIResults = await generateMultiAIDiagnostic(patientData, ecgData, diagnosticReport);
+      multiAIResults = await generateMultiAIDiagnostic(patientData, ecgData, diagnosticReport, documentsData);
       
       // Check if multi-AI is available
       if (!multiAIResults.multiAIAvailable) {

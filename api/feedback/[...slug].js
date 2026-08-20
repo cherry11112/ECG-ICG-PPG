@@ -3,11 +3,12 @@ import {
   insertFeedbackForm,
   getFeedbackFormByPatient,
   hasFeedbackToday,
-  updateFeedbackAnswer,   // kept for the manual /save-answer endpoint
-  saveSessionAnswer,      // save to session_answers table
+  updateFeedbackAnswer,   // immediate, field-specific write into feedback_form
+  appendFeedbackFreeText, // append an AI follow-up answer into feedback_form.free_text
+  saveSessionAnswer,      // save to session_answers table (session-progress audit trail)
   getSessionAnswers,      // retrieve session answers
   isSessionComplete,      // check if all 27 questions answered
-  finalizeSessionAnswers, // commit session to feedback_form when complete
+  finalizeSessionAnswers, // clean up session_answers and report completion status
   getPatientHealthData,   // fetch patient data for general chat context
   QUESTION_ID_MAP,
 } from '../_db.js';
@@ -108,29 +109,71 @@ export default async function handler(req, res) {
         });
       }
 
-      // Save to session_answers table (NOT to feedback_form yet)
-      const result = await saveSessionAnswer(
-        parseInt(patient_id),
-        session_id,
-        question_id,
-        answer_value
-      );
+      // Track progress in session_answers (audit trail / completeness check) AND
+      // write the answer straight into today's feedback_form row immediately —
+      // the patient should not have to finish all 27 questions for this answer
+      // to be persisted.
+      const [sessionResult, formResult] = await Promise.all([
+        saveSessionAnswer(parseInt(patient_id), session_id, question_id, answer_value),
+        updateFeedbackAnswer(parseInt(patient_id), question_id, answer_value, session_id),
+      ]);
 
       console.log(`[tools/save-answer] patient:${patient_id} q:${question_id} val:${answer_value} (session:${session_id})`);
 
       return res.status(200).json({
         success: true,
-        message: 'Answer saved to session (not yet finalized)',
+        message: 'Answer saved',
         session_id,
         patient_id,
         question_id,
         answer_value,
         raw_text: raw_text || null,
         saved_to_session: true,
-        ...result,
+        saved_to_feedback_form: true,
+        column: formResult.column,
+        session: sessionResult,
       });
     } catch (err) {
       console.error('[tools/save-answer]', err);
+      return res.status(500).json({ error: err.message || 'Internal Server Error' });
+    }
+  }
+
+  if (pathString === 'tools/save-followup-answer' && req.method === 'POST') {
+    try {
+      const payload = await parseBody(req, res);
+      if (!payload) return;
+
+      const { session_id, patient_id, question_context, answer_text } = payload;
+
+      if (!session_id || !patient_id || !answer_text) {
+        return res.status(400).json({
+          error: 'Missing required fields',
+          required: ['session_id', 'patient_id', 'answer_text'],
+          received: Object.keys(payload),
+        });
+      }
+
+      const result = await appendFeedbackFreeText(
+        parseInt(patient_id),
+        question_context || null,
+        answer_text,
+        session_id
+      );
+
+      console.log(`[tools/save-followup-answer] patient:${patient_id} (session:${session_id}) context:"${question_context || ''}"`);
+
+      return res.status(200).json({
+        success: true,
+        message: 'Follow-up answer appended to free_text',
+        session_id,
+        patient_id,
+        question_context: question_context || null,
+        answer_text,
+        ...result,
+      });
+    } catch (err) {
+      console.error('[tools/save-followup-answer]', err);
       return res.status(500).json({ error: err.message || 'Internal Server Error' });
     }
   }
@@ -149,37 +192,28 @@ export default async function handler(req, res) {
         });
       }
 
-      console.log(`[tools/finalize-session] Attempting to finalize session:${session_id} patient:${patient_id}`);
+      console.log(`[tools/finalize-session] Finalizing session:${session_id} patient:${patient_id}`);
 
-      // Finalize session: move from session_answers to feedback_form IF all 27 answers collected
+      // Every answer was already written to feedback_form as it was collected, so
+      // finalizing no longer gates on completeness — it just reports how many of
+      // the 27 questions were answered and clears the session_answers staging rows.
+      // Whatever the patient answered (even if they stopped early) is already saved.
       const result = await finalizeSessionAnswers(parseInt(patient_id), session_id);
 
-      if (result.success) {
-        console.log(`[tools/finalize-session] SUCCESS: All 27 answers finalized to feedback_form`);
+      // TODO(voice-agent): n8n diagnostic-generation trigger removed. Re-wire this
+      // to whatever replaces it in Stage 2+ (Claude tool-calling / direct trigger).
 
-        // TODO(voice-agent): n8n diagnostic-generation trigger removed. Re-wire this
-        // to whatever replaces it in Stage 2+ (Claude tool-calling / direct trigger).
-
-        return res.status(200).json({
-          success: true,
-          message: 'All 27 feedback answers collected and saved successfully',
-          session_id,
-          patient_id,
-          completed_at: new Date().toISOString(),
-          status: 'completed',
-          ...result,
-        });
-      } else {
-        // Session incomplete - do NOT save to feedback_form
-        console.warn(`[tools/finalize-session] INCOMPLETE: ${result.reason}`);
-        return res.status(400).json({
-          success: false,
-          message: 'Session not complete - answers not saved',
-          session_id,
-          patient_id,
-          ...result,
-        });
-      }
+      return res.status(200).json({
+        success: true,
+        message: result.complete
+          ? 'All 27 feedback answers collected and saved'
+          : `Session ended with ${result.answers_collected}/27 answers — all provided answers are saved`,
+        session_id,
+        patient_id,
+        completed_at: new Date().toISOString(),
+        status: result.complete ? 'completed' : 'partial',
+        ...result,
+      });
     } catch (err) {
       console.error('[tools/finalize-session]', err);
       return res.status(500).json({ error: err.message || 'Internal Server Error' });

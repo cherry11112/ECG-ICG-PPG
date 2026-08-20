@@ -67,11 +67,15 @@ export async function ensureSchema() {
       anxious text,
       erectile_dysfunction text,
       free_comment text,
+      free_text text,
       source text NOT NULL DEFAULT 'voice' CHECK (source IN ('manual', 'voice')),
       feedback_date date NOT NULL DEFAULT CURRENT_DATE,
       CONSTRAINT feedback_form_one_per_day UNIQUE (patient_id, feedback_date)
     );
   `;
+
+  // Migration: older deployments created feedback_form before free_text existed.
+  await sql`ALTER TABLE feedback_form ADD COLUMN IF NOT EXISTS free_text text;`;
 
   //  P1 Report Form 
   await sql`
@@ -426,6 +430,32 @@ export async function ensureSchema() {
       grace3_calculated_at timestamptz
     );
   `;
+
+  // Migration: older deployments created diagnostic_results before these existed.
+  await sql`ALTER TABLE diagnostic_results ADD COLUMN IF NOT EXISTS has_document_data boolean;`;
+  await sql`ALTER TABLE diagnostic_results ADD COLUMN IF NOT EXISTS document_findings jsonb;`;
+
+  //  Patient Documents (uploaded files + AI-extracted structured data)
+  await sql`
+    CREATE TABLE IF NOT EXISTS patient_documents (
+      id serial PRIMARY KEY,
+      patient_id integer NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      uploaded_by integer NOT NULL REFERENCES users(id),
+      original_filename text,
+      content_type text,
+      file_size_bytes integer,
+      r2_original_key text NOT NULL,
+      r2_json_key text,
+      extraction_status text NOT NULL DEFAULT 'pending'
+        CHECK (extraction_status IN ('pending', 'processing', 'done', 'failed')),
+      extraction_error text,
+      document_type text,
+      extracted_json jsonb,
+      extraction_model text,
+      created_at timestamptz NOT NULL DEFAULT now()
+    );
+  `;
+  await sql`CREATE INDEX IF NOT EXISTS idx_patient_documents_patient ON patient_documents(patient_id);`;
 }
 
 // Users
@@ -612,6 +642,43 @@ function castValue(columnName, value) {
 }
 
 
+// Ensure today's feedback_form row exists for this patient, without touching any
+// column values — used before any incremental (per-question or per-follow-up) write
+// so existing answers already on today's row are never disturbed.
+async function ensureTodayFeedbackRow(patientId) {
+  const { rows: existing } = await sql`
+    SELECT id FROM feedback_form
+    WHERE patient_id = ${patientId}
+    AND feedback_date = CURRENT_DATE
+    LIMIT 1
+  `;
+
+  if (existing.length > 0) {
+    return existing[0].id;
+  }
+
+  // Insert a fresh row for today — source MUST be set to satisfy CHECK constraint
+  const { rows: inserted } = await sql`
+    INSERT INTO feedback_form (patient_id, source, feedback_date)
+    VALUES (${patientId}, 'voice', CURRENT_DATE)
+    ON CONFLICT ON CONSTRAINT feedback_form_one_per_day DO NOTHING
+    RETURNING id
+  `;
+
+  if (inserted.length > 0) {
+    return inserted[0].id;
+  }
+
+  // Race condition: another request created the row between our SELECT and INSERT
+  const { rows: retry } = await sql`
+    SELECT id FROM feedback_form
+    WHERE patient_id = ${patientId}
+    AND feedback_date = CURRENT_DATE
+    LIMIT 1
+  `;
+  return retry[0].id;
+}
+
 export async function updateFeedbackAnswer(patientId, questionId, answer, sessionId) {
   if (!QUESTION_ID_MAP[questionId]) {
     throw new Error(
@@ -622,43 +689,10 @@ export async function updateFeedbackAnswer(patientId, questionId, answer, sessio
   const columnName = QUESTION_ID_MAP[questionId];
   const castedValue = castValue(columnName, answer);
 
-  // Step 1: Ensure today's row exists (source = 'voice' for n8n answers)
-  const { rows: existing } = await sql`
-    SELECT id FROM feedback_form
-    WHERE patient_id = ${patientId}
-    AND feedback_date = CURRENT_DATE
-    LIMIT 1
-  `;
+  // Ensure today's row exists, then update ONLY the answered column — every other
+  // column (answered on a previous call, or not yet answered) is left untouched.
+  const feedbackId = await ensureTodayFeedbackRow(patientId);
 
-  let feedbackId;
-
-  if (existing.length > 0) {
-    feedbackId = existing[0].id;
-  } else {
-    // Insert a fresh row for today — source MUST be set to satisfy CHECK constraint
-    const { rows: inserted } = await sql`
-      INSERT INTO feedback_form (patient_id, source, feedback_date)
-      VALUES (${patientId}, 'voice', CURRENT_DATE)
-      ON CONFLICT ON CONSTRAINT feedback_form_one_per_day DO NOTHING
-      RETURNING id
-    `;
-
-    if (inserted.length > 0) {
-      feedbackId = inserted[0].id;
-    } else {
-      // Race condition: another request created the row between our SELECT and INSERT
-      const { rows: retry } = await sql`
-        SELECT id FROM feedback_form
-        WHERE patient_id = ${patientId}
-        AND feedback_date = CURRENT_DATE
-        LIMIT 1
-      `;
-      feedbackId = retry[0].id;
-    }
-  }
-
-  // Step 2: Update the specific column — dynamic column name, safe because
-  // columnName is validated against QUESTION_ID_MAP above
   await sql.query(
     `UPDATE feedback_form SET ${columnName} = $1 WHERE id = $2`,
     [castedValue, feedbackId]
@@ -673,6 +707,35 @@ export async function updateFeedbackAnswer(patientId, questionId, answer, sessio
     question_id: questionId,
     column: columnName,
     answer: castedValue,
+    saved: true,
+  };
+}
+
+// Append a follow-up answer to free_text rather than overwriting it, so multiple
+// follow-ups collected across a session all get preserved. `contextLabel` (e.g. the
+// follow-up question, or the daily question it relates to) is included inline so the
+// note is still meaningful when read back later without the original conversation.
+export async function appendFeedbackFreeText(patientId, contextLabel, answerText, sessionId) {
+  const feedbackId = await ensureTodayFeedbackRow(patientId);
+  const note = contextLabel ? `${contextLabel}: ${answerText}` : String(answerText);
+
+  const { rows } = await sql`
+    UPDATE feedback_form
+    SET free_text = CASE
+      WHEN free_text IS NULL OR free_text = '' THEN ${note}
+      ELSE free_text || E'\n' || ${note}
+    END
+    WHERE id = ${feedbackId}
+    RETURNING free_text
+  `;
+
+  console.log(
+    `[DB] patient:${patientId} session:${sessionId} free_text += "${note}" (row ${feedbackId})`
+  );
+
+  return {
+    feedback_id: feedbackId,
+    free_text: rows[0]?.free_text,
     saved: true,
   };
 }
@@ -967,6 +1030,7 @@ export async function saveDiagnosticResult(patientId, diagnosticData) {
         summary, diagnostic_summary, prognosis_note,
         has_feedback_data, has_report_data, has_ecg_data,
         ecg_findings, vitals, labs, demographics, symptoms,
+        has_document_data, document_findings,
         gemini_result, claude_result, agreement_score,
         consensus_risk_level, consensus_risk_percentage, comparison_analysis,
         multi_ai_errors, multi_ai_available
@@ -999,6 +1063,8 @@ export async function saveDiagnosticResult(patientId, diagnosticData) {
         ${diagnosticData.labs ? JSON.stringify(diagnosticData.labs) : null},
         ${diagnosticData.demographics ? JSON.stringify(diagnosticData.demographics) : null},
         ${diagnosticData.symptoms ? JSON.stringify(diagnosticData.symptoms) : null},
+        ${diagnosticData.data_sources?.document_data || false},
+        ${diagnosticData.document_findings ? JSON.stringify(diagnosticData.document_findings) : null},
         ${diagnosticData.gemini_result ? JSON.stringify(diagnosticData.gemini_result) : null},
         ${diagnosticData.claude_result ? JSON.stringify(diagnosticData.claude_result) : null},
         ${diagnosticData.agreement_score || null},
@@ -1047,6 +1113,69 @@ export async function getLatestDiagnosticResult(patientId) {
   }
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Patient Documents (uploaded files + AI-extracted structured data)
+// ─────────────────────────────────────────────────────────────────────────────
+
+export async function insertPatientDocument(patientId, uploadedBy, {
+  originalFilename, contentType, fileSizeBytes, r2OriginalKey,
+}) {
+  const { rows } = await sql`
+    INSERT INTO patient_documents (
+      patient_id, uploaded_by, original_filename, content_type,
+      file_size_bytes, r2_original_key, extraction_status
+    ) VALUES (
+      ${patientId}, ${uploadedBy}, ${originalFilename || null}, ${contentType || null},
+      ${fileSizeBytes || null}, ${r2OriginalKey}, 'processing'
+    )
+    RETURNING *
+  `;
+  return rows[0];
+}
+
+export async function markPatientDocumentDone(documentId, {
+  r2JsonKey, documentType, extractedJson, extractionModel,
+}) {
+  const { rows } = await sql`
+    UPDATE patient_documents
+    SET extraction_status = 'done',
+        r2_json_key = ${r2JsonKey || null},
+        document_type = ${documentType || null},
+        extracted_json = ${extractedJson ? JSON.stringify(extractedJson) : null},
+        extraction_model = ${extractionModel || null},
+        extraction_error = NULL
+    WHERE id = ${documentId}
+    RETURNING *
+  `;
+  return rows[0];
+}
+
+export async function markPatientDocumentFailed(documentId, errorMessage) {
+  const { rows } = await sql`
+    UPDATE patient_documents
+    SET extraction_status = 'failed', extraction_error = ${errorMessage || 'Unknown error'}
+    WHERE id = ${documentId}
+    RETURNING *
+  `;
+  return rows[0];
+}
+
+export async function getPatientDocuments(patientId) {
+  const { rows } = await sql`
+    SELECT * FROM patient_documents
+    WHERE patient_id = ${patientId}
+    ORDER BY created_at DESC
+  `;
+  return rows;
+}
+
+export async function getPatientDocumentById(documentId) {
+  const { rows } = await sql`
+    SELECT * FROM patient_documents WHERE id = ${documentId} LIMIT 1
+  `;
+  return rows[0] || null;
+}
+
 // Session Answer Management (Temporary storage for voice feedback collection)
 // Answers are stored here during the conversation and only committed to
 // feedback_form when all 27 questions are answered
@@ -1091,112 +1220,34 @@ export async function isSessionComplete(sessionId) {
   return count === 27;
 }
 
+// Every answer is now written straight to feedback_form as it's collected (see
+// updateFeedbackAnswer), so this no longer builds/writes the form itself — doing so
+// here from session_answers alone would null out any column not present in that
+// session (e.g. the patient stopped early), overwriting good data already saved.
+// This is now just bookkeeping: report how many of the 27 questions were answered
+// and clear the session_answers staging rows, regardless of completeness.
 export async function finalizeSessionAnswers(patientId, sessionId) {
   try {
-    // Check if session has all 27 answers
     const answers = await getSessionAnswers(sessionId);
     const count = answers.length;
-    
-    console.log(`[DB] Finalizing session ${sessionId}: ${count} answers collected`);
-    
-    if (count < 27) {
-      console.warn(`[DB] Session ${sessionId} incomplete: only ${count}/27 answers. Not finalizing.`);
-      return {
-        success: false,
-        reason: `Session incomplete: ${count}/27 answers collected`,
-        answers_collected: count,
-        finalized: false,
-      };
-    }
 
-    // Build form object from session answers
-    const form = {};
-    for (const answer of answers) {
-      const columnName = QUESTION_ID_MAP[answer.question_id];
-      if (columnName) {
-        form[columnName] = answer.answer_value;
-      }
-    }
+    console.log(`[DB] Finalizing session ${sessionId}: ${count}/27 answers collected`);
 
-    // Insert complete form into feedback_form table
-    const { rows } = await sql`
-      INSERT INTO feedback_form (
-        patient_id, source, feedback_date,
-        dyspnea, orthopnea, paroxysmal_nocturnal_dyspnea, cyanosis,
-        jugular_venous_distension, nighttime_urination_count,
-        chest_pain, arm_pain, leg_pain, jaw_pain, back_pain,
-        stomach_pain, headache, numb_arms_legs, visual_disturbances,
-        palpitations, sweating, leg_swelling, abdominal_bloating,
-        weight_kg, walk_6min_distance_m,
-        blood_pressure_systolic, blood_pressure_diastolic,
-        fatigue_level, sleep_quality,
-        anxious, erectile_dysfunction, free_comment
-      ) VALUES (
-        ${patientId}, 'voice', CURRENT_DATE,
-        ${form.dyspnea || null}, ${form.orthopnea || null},
-        ${form.paroxysmal_nocturnal_dyspnea || null}, ${form.cyanosis || null},
-        ${form.jugular_venous_distension || null},
-        ${safeParseInt(form.nighttime_urination_count)},
-        ${form.chest_pain || null}, ${form.arm_pain || null},
-        ${form.leg_pain || null}, ${form.jaw_pain || null},
-        ${form.back_pain || null}, ${form.stomach_pain || null},
-        ${form.headache || null}, ${form.numb_arms_legs || null},
-        ${form.visual_disturbances || null}, ${form.palpitations || null},
-        ${form.sweating || null}, ${form.leg_swelling || null},
-        ${form.abdominal_bloating || null},
-        ${safeParseFloat(form.weight_kg)},
-        ${safeParseFloat(form.walk_6min_distance_m)},
-        ${safeParseInt(form.blood_pressure_systolic)},
-        ${safeParseInt(form.blood_pressure_diastolic)},
-        ${safeParseInt(form.fatigue_level)},
-        ${safeParseInt(form.sleep_quality)},
-        ${form.anxious || null}, ${form.erectile_dysfunction || null},
-        ${form.free_comment || null}
-      )
-      ON CONFLICT (patient_id, feedback_date) DO UPDATE SET
-        dyspnea = EXCLUDED.dyspnea,
-        orthopnea = EXCLUDED.orthopnea,
-        paroxysmal_nocturnal_dyspnea = EXCLUDED.paroxysmal_nocturnal_dyspnea,
-        cyanosis = EXCLUDED.cyanosis,
-        jugular_venous_distension = EXCLUDED.jugular_venous_distension,
-        nighttime_urination_count = EXCLUDED.nighttime_urination_count,
-        chest_pain = EXCLUDED.chest_pain,
-        arm_pain = EXCLUDED.arm_pain,
-        leg_pain = EXCLUDED.leg_pain,
-        jaw_pain = EXCLUDED.jaw_pain,
-        back_pain = EXCLUDED.back_pain,
-        stomach_pain = EXCLUDED.stomach_pain,
-        headache = EXCLUDED.headache,
-        numb_arms_legs = EXCLUDED.numb_arms_legs,
-        visual_disturbances = EXCLUDED.visual_disturbances,
-        palpitations = EXCLUDED.palpitations,
-        sweating = EXCLUDED.sweating,
-        leg_swelling = EXCLUDED.leg_swelling,
-        abdominal_bloating = EXCLUDED.abdominal_bloating,
-        weight_kg = EXCLUDED.weight_kg,
-        walk_6min_distance_m = EXCLUDED.walk_6min_distance_m,
-        blood_pressure_systolic = EXCLUDED.blood_pressure_systolic,
-        blood_pressure_diastolic = EXCLUDED.blood_pressure_diastolic,
-        fatigue_level = EXCLUDED.fatigue_level,
-        sleep_quality = EXCLUDED.sleep_quality,
-        anxious = EXCLUDED.anxious,
-        erectile_dysfunction = EXCLUDED.erectile_dysfunction,
-        free_comment = EXCLUDED.free_comment,
-        source = 'voice'
-      RETURNING id
+    const { rows: existing } = await sql`
+      SELECT id FROM feedback_form
+      WHERE patient_id = ${patientId} AND feedback_date = CURRENT_DATE
+      LIMIT 1
     `;
 
-    // Clean up session answers after successful finalization
     await sql`
       DELETE FROM session_answers WHERE session_id = ${sessionId}
     `;
 
-    console.log(`[DB] Session ${sessionId} finalized successfully. Feedback form saved.`);
-    
     return {
       success: true,
-      feedback_form_id: rows[0]?.id,
-      answers_finalized: count,
+      feedback_form_id: existing[0]?.id ?? null,
+      answers_collected: count,
+      complete: count >= 27,
       finalized: true,
       created_at: new Date().toISOString(),
     };
