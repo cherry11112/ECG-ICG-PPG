@@ -86,29 +86,48 @@
     return value !== null && typeof value === 'object' && !Array.isArray(value);
   }
 
-  // Renders a scalar or array value as inline HTML; returns null for anything
-  // empty (so the caller can skip the whole row rather than show a blank line).
-  function renderInlineValue(value) {
-    if (value === null || value === undefined || value === '') return null;
+  // A value is "inline" if it can sit right after "Label:" on one line — a scalar,
+  // or an array made up only of scalars. Anything else (an object, or an array
+  // containing objects/arrays) needs its own indented block underneath the label
+  // instead, so nothing gets silently truncated onto one line.
+  function isInlineValue(value) {
     if (Array.isArray(value)) {
-      const items = value
-        .map((item) => {
-          if (isPlainObject(item)) {
-            const parts = Object.entries(item)
-              .map(([k, v]) => {
-                const rendered = renderInlineValue(v);
-                return rendered ? `${humanizeKey(k)}: ${rendered}` : null;
-              })
-              .filter(Boolean);
-            return parts.length ? parts.join(', ') : null;
-          }
-          return escapeHtml(String(item));
+      return value.every((v) => !isPlainObject(v) && !Array.isArray(v));
+    }
+    return !isPlainObject(value);
+  }
+
+  // Fully recursive: renders a value (scalar, array, or nested object, to any
+  // depth) as HTML. Every key present in the extracted JSON ends up somewhere in
+  // the output — this is what makes sure nothing the AI actually extracted (and
+  // saved to R2/DB) gets dropped just because it's nested more than one level.
+  function renderNode(value) {
+    if (value === null || value === undefined || value === '') return null;
+
+    if (Array.isArray(value)) {
+      if (value.length === 0) return null;
+      if (isInlineValue(value)) {
+        const items = value.map((v) => escapeHtml(String(v)));
+        return `<ul style="margin:2px 0 2px 1.1rem; padding:0;">${items.map((i) => `<li>${i}</li>`).join('')}</ul>`;
+      }
+      const blocks = value.map((item) => renderNode(item)).filter(Boolean);
+      if (blocks.length === 0) return null;
+      return `<ul style="margin:2px 0 2px 1.1rem; padding:0;">${blocks.map((b) => `<li style="margin-bottom:6px;">${b}</li>`).join('')}</ul>`;
+    }
+
+    if (isPlainObject(value)) {
+      const rows = Object.entries(value)
+        .map(([k, v]) => {
+          const rendered = renderNode(v);
+          if (!rendered) return null;
+          return isInlineValue(v)
+            ? `<div style="margin:2px 0;"><strong>${humanizeKey(k)}:</strong> ${rendered}</div>`
+            : `<div style="margin:4px 0;"><strong>${humanizeKey(k)}:</strong><div style="margin-left:1rem;">${rendered}</div></div>`;
         })
         .filter(Boolean);
-      if (items.length === 0) return null;
-      return `<ul style="margin:4px 0 4px 1.1rem; padding:0;">${items.map((i) => `<li>${i}</li>`).join('')}</ul>`;
+      return rows.length ? rows.join('') : null;
     }
-    if (isPlainObject(value)) return null; // objects are rendered as their own subsection below
+
     return escapeHtml(String(value));
   }
 
@@ -121,26 +140,17 @@
     const subsections = [];
 
     Object.entries(extractedJson).forEach(([key, value]) => {
+      const rendered = renderNode(value);
+      if (!rendered) return;
       if (isPlainObject(value)) {
-        const rows = Object.entries(value)
-          .map(([k, v]) => {
-            const rendered = renderInlineValue(v);
-            return rendered ? `<p style="margin:2px 0 2px 0;"><strong>${humanizeKey(k)}:</strong> ${rendered}</p>` : null;
-          })
-          .filter(Boolean);
-        if (rows.length) {
-          subsections.push(
-            `<div style="margin-top:10px;">` +
-              `<div style="color:chocolate; font-weight:600; font-size:13px; margin-bottom:2px;">${humanizeKey(key)}</div>` +
-              rows.join('') +
-            `</div>`
-          );
-        }
+        subsections.push(
+          `<div style="margin-top:10px;">` +
+            `<div style="color:chocolate; font-weight:600; font-size:13px; margin-bottom:2px;">${humanizeKey(key)}</div>` +
+            rendered +
+          `</div>`
+        );
       } else {
-        const rendered = renderInlineValue(value);
-        if (rendered) {
-          topLevelRows.push(`<p style="margin:2px 0;"><strong>${humanizeKey(key)}:</strong> ${rendered}</p>`);
-        }
+        topLevelRows.push(`<p style="margin:2px 0;"><strong>${humanizeKey(key)}:</strong> ${rendered}</p>`);
       }
     });
 
