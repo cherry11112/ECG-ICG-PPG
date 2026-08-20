@@ -75,7 +75,8 @@ create table if not exists feedback_form (
   sleep_quality integer,
   anxious text,
   erectile_dysfunction text,
-  free_comment text
+  free_comment text,
+  free_text text
 );
 
 -- P1report.html multiPageForm exact-column mapping
@@ -416,14 +417,16 @@ create table if not exists diagnostic_results (
   has_feedback_data boolean,
   has_report_data boolean,
   has_ecg_data boolean,
-  
+  has_document_data boolean,
+
   -- Raw Data References
   ecg_findings jsonb,
   vitals jsonb,
   labs jsonb,
   demographics jsonb,
   symptoms jsonb,
-  
+  document_findings jsonb,
+
   -- Multi-AI Diagnostic Results (Gemini + Claude)
   gemini_result jsonb,
   claude_result jsonb,
@@ -438,6 +441,26 @@ create table if not exists diagnostic_results (
   cloudflare_html_url text,
   cloudflare_json_url text
 );
+
+-- Uploaded documents (original file + AI-extracted structured data)
+create table if not exists patient_documents (
+  id serial primary key,
+  patient_id integer not null references users(id) on delete cascade,
+  uploaded_by integer not null references users(id),
+  original_filename text,
+  content_type text,
+  file_size_bytes integer,
+  r2_original_key text not null,
+  r2_json_key text,
+  extraction_status text not null default 'pending'
+    check (extraction_status in ('pending', 'processing', 'done', 'failed')),
+  extraction_error text,
+  document_type text,
+  extracted_json jsonb,
+  extraction_model text,
+  created_at timestamptz not null default now()
+);
+create index if not exists idx_patient_documents_patient on patient_documents(patient_id);
 
 
 

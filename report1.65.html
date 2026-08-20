@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="dist/css/style.css">
+    <title>User Dashboard</title>
+</head>
+<body class="text-gray-800 font-inter">
+
+    <div class="fixed left-0 top-0 w-64 h-full p-4 z-50 sidebar-menu transition-transform"
+    style="background: url('img/picture11.png') no-repeat center center / cover;">
+        <a href="#" class="flex items-center pb-4 border-b border-b-gray-800">
+            <img src="img/fraunhofer-logo.jpg" alt="" class="w-8 h-8 rounded object-cover">
+            <span class="text-lg font-bold text-black ml-3"></span>
+        </a>
+        <ul class="mt-4">
+            <li class="mb-1 group">
+                <a href="patient1.html" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">
+                    <i class="ri-home-2-line mr-3 text-lg"></i>
+                    <span class="text-sm">Dashboard</span>
+                </a>
+            </li>
+            <li class="mb-1 group active">
+                <a href="#" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100 sidebar-dropdown-toggle">
+                    <i class="ri-file-info-line mr-3 text-lg"></i>
+                    <span class="text-white">Reports</span>
+                </a>
+            </li>
+            <li class="mb-1 group">
+                <a href="#" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">
+                    <i class="ri-settings-2-line mr-3 text-lg"></i>
+                    <span class="text-sm">Settings</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="fixed top-0 left-0 w-full h-full bg-black/50 z-40 md:hidden sidebar-overlay"></div>
+    <!-- end: Sidebar -->
+
+    <!-- start: Main -->
+    <main class="w-full md:w-[calc(100%-256px)] md:ml-64 bg-gray-50 min-h-screen transition-all main">
+        <div class="py-2 px-6 bg-white flex items-center shadow-md shadow-black/5 sticky top-0 left-0 z-30">
+            <button type="button" class="text-lg text-gray-600 sidebar-toggle">
+                <i class="ri-menu-line"></i>
+            </button>
+            <ul class="flex items-center text-sm ml-4">
+                <li class="mr-2">
+                    <a href="#" class="text-gray-400 hover:text-gray-600 font-medium">Dashboard</a>
+                </li>
+            </ul>
+            <ul class="ml-auto flex items-center">
+                <li class="dropdown ml-3">
+                    <button type="button" class="dropdown-toggle flex items-center">
+                        <img src="img/user-profile-icon-free-vector.jpg" alt="" class="w-8 h-8 rounded-full block object-cover align-middle">
+                    </button>
+                    <ul class="dropdown-menu shadow-md shadow-black/5 z-30 hidden py-1.5 rounded-md bg-white border border-gray-100 w-full max-w-[140px]">
+                        <li>
+                            <a href="#" class="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-blue-500 hover:bg-gray-50">Profile</a>
+                        </li>
+                        <li>
+                            <a href="#" id="logoutBtn" class="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-blue-500 hover:bg-gray-50">Logout</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <div class="p-6">
+            <div class="grid grid-cols-1 gap-6 mb-6">
+                <div class="bg-white rounded-md border border-gray-100 p-6 shadow-md shadow-black/5">
+                    <div class="flex justify-between mb-6">
+                        <div class="w-full">
+                            <div class="text font-semibold mb-3" style="font-size: clamp(1.25rem, 5vw, 2rem); overflow-wrap: break-word;">Uploaded Documents</div>
+                            <div class="text-lg font-small text-gray-300" style="color: gray;">
+                                Documents uploaded by the patient or doctor, with AI-extracted information
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-md border border-gray-100 p-6 shadow-md shadow-black/5 documents-section">
+                    <div class="text-2xl font-semibold mb-1" style="color: chocolate; margin-bottom: 1.5rem;">Upload a document</div>
+                    <form class="document-upload-form mb-4" style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+                        <input type="file" class="document-file-input" accept=".pdf,.jpg,.jpeg,.png,.gif,.webp,.txt" required>
+                        <button type="submit" style="background:#658de6; color:#fff; border:none; border-radius:6px; padding:8px 16px; cursor:pointer; font-weight:600;">Upload</button>
+                    </form>
+                    <div class="document-upload-status text-sm" style="min-height:18px;"></div>
+
+                    <div class="text-2xl font-semibold mb-1 mt-6" style="color: chocolate; margin-bottom: 1rem;">Documents on file</div>
+                    <div class="documents-list"></div>
+                </div>
+
+                <!-- Navigation Buttons -->
+                <div class="submit-button-container mt-6 flex justify-between">
+                    <a href="report1.6.html" id="backButton">
+                        <button type="button" class="px-3 py-1 bg-white text-black border border-black rounded-sm text-sm">Back</button>
+                    </a>
+                    <a href="report1.7.html" id="nextButtonLink">
+                        <button type="button" id="nextButton" class="px-3 py-1 bg-white text-black border border-black rounded-sm text-sm">Next</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+    <!-- end: Main -->
+
+    <script src="dist/js/script.js"></script>
+    <script src="dist/js/report.js"></script>
+    <script src="dist/js/documents.js"></script>
+</body>
+</html>

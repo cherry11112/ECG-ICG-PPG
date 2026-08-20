@@ -8,6 +8,10 @@
     {
       "source": "/api/diagnostic/:path*",
       "destination": "/api/diagnostic/[...slug]"
+    },
+    {
+      "source": "/api/documents/:path*",
+      "destination": "/api/documents/[...slug]"
     }
   ]
 }

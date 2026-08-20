@@ -1689,13 +1689,27 @@
                     </form>
               </div>
           </div>
+
+          <div class="bg-white rounded-md border border-gray-100 p-6 shadow-md shadow-black/5 documents-section">
+              <div class="flex justify-between mb-6">
+                  <div class="text-2xl font-semibold">Uploaded Documents</div>
+                  <a id="viewFullReportLink" href="#" class="px-3 py-1 bg-white text-black border border-black rounded-sm text-sm" style="align-self:center;">View Full Report</a>
+              </div>
+              <form class="document-upload-form mb-4" style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+                  <input type="file" class="document-file-input" accept=".pdf,.jpg,.jpeg,.png,.gif,.webp,.txt" required>
+                  <button type="submit" style="background:#658de6; color:#fff; border:none; border-radius:6px; padding:8px 16px; cursor:pointer; font-weight:600;">Upload</button>
+              </form>
+              <div class="document-upload-status text-sm" style="min-height:18px;"></div>
+              <div class="documents-list mt-4"></div>
+          </div>
         </div>
 
-		   
-    </main>        
+
+    </main>
     <!-- end: Main -->
 
 <script type="module" src="dist/js/report.js"></script>
+<script src="dist/js/documents.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
   const token = localStorage.getItem('token');
@@ -1705,8 +1719,12 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Get patientId from URL parameter
   const params = new URLSearchParams(location.search);
   const patientId = params.get('patientId');
-  if (!patientId) { 
-    alert('Missing patientId'); 
+  const viewFullReportLink = document.getElementById('viewFullReportLink');
+  if (viewFullReportLink && patientId) {
+    viewFullReportLink.href = `report1.html?patientId=${encodeURIComponent(patientId)}`;
+  }
+  if (!patientId) {
+    alert('Missing patientId');
     window.location.href = 'doctor.html'; 
     return; 
   }
