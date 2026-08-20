@@ -95,11 +95,24 @@ async def get_patient_context(patient_id: int) -> dict:
             patient_id,
         )
 
+        document_rows = await conn.fetch(
+            """
+            SELECT original_filename, document_type, extraction_status, created_at,
+                   extracted_json
+            FROM patient_documents
+            WHERE patient_id = $1
+            ORDER BY created_at DESC
+            LIMIT 5
+            """,
+            patient_id,
+        )
+
     return {
         "patient": dict(user_row),
         "latest_feedback": dict(feedback_row) if feedback_row else None,
         "latest_report": dict(report_row) if report_row else None,
         "latest_diagnostic": dict(diagnostic_row) if diagnostic_row else None,
+        "latest_documents": [dict(row) for row in document_rows] if document_rows else None,
     }
 
 
@@ -119,8 +132,9 @@ get_patient_context_schema = FunctionSchema(
     name="get_patient_context",
     description=(
         "Look up the current patient's most recent symptom feedback, intake "
-        "report, and diagnostic status (including whether biosignal results "
-        "like ECG are ready) from the database. Call this before answering any "
+        "report, diagnostic status (including whether biosignal results like ECG "
+        "are ready), and any documents they've uploaded (with AI-extracted "
+        "findings) from the database. Call this before answering any "
         "question about the patient's recorded health data. Always refers to "
         "the patient this session belongs to — there is no way to look up a "
         "different patient."

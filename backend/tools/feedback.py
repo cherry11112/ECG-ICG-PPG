@@ -51,6 +51,24 @@ async def save_feedback_answer(patient_id: int, session_id: str, question_id: st
     return resp.json()
 
 
+async def save_followup_answer(
+    patient_id: int, session_id: str, question_context: str, answer_text: str
+) -> dict:
+    if _http is None:
+        raise RuntimeError("feedback tools client not initialized — call init_client() first")
+    resp = await _http.post(
+        "/api/feedback/tools/save-followup-answer",
+        json={
+            "patient_id": patient_id,
+            "session_id": session_id,
+            "question_context": question_context,
+            "answer_text": answer_text,
+        },
+    )
+    resp.raise_for_status()
+    return resp.json()
+
+
 async def finalize_feedback_session(patient_id: int, session_id: str) -> dict:
     if _http is None:
         raise RuntimeError("feedback tools client not initialized — call init_client() first")
@@ -73,6 +91,16 @@ async def save_feedback_answer_handler(params) -> None:
         session_id=str(params.app_resources["session_id"]),
         question_id=str(params.arguments["question_id"]),
         answer_value=str(params.arguments["answer_value"]),
+    )
+    await params.result_callback(result)
+
+
+async def save_followup_answer_handler(params) -> None:
+    result = await save_followup_answer(
+        patient_id=int(params.app_resources["patient_id"]),
+        session_id=str(params.app_resources["session_id"]),
+        question_context=str(params.arguments["question_context"]),
+        answer_text=str(params.arguments["answer_text"]),
     )
     await params.result_callback(result)
 
@@ -103,6 +131,31 @@ save_feedback_answer_schema = FunctionSchema(
         },
     },
     required=["question_id", "answer_value"],
+)
+
+save_followup_answer_schema = FunctionSchema(
+    name="save_followup_answer",
+    description=(
+        "Save the patient's answer to an AI-generated follow-up question (a question "
+        "not on the fixed 27-question list, asked to clarify or get more detail on a "
+        "prior answer). This is stored separately in free_text — it never overwrites "
+        "the structured answer already saved for the original question."
+    ),
+    properties={
+        "question_context": {
+            "type": "string",
+            "description": (
+                "Short label for what the follow-up was about, so the note is "
+                "understandable on its own later (e.g. 'Chest pain location', "
+                "'Chest pain trigger')."
+            ),
+        },
+        "answer_text": {
+            "type": "string",
+            "description": "The patient's answer to the follow-up question.",
+        },
+    },
+    required=["question_context", "answer_text"],
 )
 
 finalize_feedback_session_schema = FunctionSchema(

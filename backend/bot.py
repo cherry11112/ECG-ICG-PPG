@@ -83,6 +83,7 @@ def _build_llm_and_context(mode: str):
     llm.register_function("get_patient_context", neon_tools.get_patient_context_handler)
     llm.register_function("get_biosignal_result", r2_tools.get_biosignal_result_handler)
     llm.register_function("save_feedback_answer", feedback_tools.save_feedback_answer_handler)
+    llm.register_function("save_followup_answer", feedback_tools.save_followup_answer_handler)
     llm.register_function("finalize_feedback_session", feedback_tools.finalize_feedback_session_handler)
 
     tools = ToolsSchema(
@@ -90,6 +91,7 @@ def _build_llm_and_context(mode: str):
             neon_tools.get_patient_context_schema,
             r2_tools.get_biosignal_result_schema,
             feedback_tools.save_feedback_answer_schema,
+            feedback_tools.save_followup_answer_schema,
             feedback_tools.finalize_feedback_session_schema,
         ]
     )
