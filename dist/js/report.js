@@ -19,14 +19,37 @@ function formatDateValue(value) {
   return value;
 }
 
+// Once a doctor lands on report1.html?patientId=X, every Back/Next link on every
+// report1.*.html page needs to keep carrying that param forward — otherwise the
+// very next click silently drops back to the doctor's own (nonexistent) data.
+function preservePatientIdInNavLinks() {
+  const patientIdParam = new URLSearchParams(location.search).get('patientId');
+  if (!patientIdParam) return;
+  document.querySelectorAll('a[href]').forEach((a) => {
+    const href = a.getAttribute('href');
+    if (href && /^report1(\.\d+)?\.html$/.test(href)) {
+      a.setAttribute('href', `${href}?patientId=${encodeURIComponent(patientIdParam)}`);
+    }
+  });
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
   const token = localStorage.getItem('token');
   const role = localStorage.getItem('role');
   if (!token) { window.location.href = 'index.html'; return; }
-  
+
+  preservePatientIdInNavLinks();
+
   try {
-    const res = await fetch('/api/reports', { 
-      headers: { Authorization: `Bearer ${token}` } 
+    // A doctor viewing a specific patient's reports arrives with ?patientId= in the
+    // URL (see P1report.html's "View Full Report" link) — thread it through so
+    // /api/reports resolves that patient instead of the logged-in doctor's own id.
+    const patientIdParam = new URLSearchParams(location.search).get('patientId');
+    const reportsUrl = patientIdParam
+      ? `/api/reports?patientId=${encodeURIComponent(patientIdParam)}`
+      : '/api/reports';
+    const res = await fetch(reportsUrl, {
+      headers: { Authorization: `Bearer ${token}` }
     });
     const data = await res.json();
     if (!res.ok) {
@@ -107,7 +130,7 @@ function displayFeedbackData(feedbackList) {
     'erectile_dysfunction': 'erectile_dysfunction',
     'free_comment': 'free_comment'
   };
-  
+
   // Populate feedback data
   Object.keys(feedbackMapping).forEach(fieldName => {
     const value = latestFeedback[fieldName];
@@ -129,7 +152,17 @@ function displayFeedbackData(feedbackList) {
       }
     }
   });
-  
+
+  // free_text holds AI follow-up answers collected during the voice check-in —
+  // separate from the structured fields above, shown in its own section.
+  const freeTextElement = document.getElementById('free_text');
+  if (freeTextElement) {
+    const freeText = latestFeedback.free_text;
+    freeTextElement.textContent = (freeText && freeText.trim())
+      ? freeText
+      : 'No follow-up notes for this check-in.';
+  }
+
   console.log('Latest feedback displayed:', latestFeedback);
 }
 
