@@ -670,7 +670,7 @@ async function ensureTodayFeedbackRow(patientId) {
   const { rows: inserted } = await sql`
     INSERT INTO feedback_form (patient_id, source, feedback_date)
     VALUES (${patientId}, 'voice', CURRENT_DATE)
-    ON CONFLICT ON CONSTRAINT feedback_form_one_per_day DO NOTHING
+    ON CONFLICT (patient_id, feedback_date) DO NOTHING
     RETURNING id
   `;
 
