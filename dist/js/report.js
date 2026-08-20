@@ -25,10 +25,17 @@ function formatDateValue(value) {
 function preservePatientIdInNavLinks() {
   const patientIdParam = new URLSearchParams(location.search).get('patientId');
   if (!patientIdParam) return;
+  const role = localStorage.getItem('role');
   document.querySelectorAll('a[href]').forEach((a) => {
     const href = a.getAttribute('href');
     if (href && /^report1(\.\d+)?\.html$/.test(href)) {
       a.setAttribute('href', `${href}?patientId=${encodeURIComponent(patientIdParam)}`);
+    } else if (role === 'doctor' && href === 'patient1.html') {
+      // report1.html's own "Back" link assumes a patient viewing their own report,
+      // so it always points at the patient dashboard — wrong for a doctor, who has
+      // no patient1.html of their own. Send them back to this patient's P1report
+      // page instead.
+      a.setAttribute('href', `P1report.html?patientId=${encodeURIComponent(patientIdParam)}`);
     }
   });
 }
