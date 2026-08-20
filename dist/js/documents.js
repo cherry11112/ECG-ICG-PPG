@@ -4,6 +4,10 @@
 // this section's data-patient-id attribute or a ?patientId= URL param (doctor
 // pages); with neither, the API falls back to the logged-in user (auth.sub).
 (function () {
+  // Must match MAX_FILE_BYTES in api/documents/[...slug].js — kept here too so we
+  // can reject an oversized file before ever sending it over the network.
+  const MAX_UPLOAD_BYTES = 2.5 * 1024 * 1024;
+
   function escapeHtml(str) {
     return String(str).replace(/[&<>"']/g, (c) => ({
       '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
@@ -124,6 +128,19 @@
         const file = fileInput && fileInput.files[0];
         if (!file) return;
 
+        // Vercel rejects any request body over ~4.5MB at the platform level, before
+        // it ever reaches our function — base64 adds ~33% overhead, so a raw file
+        // over MAX_UPLOAD_BYTES would blow that ceiling and fail with a raw
+        // (non-JSON) "payload too large" error. Catch it here instead, with a
+        // message the patient/doctor can actually act on.
+        if (file.size > MAX_UPLOAD_BYTES) {
+          if (statusEl) {
+            statusEl.textContent = `File too large (${formatBytes(file.size)}). Max size is ${formatBytes(MAX_UPLOAD_BYTES)}.`;
+            statusEl.style.color = '#dc2626';
+          }
+          return;
+        }
+
         const submitBtn = form.querySelector('button[type="submit"]');
         if (submitBtn) submitBtn.disabled = true;
         if (statusEl) {
@@ -142,7 +159,21 @@
             headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
             body: JSON.stringify(body),
           });
-          const data = await resp.json();
+
+          // A platform-level rejection (payload too large, gateway timeout, etc.)
+          // returns HTML/plain text, not JSON — parsing that as JSON is what throws
+          // the confusing "unexpected character" error, so check first.
+          let data;
+          const contentType = resp.headers.get('content-type') || '';
+          if (contentType.includes('application/json')) {
+            data = await resp.json();
+          } else {
+            throw new Error(
+              resp.status === 413
+                ? 'File too large for the server to accept.'
+                : `Upload failed (server returned ${resp.status}).`
+            );
+          }
           if (!resp.ok) throw new Error(data.error || 'Upload failed');
 
           const docFailed = data.document && data.document.extraction_status === 'failed';
