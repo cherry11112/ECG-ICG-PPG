@@ -172,6 +172,29 @@ function displayFeedbackData(feedbackList) {
     }
   });
 
+  // General check-in questions: 6 AI-generated question/answer pairs asked before
+  // the standard 27. Wording varies session to session, so each row is only shown
+  // if that slot was actually answered.
+  let anyGeneralQuestion = false;
+  for (let i = 1; i <= 6; i++) {
+    const questionText = latestFeedback[`general_question_${i}`];
+    const answerText = latestFeedback[`general_answer_${i}`];
+    const row = document.querySelector(`[data-general-row="${i}"]`);
+    const questionEl = document.getElementById(`general_question_${i}`);
+    const answerEl = document.getElementById(`general_answer_${i}`);
+    if (!row || !questionEl || !answerEl) continue;
+    if (questionText) {
+      questionEl.textContent = questionText;
+      answerEl.textContent = answerText || '-';
+      row.style.display = '';
+      anyGeneralQuestion = true;
+    } else {
+      row.style.display = 'none';
+    }
+  }
+  const noGeneralEl = document.getElementById('no-general-questions');
+  if (noGeneralEl) noGeneralEl.style.display = anyGeneralQuestion ? 'none' : '';
+
   console.log('Latest feedback displayed:', latestFeedback);
 }
 
