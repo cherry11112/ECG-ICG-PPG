@@ -31,10 +31,10 @@
       <div id="loginForm" class="block">
         <h2 class="text-center text-2xl font-semibold mb-6">Login</h2>
         <form id="loginFormElement">
-          <label for="loginEmail" class="block text-sm font-medium mb-2">Email:</label>
-          <input type="email" id="loginEmail" name="email" required 
+          <label for="loginId" class="block text-sm font-medium mb-2">User ID:</label>
+          <input type="number" id="loginId" name="id" required min="1"
                  class="w-full px-4 py-2 mb-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                 placeholder="johndoe@gmail.com">
+                 placeholder="Enter your login ID (e.g. 42)">
 
           <label for="loginPassword" class="block text-sm font-medium mb-2">Password:</label>
           <input type="password" id="loginPassword" name="password" required 
@@ -142,19 +142,25 @@
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) return { success: false, message: data.error || 'Signup failed' };
-      return { success: true, message: `Account created for ${name}. Please log in.` };
+      return { success: true, message: `Account created for ${name}. Your login ID is ${data.id}. Please save it — you'll need it to log in.` };
     }
 
     // Login via our API
-    async function loginUser(email, password) {
+    async function loginUser(id, password, role) {
       const res = await fetch('/api/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username: email, password })
+        body: JSON.stringify({ id, password, role })
       });
       const data = await res.json().catch(() => ({}));
-      if (!res.ok) return { success: false, error: data.error || 'Login failed' };
-      
+      if (!res.ok) {
+        if (res.status === 403 && data.error === 'Incorrect role selected') {
+          const actualRole = data.actualRole ? data.actualRole.charAt(0).toUpperCase() + data.actualRole.slice(1) : 'a different role';
+          return { success: false, error: `Incorrect role selected. This account is registered as ${actualRole}.` };
+        }
+        return { success: false, error: data.error || 'Login failed' };
+      }
+
       // Store JWT token - using both 'auth_token' and 'token' for compatibility
       localStorage.setItem('auth_token', data.token);
       localStorage.setItem('token', data.token);
@@ -171,14 +177,14 @@
     // Handle login form submission
     document.getElementById('loginFormElement').addEventListener('submit', async function(e) {
       e.preventDefault();
-      const email = document.getElementById('loginEmail').value;
+      const id = document.getElementById('loginId').value;
       const password = document.getElementById('loginPassword').value;
       const role = document.getElementById('loginRole').value;
       const loginBtn = document.getElementById('loginBtn');
       loginBtn.disabled = true;
       loginBtn.textContent = 'Logging in...';
       try {
-        const result = await loginUser(email, password);
+        const result = await loginUser(id, password, role);
         console.log('[index.html] Login result:', result);
         if (result.success) {
           showMessage('Login successful! Redirecting...', 'success');

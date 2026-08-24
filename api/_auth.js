@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken'
-import { ensureSchema, findUserByUsername, createUser, validateUserPassword } from './_db.js'
+import { ensureSchema, findUserByUsername, findUserById, createUser, validateUserPassword } from './_db.js'
 
 const JWT_SECRET = process.env.JWT_SECRET || 'dev-secret-change-me'
 const JWT_EXPIRES = '7d'
@@ -33,12 +33,17 @@ export async function handleSignup(req, res, body) {
 export async function handleLogin(req, res, body) {
   try {
     await ensureSchema()
-    const { username, password } = JSON.parse(body || '{}')
-    if (!username || !password) {
+    const { id, password, role } = JSON.parse(body || '{}')
+    if (!id || !password || !role) {
       res.statusCode = 400
       return res.end(JSON.stringify({ error: 'Missing credentials' }))
     }
-    const user = await findUserByUsername(username)
+    const userId = parseInt(id, 10)
+    if (Number.isNaN(userId)) {
+      res.statusCode = 400
+      return res.end(JSON.stringify({ error: 'Invalid ID' }))
+    }
+    const user = await findUserById(userId)
     if (!user) {
       res.statusCode = 401
       return res.end(JSON.stringify({ error: 'Invalid credentials' }))
@@ -47,6 +52,10 @@ export async function handleLogin(req, res, body) {
     if (!ok) {
       res.statusCode = 401
       return res.end(JSON.stringify({ error: 'Invalid credentials' }))
+    }
+    if (user.role !== role) {
+      res.statusCode = 403
+      return res.end(JSON.stringify({ error: 'Incorrect role selected', actualRole: user.role }))
     }
     const token = jwt.sign({ sub: user.id, role: user.role }, JWT_SECRET, { expiresIn: JWT_EXPIRES })
     res.setHeader('Content-Type', 'application/json')

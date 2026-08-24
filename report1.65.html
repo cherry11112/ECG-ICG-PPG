@@ -74,14 +74,22 @@
                         <div class="w-full">
                             <div class="text font-semibold mb-3" style="font-size: clamp(1.25rem, 5vw, 2rem); overflow-wrap: break-word;">Uploaded Documents</div>
                             <div class="text-lg font-small text-gray-300" style="color: gray;">
-                                Documents uploaded by the patient or doctor, with AI-extracted information
+                                Documents uploaded by the patient or doctor
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="bg-white rounded-md border border-gray-100 p-6 shadow-md shadow-black/5 documents-section">
-                    <div class="text-2xl font-semibold mb-1" style="color: chocolate; margin-bottom: 1rem;">Documents on file</div>
+                    <div class="text-2xl font-semibold mb-1" style="color: chocolate; margin-bottom: 1.5rem;">Upload a document</div>
+                    <form class="document-upload-form mb-4" style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+                        <input type="file" class="document-file-input" accept=".pdf,.jpg,.jpeg,.png,.gif,.webp,.txt" required>
+                        <button type="submit" style="background:#658de6; color:#fff; border:none; border-radius:6px; padding:8px 16px; cursor:pointer; font-weight:600;">Upload</button>
+                        <span style="font-size:12px; color:#9ca3af;">Max 2.5MB — PDF, JPG, PNG, GIF, WEBP, or TXT</span>
+                    </form>
+                    <div class="document-upload-status text-sm" style="min-height:18px;"></div>
+
+                    <div class="text-2xl font-semibold mb-1 mt-6" style="color: chocolate; margin-bottom: 1rem;">Documents on file</div>
                     <div class="documents-list"></div>
                 </div>
 
