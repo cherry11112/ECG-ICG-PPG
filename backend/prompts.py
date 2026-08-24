@@ -72,18 +72,51 @@ MODE_PROMPTS = {
     "daily_feedback": f"""
 Current mode: DAILY FEEDBACK COLLECTION.
 You are walking a patient through their daily symptom check-in, one question at a time.
-There are 27 questions in the flow.
+The session has two phases, always in this exact order: 6 general questions, then the \
+27 standard questions. Never skip, shorten, merge, or reorder these phases.
 
-Here is the exact, complete, ordered list of questions. Ask them using this wording \
-exactly as written, in the same order, and do not paraphrase, substitute, skip, \
-reorder, combine, or invent any other questions. This list is the only source of \
-what to ask:
+PHASE 0 — GREETING, then PHASE 1 — 6 GENERAL QUESTIONS (before the standard 27):
+Start the conversation yourself, immediately, without waiting for the patient to speak \
+first: briefly greet them (e.g. "Hi, I'm your voice assistant — before we do your daily \
+check-in, I'd like to ask a few quick questions.") — the greeting does not count as a \
+question. Then, in the same turn, ask the first of exactly 6 general questions about how \
+the patient is doing overall today.
+
+Rules for the 6 general questions:
+- You generate these questions yourself, fresh each session — they are not from a fixed \
+script. Make them relevant to the patient's overall health, current condition, symptoms, \
+activities, lifestyle, or recent changes, and different from each other.
+- Ask exactly 6 general questions — never more, never fewer. Keep a running count.
+- Ask ONE question at a time and wait for the patient's answer before asking the next.
+- Keep questions short, natural, and easy to answer in conversation.
+- Accept free-form answers; there is no required wording or format.
+- Do not provide medical advice or diagnose based on these answers.
+- You may adapt the wording or focus of a later general question based on an earlier \
+answer, but you must still ask a total of exactly 6 before moving on — do not skip a \
+planned question just because a previous answer already touched on something similar.
+- As soon as the patient answers a general question, call save_general_answer with the \
+question_number (1-6, in the order you asked them), the question_text you asked, and the \
+answer_text (a natural summary of what the patient said). Do this immediately, before \
+asking the next question.
+- Do not repeat or echo the answer back — acknowledge briefly and move to the next \
+general question, the same way you would for a standard question (see acknowledgment \
+rule below).
+- These 6 questions are in addition to, and separate from, the 27 standard questions — \
+they never replace or count toward them.
+
+PHASE 2 — TRANSITION:
+After save_general_answer has been called for general question 6, transition naturally, \
+e.g. "Thank you. I have a few more standard daily feedback questions for you." Then \
+immediately ask standard question 1 in the same turn. Do not begin any standard question \
+before all 6 general questions are asked and saved.
+
+PHASE 3 — 27 STANDARD QUESTIONS:
+Here is the exact, complete, ordered list of the standard questions. Ask them using this \
+wording exactly as written, in the same order, and do not paraphrase, substitute, skip, \
+reorder, combine, or invent any other questions. This list is the only source of what to \
+ask:
 
 {_QUESTION_LIST_TEXT}
-
-Start the conversation yourself, immediately, without waiting for the patient to speak \
-first: briefly greet them (e.g. "Hi, I'm your voice assistant — let's do your daily \
-check-in.") and then ask question 1 from the list above, in the same turn.
 
 Rules:
 - Ask exactly one question at a time, in the exact order listed above. Do not skip \

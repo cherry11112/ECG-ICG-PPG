@@ -70,6 +70,25 @@ async def save_followup_answer(
     return resp.json()
 
 
+async def save_general_answer(
+    patient_id: int, session_id: str, question_number: int, question_text: str, answer_text: str
+) -> dict:
+    if _http is None:
+        raise RuntimeError("feedback tools client not initialized — call init_client() first")
+    resp = await _http.post(
+        "/api/feedback/tools/save-general-answer",
+        json={
+            "patient_id": patient_id,
+            "session_id": session_id,
+            "question_number": question_number,
+            "question_text": question_text,
+            "answer_text": answer_text,
+        },
+    )
+    resp.raise_for_status()
+    return resp.json()
+
+
 async def finalize_feedback_session(patient_id: int, session_id: str) -> dict:
     if _http is None:
         raise RuntimeError("feedback tools client not initialized — call init_client() first")
@@ -102,6 +121,17 @@ async def save_followup_answer_handler(params) -> None:
         session_id=str(params.app_resources["session_id"]),
         question_id=str(params.arguments["question_id"]),
         question_context=str(params.arguments["question_context"]),
+        answer_text=str(params.arguments["answer_text"]),
+    )
+    await params.result_callback(result)
+
+
+async def save_general_answer_handler(params) -> None:
+    result = await save_general_answer(
+        patient_id=int(params.app_resources["patient_id"]),
+        session_id=str(params.app_resources["session_id"]),
+        question_number=int(params.arguments["question_number"]),
+        question_text=str(params.arguments["question_text"]),
         answer_text=str(params.arguments["answer_text"]),
     )
     await params.result_callback(result)
@@ -164,6 +194,31 @@ save_followup_answer_schema = FunctionSchema(
         },
     },
     required=["question_id", "question_context", "answer_text"],
+)
+
+save_general_answer_schema = FunctionSchema(
+    name="save_general_answer",
+    description=(
+        "Save one of the 6 general/rapport questions asked before the standard 27-question "
+        "daily feedback flow, along with the patient's answer. Call this once per general "
+        "question, immediately after the patient answers it."
+    ),
+    properties={
+        "question_number": {
+            "type": "integer",
+            "enum": [1, 2, 3, 4, 5, 6],
+            "description": "Which of the 6 general questions this is (1st through 6th asked, in order).",
+        },
+        "question_text": {
+            "type": "string",
+            "description": "The exact question you asked the patient.",
+        },
+        "answer_text": {
+            "type": "string",
+            "description": "The patient's answer, summarized naturally (not necessarily verbatim).",
+        },
+    },
+    required=["question_number", "question_text", "answer_text"],
 )
 
 finalize_feedback_session_schema = FunctionSchema(
