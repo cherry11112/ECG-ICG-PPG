@@ -481,6 +481,11 @@ export async function findUserByUsername(username) {
   return rows[0] || null;
 }
 
+export async function findUserById(id) {
+  const { rows } = await sql`SELECT * FROM users WHERE id = ${id} LIMIT 1`;
+  return rows[0] || null;
+}
+
 export async function createUser({ fullName, username, password, role }) {
   const passwordHash = await bcrypt.hash(password, 10);
   const { rows } = await sql`
