@@ -135,15 +135,32 @@
             
             <div class="p-6">
                 <div class="grid grid-cols-1 gap-6 mb-6">
-                <div class="text-2xl font-semibold mb-1" style="color: chocolate; margin-bottom: 1.5rem;">General Check-in</div>
-                <div class="page-2" id="general-questions-section">
-                    <p data-general-row="1" style="display:none;"><strong><span id="general_question_1"></span></strong> <span id="general_answer_1"></span></p>
-                    <p data-general-row="2" style="display:none;"><strong><span id="general_question_2"></span></strong> <span id="general_answer_2"></span></p>
-                    <p data-general-row="3" style="display:none;"><strong><span id="general_question_3"></span></strong> <span id="general_answer_3"></span></p>
-                    <p data-general-row="4" style="display:none;"><strong><span id="general_question_4"></span></strong> <span id="general_answer_4"></span></p>
-                    <p data-general-row="5" style="display:none;"><strong><span id="general_question_5"></span></strong> <span id="general_answer_5"></span></p>
-                    <p data-general-row="6" style="display:none;"><strong><span id="general_question_6"></span></strong> <span id="general_answer_6"></span></p>
-                    <p id="no-general-questions" style="color:#9ca3af;">No general check-in questions recorded.</p>
+                <div class="text-2xl font-semibold mb-1" style="color: chocolate; margin-bottom: 0.5rem;">Patient Profile</div>
+                <div class="text-sm text-gray-400" style="color: gray; margin-bottom: 1rem;">
+                    Background, medical history, family history, and lifestyle notes gathered gradually across daily check-ins.
+                </div>
+                <div class="page-2" id="patient-profile-section">
+                    <div class="profile-category" data-profile-category="background" style="display:none;">
+                        <div style="color:chocolate; font-weight:600; font-size:14px; margin:10px 0 4px;">Background</div>
+                        <div class="profile-category-rows"></div>
+                    </div>
+                    <div class="profile-category" data-profile-category="medical_history" style="display:none;">
+                        <div style="color:chocolate; font-weight:600; font-size:14px; margin:10px 0 4px;">Medical History</div>
+                        <div class="profile-category-rows"></div>
+                    </div>
+                    <div class="profile-category" data-profile-category="family_history" style="display:none;">
+                        <div style="color:chocolate; font-weight:600; font-size:14px; margin:10px 0 4px;">Family History</div>
+                        <div class="profile-category-rows"></div>
+                    </div>
+                    <div class="profile-category" data-profile-category="lifestyle" style="display:none;">
+                        <div style="color:chocolate; font-weight:600; font-size:14px; margin:10px 0 4px;">Lifestyle & Environmental Factors</div>
+                        <div class="profile-category-rows"></div>
+                    </div>
+                    <div class="profile-category" data-profile-category="other" style="display:none;">
+                        <div style="color:chocolate; font-weight:600; font-size:14px; margin:10px 0 4px;">Other</div>
+                        <div class="profile-category-rows"></div>
+                    </div>
+                    <p id="no-profile-notes" style="color:#9ca3af;">No profile information recorded yet.</p>
                 </div>
 
                 <br>

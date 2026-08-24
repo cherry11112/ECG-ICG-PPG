@@ -86,13 +86,30 @@ export async function ensureSchema() {
     await sql.query(`ALTER TABLE feedback_form ADD COLUMN IF NOT EXISTS ${column}_free_text text;`);
   }
 
-  // Migration: 6 general/rapport questions the voice agent generates fresh each
-  // session (before the fixed 27) — question wording varies session to session, so
-  // question + answer are stored as a pair per slot rather than one fixed column.
+  // Migration: superseded by the patient_profile_notes table below — those 6
+  // general-question columns were per-day (overwritten daily) which doesn't fit
+  // a profile that should accumulate across sessions. Drop them; no real patient
+  // data was ever collected into them.
   for (let i = 1; i <= 6; i++) {
-    await sql.query(`ALTER TABLE feedback_form ADD COLUMN IF NOT EXISTS general_question_${i} text;`);
-    await sql.query(`ALTER TABLE feedback_form ADD COLUMN IF NOT EXISTS general_answer_${i} text;`);
+    await sql.query(`ALTER TABLE feedback_form DROP COLUMN IF EXISTS general_question_${i};`);
+    await sql.query(`ALTER TABLE feedback_form DROP COLUMN IF EXISTS general_answer_${i};`);
   }
+
+  //  Patient Profile Notes (accumulated across all daily-feedback sessions)
+  await sql`
+    CREATE TABLE IF NOT EXISTS patient_profile_notes (
+      id serial PRIMARY KEY,
+      patient_id integer NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      session_id text,
+      category text NOT NULL CHECK (category IN (
+        'background', 'medical_history', 'family_history', 'lifestyle', 'other'
+      )),
+      question_text text NOT NULL,
+      answer_text text NOT NULL,
+      created_at timestamptz NOT NULL DEFAULT now()
+    );
+  `;
+  await sql`CREATE INDEX IF NOT EXISTS idx_patient_profile_notes_patient ON patient_profile_notes(patient_id);`;
 
   //  P1 Report Form
   await sql`
@@ -779,39 +796,41 @@ export async function saveFollowupAnswer(patientId, questionId, contextLabel, an
   };
 }
 
-// Save one of the 6 AI-generated general/rapport questions (asked before the
-// fixed 27) into that slot's own general_question_N / general_answer_N pair.
-// questionNumber must be validated as an integer 1-6 by the caller — it's
-// interpolated into the column name, so an unvalidated value here would be a
-// SQL injection vector.
-export async function saveGeneralAnswer(patientId, questionNumber, questionText, answerText, sessionId) {
-  const n = parseInt(questionNumber, 10);
-  if (!Number.isInteger(n) || n < 1 || n > 6) {
-    throw new Error(`Invalid question_number: "${questionNumber}". Must be an integer 1-6.`);
+const PROFILE_NOTE_CATEGORIES = new Set([
+  'background', 'medical_history', 'family_history', 'lifestyle', 'other',
+]);
+
+// Save one AI-generated patient-profile question/answer, gathered a few at a
+// time across daily-feedback sessions. Unlike feedback_form, this table is
+// never overwritten per day — every note accumulates, building up background,
+// medical history, family history, and lifestyle context over time.
+export async function saveProfileNote(patientId, sessionId, category, questionText, answerText) {
+  if (!PROFILE_NOTE_CATEGORIES.has(category)) {
+    throw new Error(
+      `Invalid category: "${category}". Valid categories: ${Array.from(PROFILE_NOTE_CATEGORIES).join(', ')}`
+    );
   }
 
-  const feedbackId = await ensureTodayFeedbackRow(patientId);
-  const questionColumn = `general_question_${n}`;
-  const answerColumn = `general_answer_${n}`;
-
-  const { rows } = await sql.query(
-    `UPDATE feedback_form SET ${questionColumn} = $1, ${answerColumn} = $2 WHERE id = $3
-     RETURNING ${questionColumn} AS question_text, ${answerColumn} AS answer_text`,
-    [questionText || null, answerText || null, feedbackId]
-  );
+  const { rows } = await sql`
+    INSERT INTO patient_profile_notes (patient_id, session_id, category, question_text, answer_text)
+    VALUES (${patientId}, ${sessionId || null}, ${category}, ${questionText}, ${answerText})
+    RETURNING *
+  `;
 
   console.log(
-    `[DB] patient:${patientId} session:${sessionId} general_q:${n} → "${questionText}" = "${answerText}" (row ${feedbackId})`
+    `[DB] patient:${patientId} session:${sessionId} profile_note[${category}] "${questionText}" = "${answerText}" (row ${rows[0].id})`
   );
 
-  return {
-    feedback_id: feedbackId,
-    question_number: n,
-    column: answerColumn,
-    question_text: rows[0]?.question_text,
-    answer_text: rows[0]?.answer_text,
-    saved: true,
-  };
+  return rows[0];
+}
+
+export async function getPatientProfileNotes(patientId) {
+  const { rows } = await sql`
+    SELECT * FROM patient_profile_notes
+    WHERE patient_id = ${patientId}
+    ORDER BY category ASC, created_at ASC
+  `;
+  return rows;
 }
 
 // ─────────────────────────────────────────────────────────────────────────────

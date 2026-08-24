@@ -65,16 +65,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
     
     // data.reports: doctor reports
-    // data.feedback: daily feedback_form entries  
+    // data.feedback: daily feedback_form entries
     // data.p1forms: doctor p1_report_form entries
-    
+    // data.profileNotes: accumulated patient-profile Q&A notes (all sessions)
+
     console.log('Report data:', data);
-    
+
     // Display feedback data in the page
     displayFeedbackData(data.feedback || []);
     displayDoctorReports(data.reports || []);
     displayDiagnosticResults(data.diagnostics || []);
     displayP1Forms(data.p1forms || []);
+    displayPatientProfile(data.profileNotes || []);
     
     // After displaying data, replace any remaining "Loading..." with "-"
     replaceLoadingText();
@@ -172,30 +174,46 @@ function displayFeedbackData(feedbackList) {
     }
   });
 
-  // General check-in questions: 6 AI-generated question/answer pairs asked before
-  // the standard 27. Wording varies session to session, so each row is only shown
-  // if that slot was actually answered.
-  let anyGeneralQuestion = false;
-  for (let i = 1; i <= 6; i++) {
-    const questionText = latestFeedback[`general_question_${i}`];
-    const answerText = latestFeedback[`general_answer_${i}`];
-    const row = document.querySelector(`[data-general-row="${i}"]`);
-    const questionEl = document.getElementById(`general_question_${i}`);
-    const answerEl = document.getElementById(`general_answer_${i}`);
-    if (!row || !questionEl || !answerEl) continue;
-    if (questionText) {
-      questionEl.textContent = questionText;
-      answerEl.textContent = answerText || '-';
-      row.style.display = '';
-      anyGeneralQuestion = true;
-    } else {
-      row.style.display = 'none';
-    }
-  }
-  const noGeneralEl = document.getElementById('no-general-questions');
-  if (noGeneralEl) noGeneralEl.style.display = anyGeneralQuestion ? 'none' : '';
-
   console.log('Latest feedback displayed:', latestFeedback);
+}
+
+// Patient profile: accumulated background/medical-history/family-history/lifestyle
+// Q&A notes gathered a few at a time across every daily_feedback session (never
+// overwritten), grouped here by category. Unlike the daily feedback fields above,
+// this isn't "latest entry only" — it's the full set collected so far.
+function displayPatientProfile(profileNotes) {
+  const categories = ['background', 'medical_history', 'family_history', 'lifestyle', 'other'];
+  let anyNotes = false;
+
+  categories.forEach(category => {
+    const notesForCategory = profileNotes.filter(note => note.category === category);
+    const categoryEl = document.querySelector(`[data-profile-category="${category}"]`);
+    if (!categoryEl) return;
+    const rowsEl = categoryEl.querySelector('.profile-category-rows');
+
+    if (notesForCategory.length === 0) {
+      categoryEl.style.display = 'none';
+      if (rowsEl) rowsEl.innerHTML = '';
+      return;
+    }
+
+    anyNotes = true;
+    categoryEl.style.display = '';
+    if (rowsEl) {
+      rowsEl.innerHTML = notesForCategory
+        .map(note => `<p style="margin:2px 0;"><strong>${escapeHtmlText(note.question_text)}</strong> ${escapeHtmlText(note.answer_text)}</p>`)
+        .join('');
+    }
+  });
+
+  const noNotesEl = document.getElementById('no-profile-notes');
+  if (noNotesEl) noNotesEl.style.display = anyNotes ? 'none' : '';
+}
+
+function escapeHtmlText(str) {
+  return String(str == null ? '' : str).replace(/[&<>"']/g, (c) => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
+  }[c]));
 }
 
 function displayDoctorReports(reports) {

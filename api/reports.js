@@ -1,4 +1,4 @@
-import { ensureSchema, getPatientReports, getFeedbackFormByPatient, getP1ReportFormByPatient } from './_db.js'
+import { ensureSchema, getPatientReports, getFeedbackFormByPatient, getP1ReportFormByPatient, getPatientProfileNotes } from './_db.js'
 import { requireAuth } from './_auth.js'
 
 export default async function handler(req, res) {
@@ -21,12 +21,13 @@ export default async function handler(req, res) {
     patientId = Number(patientIdParam)
   }
 
-  const [doctorReports, patientFeedback, p1forms] = await Promise.all([
+  const [doctorReports, patientFeedback, p1forms, profileNotes] = await Promise.all([
     getPatientReports(patientId),
     getFeedbackFormByPatient(patientId),
-    getP1ReportFormByPatient(patientId)
+    getP1ReportFormByPatient(patientId),
+    getPatientProfileNotes(patientId)
   ])
-  res.status(200).json({ reports: doctorReports, feedback: patientFeedback, p1forms })
+  res.status(200).json({ reports: doctorReports, feedback: patientFeedback, p1forms, profileNotes })
 }
 
 

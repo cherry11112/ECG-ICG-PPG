@@ -5,7 +5,7 @@ import {
   hasFeedbackToday,
   updateFeedbackAnswer,   // immediate, field-specific write into feedback_form
   saveFollowupAnswer,     // append an AI follow-up answer into feedback_form.<column>_free_text
-  saveGeneralAnswer,      // save one of the 6 pre-questionnaire general Q&A pairs
+  saveProfileNote,        // append one accumulating patient-profile Q&A note
   saveSessionAnswer,      // save to session_answers table (session-progress audit trail)
   getSessionAnswers,      // retrieve session answers
   isSessionComplete,      // check if all 27 questions answered
@@ -188,48 +188,42 @@ export default async function handler(req, res) {
     }
   }
 
-  if (pathString === 'tools/save-general-answer' && req.method === 'POST') {
+  if (pathString === 'tools/save-profile-note' && req.method === 'POST') {
     try {
       const payload = await parseBody(req, res);
       if (!payload) return;
 
-      const { session_id, patient_id, question_number, question_text, answer_text } = payload;
+      const { session_id, patient_id, category, question_text, answer_text } = payload;
 
-      if (!session_id || !patient_id || !question_number || !question_text || !answer_text) {
+      if (!session_id || !patient_id || !category || !question_text || !answer_text) {
         return res.status(400).json({
           error: 'Missing required fields',
-          required: ['session_id', 'patient_id', 'question_number', 'question_text', 'answer_text'],
+          required: ['session_id', 'patient_id', 'category', 'question_text', 'answer_text'],
           received: Object.keys(payload),
         });
       }
 
-      const n = parseInt(question_number, 10);
-      if (!Number.isInteger(n) || n < 1 || n > 6) {
-        return res.status(400).json({
-          error: `Invalid question_number: "${question_number}". Must be an integer 1-6.`,
-        });
-      }
-
-      const result = await saveGeneralAnswer(
+      const result = await saveProfileNote(
         parseInt(patient_id),
-        n,
+        session_id,
+        category,
         question_text,
-        answer_text,
-        session_id
+        answer_text
       );
 
-      console.log(`[tools/save-general-answer] patient:${patient_id} q${n}:"${question_text}" (session:${session_id})`);
+      console.log(`[tools/save-profile-note] patient:${patient_id} [${category}] "${question_text}" (session:${session_id})`);
 
       return res.status(200).json({
         success: true,
-        message: `General answer ${n} saved`,
+        message: 'Profile note saved',
         session_id,
         patient_id,
-        ...result,
+        note: result,
       });
     } catch (err) {
-      console.error('[tools/save-general-answer]', err);
-      return res.status(500).json({ error: err.message || 'Internal Server Error' });
+      console.error('[tools/save-profile-note]', err);
+      const isValidationError = /Invalid category/.test(err.message || '');
+      return res.status(isValidationError ? 400 : 500).json({ error: err.message || 'Internal Server Error' });
     }
   }
 
