@@ -86,7 +86,15 @@ export async function ensureSchema() {
     await sql.query(`ALTER TABLE feedback_form ADD COLUMN IF NOT EXISTS ${column}_free_text text;`);
   }
 
-  //  P1 Report Form 
+  // Migration: 6 general/rapport questions the voice agent generates fresh each
+  // session (before the fixed 27) — question wording varies session to session, so
+  // question + answer are stored as a pair per slot rather than one fixed column.
+  for (let i = 1; i <= 6; i++) {
+    await sql.query(`ALTER TABLE feedback_form ADD COLUMN IF NOT EXISTS general_question_${i} text;`);
+    await sql.query(`ALTER TABLE feedback_form ADD COLUMN IF NOT EXISTS general_answer_${i} text;`);
+  }
+
+  //  P1 Report Form
   await sql`
     CREATE TABLE IF NOT EXISTS report_form (
       id serial PRIMARY KEY,
@@ -767,6 +775,41 @@ export async function saveFollowupAnswer(patientId, questionId, contextLabel, an
     question_id: questionId,
     column: freeTextColumn,
     free_text: rows[0]?.free_text,
+    saved: true,
+  };
+}
+
+// Save one of the 6 AI-generated general/rapport questions (asked before the
+// fixed 27) into that slot's own general_question_N / general_answer_N pair.
+// questionNumber must be validated as an integer 1-6 by the caller — it's
+// interpolated into the column name, so an unvalidated value here would be a
+// SQL injection vector.
+export async function saveGeneralAnswer(patientId, questionNumber, questionText, answerText, sessionId) {
+  const n = parseInt(questionNumber, 10);
+  if (!Number.isInteger(n) || n < 1 || n > 6) {
+    throw new Error(`Invalid question_number: "${questionNumber}". Must be an integer 1-6.`);
+  }
+
+  const feedbackId = await ensureTodayFeedbackRow(patientId);
+  const questionColumn = `general_question_${n}`;
+  const answerColumn = `general_answer_${n}`;
+
+  const { rows } = await sql.query(
+    `UPDATE feedback_form SET ${questionColumn} = $1, ${answerColumn} = $2 WHERE id = $3
+     RETURNING ${questionColumn} AS question_text, ${answerColumn} AS answer_text`,
+    [questionText || null, answerText || null, feedbackId]
+  );
+
+  console.log(
+    `[DB] patient:${patientId} session:${sessionId} general_q:${n} → "${questionText}" = "${answerText}" (row ${feedbackId})`
+  );
+
+  return {
+    feedback_id: feedbackId,
+    question_number: n,
+    column: answerColumn,
+    question_text: rows[0]?.question_text,
+    answer_text: rows[0]?.answer_text,
     saved: true,
   };
 }
