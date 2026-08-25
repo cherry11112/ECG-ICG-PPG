@@ -129,17 +129,19 @@ async def get_patient_context(patient_id: int) -> dict:
             patient_id,
         )
 
-        # Everything already collected via the daily_feedback flow's 6 general
-        # questions, across every past session — capped so a patient with months
-        # of history doesn't blow out the context window. The daily_feedback
-        # prompt uses this to avoid re-asking something already on file.
+        # Everything already collected via the daily_feedback flow's 15-20
+        # general questions per session, across every past session — capped
+        # (roughly a week at the upper end of that range) so a patient with
+        # months of history doesn't blow out the context window. The
+        # daily_feedback prompt uses this to avoid re-asking something already
+        # on file.
         profile_note_rows = await conn.fetch(
             """
             SELECT category, question_text, answer_text, created_at
             FROM patient_profile_notes
             WHERE patient_id = $1
             ORDER BY created_at DESC
-            LIMIT 40
+            LIMIT 150
             """,
             patient_id,
         )
@@ -176,7 +178,7 @@ get_patient_context_schema = FunctionSchema(
         "sessions (background, medical history, family history, lifestyle) from "
         "the database. Call this before answering any question about the "
         "patient's recorded health data, and at the start of daily_feedback mode "
-        "before generating the 6 general questions, so you don't re-ask "
+        "before generating the 15-20 general questions, so you don't re-ask "
         "something already on file. Always refers to the patient this session "
         "belongs to — there is no way to look up a different patient."
     ),

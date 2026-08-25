@@ -202,7 +202,7 @@ save_followup_answer_schema = FunctionSchema(
 save_profile_note_schema = FunctionSchema(
     name="save_profile_note",
     description=(
-        "Save one of the 6 general profile-building questions asked before the standard "
+        "Save one of the 15-20 general profile-building questions asked before the standard "
         "27-question daily feedback flow, along with the patient's answer. These notes "
         "accumulate in the patient's profile across all sessions (never overwritten), so "
         "check get_patient_context first to see what's already on file. Call this once "
