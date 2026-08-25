@@ -7,11 +7,33 @@ no string interpolation of user/LLM-supplied values into SQL.
 """
 from __future__ import annotations
 
+import datetime
+import decimal
+
 import asyncpg
 
 from pipecat.adapters.schemas.function_schema import FunctionSchema
 
 _pool: asyncpg.Pool | None = None
+
+
+def _json_safe(value):
+    """Recursively convert asyncpg row values into JSON-serializable types.
+
+    asyncpg returns `timestamptz`/`date` columns as datetime/date objects and
+    `numeric` columns as Decimal — none of which json.dumps can handle, which is
+    exactly what crashed get_patient_context (Pipecat JSON-encodes the tool
+    result to send back to the LLM). Applied to every row before it's returned.
+    """
+    if isinstance(value, (datetime.datetime, datetime.date)):
+        return value.isoformat()
+    if isinstance(value, decimal.Decimal):
+        return float(value)
+    if isinstance(value, dict):
+        return {k: _json_safe(v) for k, v in value.items()}
+    if isinstance(value, (list, tuple)):
+        return [_json_safe(v) for v in value]
+    return value
 
 
 async def init_pool(database_url: str) -> asyncpg.Pool:
@@ -122,14 +144,14 @@ async def get_patient_context(patient_id: int) -> dict:
             patient_id,
         )
 
-    return {
+    return _json_safe({
         "patient": dict(user_row),
         "latest_feedback": dict(feedback_row) if feedback_row else None,
         "latest_report": dict(report_row) if report_row else None,
         "latest_diagnostic": dict(diagnostic_row) if diagnostic_row else None,
         "latest_documents": [dict(row) for row in document_rows] if document_rows else None,
         "profile_notes": [dict(row) for row in profile_note_rows] if profile_note_rows else None,
-    }
+    })
 
 
 async def get_patient_context_handler(params) -> None:
