@@ -76,7 +76,15 @@ def _build_llm():
 def _build_llm_and_context(mode: str):
     from pipecat.adapters.schemas.tools_schema import ToolsSchema
     from pipecat.processors.aggregators.llm_context import LLMContext
-    from pipecat.processors.aggregators.llm_response_universal import LLMContextAggregatorPair
+    from pipecat.processors.aggregators.llm_response_universal import (
+        LLMContextAggregatorPair,
+        LLMUserAggregatorParams,
+    )
+    from pipecat.turns.user_mute.mute_until_first_bot_complete_user_mute_strategy import (
+        MuteUntilFirstBotCompleteUserMuteStrategy,
+    )
+    from pipecat.turns.user_start import TranscriptionUserTurnStartStrategy, VADUserTurnStartStrategy
+    from pipecat.turns.user_turn_strategies import UserTurnStrategies
 
     llm = _build_llm()
 
@@ -100,7 +108,28 @@ def _build_llm_and_context(mode: str):
 
     system_prompt = prompts.build_system_prompt(mode)
     context = LLMContext(messages=[{"role": "system", "content": system_prompt}], tools=tools)
-    context_aggregator = LLMContextAggregatorPair(context)
+
+    # The bot must always speak first and never be talked over:
+    # - user_mute_strategies=[MuteUntilFirstBotCompleteUserMuteStrategy()] drops
+    #   every user audio/speech frame from the moment the session connects until
+    #   the bot finishes its opening greeting — the system does not "hear" or
+    #   react to anything the patient says before that first turn completes.
+    # - enable_interruptions=False on both turn-start strategies means that,
+    #   from then on, the patient speaking never cuts off audio the bot is
+    #   currently playing (no barge-in) — their speech is still transcribed and
+    #   answered, just after the bot finishes its current turn, not mid-sentence.
+    context_aggregator = LLMContextAggregatorPair(
+        context,
+        user_params=LLMUserAggregatorParams(
+            user_mute_strategies=[MuteUntilFirstBotCompleteUserMuteStrategy()],
+            user_turn_strategies=UserTurnStrategies(
+                start=[
+                    VADUserTurnStartStrategy(enable_interruptions=False),
+                    TranscriptionUserTurnStartStrategy(enable_interruptions=False),
+                ]
+            ),
+        ),
+    )
 
     return llm, context_aggregator
 
