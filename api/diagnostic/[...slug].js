@@ -9,6 +9,7 @@ import { sql } from '@vercel/postgres';
 import { ensureSchema, saveDiagnosticResult, getPatientReports, getFeedbackFormByPatient, getP1ReportFormByPatient, getDiagnosticResultsByPatient, getPatientDocuments } from '../_db.js';
 import { requireAuth } from '../_auth.js';
 import { calculateAndStoreGRACE3Score, calculateGRACE3Score } from '../_grace3.js';
+import { putObject } from '../_r2.js';
 
 // API Configuration - Consolidated from _multi_ai.js
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
@@ -47,9 +48,17 @@ async function fetchPatientData(patientId) {
   }
 }
 
-async function fetchECGResults() {
+// Reads the biosignal result the Python pipeline (run_analysis.py) wrote for THIS
+// patient. Every biosignal result lives under a patient-scoped key — there is no
+// global/shared `data/ecg_results.json` fallback, because falling back to it would
+// silently hand one patient's ECG data to another patient's diagnostic report.
+async function fetchECGResults(patientId) {
+  if (!patientId) {
+    console.warn('[fetchECGResults] Called without a patientId — refusing to fetch (no global fallback).');
+    return null;
+  }
   try {
-    const url = `${CLOUDFLARE_R2_URL}/data/ecg_results.json`;
+    const url = `${CLOUDFLARE_R2_URL}/data/${patientId}/ECG/processed_ecg.json`;
     const response = await fetch(url, {
       method: 'GET',
       headers: {
@@ -63,7 +72,16 @@ async function fetchECGResults() {
     }
     
     const data = await response.json();
-    
+
+    // Defense-in-depth: the key itself is patient-scoped, but also refuse to serve
+    // the payload if the patientId embedded inside it disagrees (mirrors the same
+    // check in backend/tools/r2.py's get_biosignal_result).
+    const embeddedPatientId = data.patientId;
+    if (embeddedPatientId !== undefined && embeddedPatientId !== null && String(embeddedPatientId) !== String(patientId)) {
+      console.warn(`[fetchECGResults] Key for patient ${patientId} contains patientId=${embeddedPatientId} — refusing to serve.`);
+      return null;
+    }
+
     // Handle various possible structures from ECG analysis
     return {
       summary: data.summary || data.diagnostic_summary || null,
@@ -1519,58 +1537,17 @@ function buildCompleteReport(diagnosticData, patientData, ecgData = null, docume
   };
 }
 
+// Was hand-rolled HTTP Basic auth, which R2's S3-compatible endpoint does not
+// accept (it requires SigV4) — every call silently failed. Now uses the shared,
+// working _r2.js client (same one api/documents/[...slug].js already relies on).
 async function saveToCloudflare(data, filename) {
   try {
-    const R2_BUCKET_NAME = process.env.R2_BUCKET_NAME || 'signals-result';
-    const R2_ACCOUNT_ID = process.env.R2_ACCOUNT_ID;
-    const R2_ACCESS_KEY = process.env.R2_ACCESS_KEY;
-    const R2_SECRET_KEY = process.env.R2_SECRET_KEY;
-
-    console.log('[saveToCloudflare] Checking R2 credentials...');
-    console.log('[saveToCloudflare] R2_BUCKET_NAME:', R2_BUCKET_NAME);
-    console.log('[saveToCloudflare] R2_ACCOUNT_ID:', R2_ACCOUNT_ID ? '***configured***' : '***MISSING***');
-    console.log('[saveToCloudflare] R2_ACCESS_KEY:', R2_ACCESS_KEY ? '***configured***' : '***MISSING***');
-    console.log('[saveToCloudflare] R2_SECRET_KEY:', R2_SECRET_KEY ? '***configured***' : '***MISSING***');
-
-    if (!R2_ACCESS_KEY || !R2_SECRET_KEY || !R2_ACCOUNT_ID) {
-      console.error('[saveToCloudflare] Missing R2 credentials - cannot save to Cloudflare');
-      console.error('[saveToCloudflare] Required: R2_ACCOUNT_ID, R2_ACCESS_KEY, R2_SECRET_KEY');
-      return null;
-    }
-
-    // Construct the R2 endpoint
-    const endpoint = `https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com/${R2_BUCKET_NAME}/${filename}`;
-    console.log('[saveToCloudflare] Endpoint:', endpoint);
-
-    // Create auth header
-    const auth = Buffer.from(`${R2_ACCESS_KEY}:${R2_SECRET_KEY}`).toString('base64');
-    
-    console.log('[saveToCloudflare] Sending PUT request to R2...');
-    const response = await fetch(endpoint, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Basic ${auth}`
-      },
-      body: JSON.stringify(data)
-    });
-
-    console.log('[saveToCloudflare] Response status:', response.status);
-    const responseText = await response.text();
-    console.log('[saveToCloudflare] Response body:', responseText.substring(0, 200));
-
-    if (response.ok) {
-      const publicUrl = `${CLOUDFLARE_R2_URL}/${filename}`;
-      console.log(`[saveToCloudflare] Successfully saved to R2: ${publicUrl}`);
-      return publicUrl;
-    } else {
-      console.error(`[saveToCloudflare] Failed to save to R2: ${response.status} ${response.statusText}`);
-      console.error('[saveToCloudflare] Response body:', responseText);
-      return null;
-    }
+    await putObject(filename, JSON.stringify(data), 'application/json');
+    const publicUrl = `${CLOUDFLARE_R2_URL}/${filename}`;
+    console.log(`[saveToCloudflare] Successfully saved to R2: ${publicUrl}`);
+    return publicUrl;
   } catch (err) {
     console.error('[saveToCloudflare] Error saving to Cloudflare:', err.message);
-    console.error('[saveToCloudflare] Error stack:', err.stack);
     return null;
   }
 }
@@ -1743,7 +1720,7 @@ async function handleGenerateDiagnostic(req, res) {
     const patientData = await fetchPatientData(patient_id);
     
     console.log('[generate-diagnostic] Fetching ECG results from Cloudflare...');
-    const ecgData = await fetchECGResults();
+    const ecgData = await fetchECGResults(patient_id);
 
     console.log('[generate-diagnostic] Fetching uploaded document data...');
     const documentsData = await fetchPatientDocuments(patient_id);
@@ -1828,7 +1805,7 @@ async function handleGenerateDiagnostic(req, res) {
 
     // Save to Cloudflare R2
     const timestamp = Date.now();
-    const r2Filename = `diagnostics/diagnostic_${patient_id}_${timestamp}.json`;
+    const r2Filename = `reports/${patient_id}/${timestamp}.json`;
     const cloudflarePath = await saveToCloudflare(fullReport, r2Filename);
 
     // Add cloudflare URL to the report data before saving to DB
@@ -2063,7 +2040,7 @@ async function handleCalculateGRACE3(req, res) {
     console.log('[calculate-grace3] Fetching ECG results from Cloudflare R2...');
     let ecgData = null;
     try {
-      const ecgResults = await fetchECGResults();
+      const ecgResults = await fetchECGResults(patientId);
       if (ecgResults && ecgResults.metrics) {
         ecgData = ecgResults;
         console.log('[calculate-grace3] ECG data loaded:', {

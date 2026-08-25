@@ -452,6 +452,7 @@
           let currentIndex = 0;
           let ecgData = null;
           let heartSoundData = null;
+          let currentPatientId = null;
 
           // Log initialization start
           console.log('%c ECG-13 Report Loader Initialized', 'color: #22c55e; font-size: 14px; font-weight: bold');
@@ -627,7 +628,7 @@
               
               // If local metadata not found, try R2 with CORS workaround
               if (!metadata) {
-                const r2MetadataUrl = `${CLOUDFLARE_CONFIG.R2_DIRECT_URL}/${CLOUDFLARE_CONFIG.IMAGES_PREFIX}multi_lead_ecg_report_metadata.json`;
+                const r2MetadataUrl = `${CLOUDFLARE_CONFIG.R2_DIRECT_URL}/${CLOUDFLARE_CONFIG.IMAGES_PREFIX}${currentPatientId}/multi_lead_ecg_report_metadata.json`;
                 console.log(` Attempting R2 fetch: ${r2MetadataUrl}`);
                 
                 try {
@@ -648,7 +649,7 @@
                   
                   // Fallback: Try CORS proxy if available
                   if (CLOUDFLARE_CONFIG.R2_BUCKET_URL) {
-                    const corsProxyUrl = `${CLOUDFLARE_CONFIG.R2_BUCKET_URL}/${CLOUDFLARE_CONFIG.IMAGES_PREFIX}multi_lead_ecg_report_metadata.json`;
+                    const corsProxyUrl = `${CLOUDFLARE_CONFIG.R2_BUCKET_URL}/${CLOUDFLARE_CONFIG.IMAGES_PREFIX}${currentPatientId}/multi_lead_ecg_report_metadata.json`;
                     console.log(` Trying CORS proxy: ${corsProxyUrl}`);
                     
                     try {
@@ -774,7 +775,7 @@
               document.getElementById('multiLeadLoading').textContent = 'Loading ECG report...';
               
               // Try to load legacy single image from R2
-              const imageUrl = `${CLOUDFLARE_CONFIG.R2_DIRECT_URL}/${CLOUDFLARE_CONFIG.IMAGES_PREFIX}multi_lead_ecg_report.png`;
+              const imageUrl = `${CLOUDFLARE_CONFIG.R2_DIRECT_URL}/${CLOUDFLARE_CONFIG.IMAGES_PREFIX}${currentPatientId}/multi_lead_ecg_report.png`;
               console.log(` Loading legacy single image: ${imageUrl}`);
               
               const img = document.getElementById('multiLeadImg');
@@ -799,7 +800,7 @@
             }
             
             const imageName = `multi_lead_ecg_report_page_${pageNum}.png`;
-            const imageUrl = `${CLOUDFLARE_CONFIG.R2_DIRECT_URL}/${CLOUDFLARE_CONFIG.IMAGES_PREFIX}${imageName}`;
+            const imageUrl = `${CLOUDFLARE_CONFIG.R2_DIRECT_URL}/${CLOUDFLARE_CONFIG.IMAGES_PREFIX}${currentPatientId}/${imageName}`;
             console.log(` Loading page ${pageNum + 1}/${multiLeadTotalPages}: ${imageName}`);
             console.log(`   URL: ${imageUrl}`);
             
@@ -847,41 +848,45 @@
             }
           }
 
+          // Get patient ID from the URL, or whichever the logged-in session left behind.
+          function getPatientId() {
+            return new URLSearchParams(window.location.search).get('patient_id') ||
+                   sessionStorage.getItem('patient_id') ||
+                   localStorage.getItem('patient_id');
+          }
+
           async function loadECGResults() {
             console.log('%c Loading ECG Results', 'color: #3b82f6; font-size: 12px; font-weight: bold');
-            
-            const r2DataPath = `${CLOUDFLARE_CONFIG.DATA_PREFIX}ecg_results.json`;
+
+            const patientId = getPatientId();
+            if (!patientId) {
+              console.error('No patient_id available — refusing to load biosignal results (no shared/global file to fall back to).');
+              return;
+            }
+            currentPatientId = patientId;
+
+            // Every biosignal result is stored per-patient — there is no shared
+            // data/ecg_results.json to fall back to.
+            const r2DataPath = `${CLOUDFLARE_CONFIG.DATA_PREFIX}${patientId}/ECG/processed_ecg.json`;
             const r2DataUrl = `${CLOUDFLARE_CONFIG.R2_BUCKET_URL}/${r2DataPath}`;
-            
+
             try {
               console.log(`📡 Attempting to load data from R2 CORS proxy: ${r2DataUrl}`);
               const r2Response = await fetch(r2DataUrl, {
                 method: 'GET'
               });
-              
+
               if (!r2Response.ok) {
                 throw new Error(`HTTP ${r2Response.status}`);
               }
-              
+
               ecgData = await r2Response.json();
               console.log(' Data loaded from Cloudflare R2 CORS proxy');
             } catch (error) {
-              console.warn(` Could not load from R2 (${error.message}), trying local file...`);
-              try {
-                const localResponse = await fetch('ecg_results.json');
-                if (localResponse.ok) {
-                  ecgData = await localResponse.json();
-                  console.log(' Data loaded from local file');
-                } else {
-                  throw new Error(`Local file returned HTTP ${localResponse.status}`);
-                }
-              } catch (e) {
-                console.error(' Could not load data from anywhere:', e.message);
-                console.error('   Make sure ecg_results.json exists locally or on R2');
-                return;
-              }
+              console.error(` Could not load data from R2 (${error.message})`);
+              return;
             }
-            
+
             // Load metrics
             if (ecgData && ecgData.metrics) {
               const m = ecgData.metrics;
@@ -939,7 +944,7 @@
                 if (element && ecgData.images[key]) {
                   const fileName = ecgData.images[key];
                   const encodedFileName = fileName.split('/').map(part => encodeURIComponent(part)).join('/');
-                  const imageUrl = `${CLOUDFLARE_CONFIG.R2_DIRECT_URL}/${CLOUDFLARE_CONFIG.IMAGES_PREFIX}${encodedFileName}`;
+                  const imageUrl = `${CLOUDFLARE_CONFIG.R2_DIRECT_URL}/${CLOUDFLARE_CONFIG.IMAGES_PREFIX}${currentPatientId}/${encodedFileName}`;
                   element.src = imageUrl;
                   element.addEventListener('click', () => window.open(imageUrl, '_blank'));
                   element.onerror = () => {
@@ -964,7 +969,7 @@
                 const element = document.getElementById(elementId);
                 if (element) {
                   const encodedFileName = fileName.split('/').map(part => encodeURIComponent(part)).join('/');
-                  const videoUrl = `${CLOUDFLARE_CONFIG.R2_DIRECT_URL}/${CLOUDFLARE_CONFIG.IMAGES_PREFIX}${encodedFileName}`;
+                  const videoUrl = `${CLOUDFLARE_CONFIG.R2_DIRECT_URL}/${CLOUDFLARE_CONFIG.IMAGES_PREFIX}${currentPatientId}/${encodedFileName}`;
                   const source = document.createElement('source');
                   source.src = videoUrl;
                   source.type = 'video/mp4';
@@ -1129,7 +1134,7 @@
                   
                   const heartSoundFileName = ecgData.metrics.lung_sound_file;
                   const encodedHeartSoundFileName = encodeURIComponent(heartSoundFileName);
-                  const heartSoundUrl = `${CLOUDFLARE_CONFIG.R2_BUCKET_URL}/${CLOUDFLARE_CONFIG.IMAGES_PREFIX}${encodedHeartSoundFileName}`;
+                  const heartSoundUrl = `${CLOUDFLARE_CONFIG.R2_BUCKET_URL}/${CLOUDFLARE_CONFIG.IMAGES_PREFIX}${currentPatientId}/${encodedHeartSoundFileName}`;
                   
                   console.log(`Lung Sound URL: ${heartSoundUrl}`);
                   const response = await fetch(heartSoundUrl);
@@ -1193,7 +1198,7 @@
                     ? ecgData.metrics.heart_sound_file 
                     : 'healthy_heartsound.wav';
                   const encodedHeartSoundFileName = encodeURIComponent(heartSoundFileName);
-                  const heartSoundUrl = `${CLOUDFLARE_CONFIG.R2_DIRECT_URL}/${CLOUDFLARE_CONFIG.IMAGES_PREFIX}${encodedHeartSoundFileName}`;
+                  const heartSoundUrl = `${CLOUDFLARE_CONFIG.R2_DIRECT_URL}/${CLOUDFLARE_CONFIG.IMAGES_PREFIX}${currentPatientId}/${encodedHeartSoundFileName}`;
                   const audioSource = document.createElement('source');
                   audioSource.src = heartSoundUrl;
                   audioSource.type = 'audio/wav';

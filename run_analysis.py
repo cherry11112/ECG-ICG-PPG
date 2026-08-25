@@ -211,18 +211,36 @@ def run_ecg_analysis():
         return False
 
 def export_and_upload_results(patient_id=None):
-    """Export ECG results to JSON and upload to Cloudflare R2"""
+    """Export ECG results to JSON and upload to Cloudflare R2.
+
+    Every file this function writes locally or uploads to R2 is scoped under
+    patient_id — there is no global/shared storage location. A patient_id is
+    therefore required; without one this refuses to upload rather than fall
+    back to a shared path that could mix one patient's biosignal data into
+    another patient's report.
+    """
     print_step(2, "Exporting Results & Uploading to Cloudflare R2")
-    
+
     # Get patient_id from environment if not provided
     if patient_id is None:
         patient_id = os.environ.get('PATIENT_ID')
-    
-    if patient_id:
-        print(f"\n[INFO] Processing for Patient ID: {patient_id}")
-    else:
-        print(f"\n[WARNING] No patient_id provided - using generic storage")
-    
+
+    if not patient_id:
+        print_error("No patient_id provided — refusing to process or upload results.")
+        print("  Every biosignal result must be stored under a patient_id; there is")
+        print("  no shared/global storage location. Provide one with either:")
+        print("    python run_analysis.py <patient_id>")
+        print("    SET PATIENT_ID=<patient_id> && python run_analysis.py")
+        return False
+
+    print(f"\n[INFO] Processing for Patient ID: {patient_id}")
+
+    # Unique per-run identifier — nothing in this app already has a biosignal
+    # "recording ID" to reuse (only the unrelated daily-feedback session_id
+    # exists), so a run timestamp is the simplest way to keep re-processing the
+    # same patient from silently overwriting a prior run's archived results.
+    run_timestamp = pd.Timestamp.utcnow().strftime('%Y%m%dT%H%M%SZ')
+
     # Path to the updated CSV from ECG-13.py
     updated_file_path = 'C:\\Users\\garcia\\Downloads\\ECG\\cardiac_signals_prob_updated.csv'
     
@@ -933,7 +951,7 @@ def export_and_upload_results(patient_id=None):
         
         for file_path in all_files:
             try:
-                r2_path = f"{CLOUDFLARE_CONFIG['IMAGES_PREFIX']}{file_path.name}"
+                r2_path = f"{CLOUDFLARE_CONFIG['IMAGES_PREFIX']}{patient_id}/{file_path.name}"
                 url = upload_file_to_r2(str(file_path), r2_path, s3_client)
                 if url:
                     uploaded_count += 1
@@ -955,7 +973,7 @@ def export_and_upload_results(patient_id=None):
             print("   " + "-"*56)
             for image_file in sorted(png_files):
                 img_name = image_file.name
-                r2_path = f"{CLOUDFLARE_CONFIG['IMAGES_PREFIX']}{img_name}"
+                r2_path = f"{CLOUDFLARE_CONFIG['IMAGES_PREFIX']}{patient_id}/{img_name}"
                 r2_url = f"https://signals-result.24ad4e1c9f5d25c491c5910d289a5ab1.r2.cloudflarestorage.com/{r2_path}"
                 print(f"   {img_name}")
                 print(f" {r2_url}")
@@ -1099,38 +1117,52 @@ def export_and_upload_results(patient_id=None):
     
     print("-"*60)
     
-    # Save results to JSON
-    # Use patient-specific path if available: /patient_{id}/ecg_results.json
-    if patient_id:
-        output_path = Path(__file__).parent / f'ecg_results_patient_{patient_id}.json'
-        r2_json_key = f"{CLOUDFLARE_CONFIG['DATA_PREFIX']}patient_{patient_id}/ecg_results.json"
-    else:
-        output_path = Path(__file__).parent / 'ecg_results.json'
-        r2_json_key = f"{CLOUDFLARE_CONFIG['DATA_PREFIX']}ecg_results.json"
-    
+    # Save results to JSON — always patient-scoped locally (no bare 'ecg_results.json',
+    # which would get silently overwritten/reused across different patients' runs).
+    output_path = Path(__file__).parent / f'ecg_results_patient_{patient_id}.json'
+
     try:
         with open(output_path, 'w') as f:
             json.dump(ecg_results, f, indent=2)
         print(f"\n  Results exported to: {output_path}")
-        
-        # UPLOAD JSON TO R2 FOR VERCEL ACCESS
+
+        # UPLOAD JSON TO R2 FOR VERCEL/VOICE-AGENT ACCESS
+        #
+        # ECG-13.py's analysis is one combined pass over ECG+PPG+ICG together, so
+        # there's no genuinely separate per-signal metric extraction to split out —
+        # the same combined result is written under each signal's own folder
+        # (data/{patient_id}/ECG|ICG|PPG/processed_*.json) so a consumer asking for
+        # any one signal_type (backend/tools/r2.py's get_biosignal_result) finds a
+        # patient-scoped file and reads the metrics relevant to that signal out of
+        # it. Each is also archived under history/{run_timestamp}.json alongside
+        # the "current" copy, so reprocessing a patient never destroys prior runs.
         if cloudflare_available and s3_client:
-            try:
-                print("\n Uploading ecg_results.json to Cloudflare R2...")
-                url = upload_file_to_r2('ecg_results.json', r2_json_key, s3_client)
+            signal_uploads = [
+                ('ECG', 'processed_ecg.json'),
+                ('ICG', 'processed_icg.json'),
+                ('PPG', 'processed_ppg.json'),
+            ]
+            uploaded_urls = []
+            for signal_folder, filename in signal_uploads:
+                current_key = f"{CLOUDFLARE_CONFIG['DATA_PREFIX']}{patient_id}/{signal_folder}/{filename}"
+                history_key = f"{CLOUDFLARE_CONFIG['DATA_PREFIX']}{patient_id}/{signal_folder}/history/{run_timestamp}.json"
+                print(f"\n Uploading {signal_folder} result to Cloudflare R2...")
+                url = upload_file_to_r2(str(output_path), current_key, s3_client)
+                upload_file_to_r2(str(output_path), history_key, s3_client)
                 if url:
-                    print(f" JSON uploaded to R2: {url}")
-                    if patient_id:
-                        print(f"\n Patient {patient_id} data accessible at: {url}")
-                    print(f"\n Your Vercel site will load metrics from:")
-                    print(f"   {url}")
+                    print(f" {signal_folder} JSON uploaded to R2: {url}")
+                    uploaded_urls.append(url)
                 else:
-                    print(" Failed to upload JSON to R2")
-            except Exception as e:
-                print(f" Could not upload JSON to R2: {e}")
+                    print(f" Failed to upload {signal_folder} JSON to R2")
+
+            if uploaded_urls:
+                print(f"\n Patient {patient_id} data accessible at:")
+                for url in uploaded_urls:
+                    print(f"   {url}")
         else:
             print("\n Cloudflare upload disabled - JSON saved locally only")
-            print("   For Vercel: You need to manually upload ecg_results.json to R2")
+            print(f"   For Vercel: You need to manually upload {output_path.name} to R2")
+            print(f"   under data/{patient_id}/ECG/, data/{patient_id}/ICG/, and data/{patient_id}/PPG/")
     except Exception as e:
         print_error(f"Error saving JSON: {e}")
         return False
@@ -1155,7 +1187,7 @@ def export_and_upload_results(patient_id=None):
         ]
     })
     
-    summary_csv_path = Path(__file__).parent / 'ecg_metrics_summary.csv'
+    summary_csv_path = Path(__file__).parent / f'ecg_metrics_summary_patient_{patient_id}.csv'
     try:
         summary_df.to_csv(summary_csv_path, index=False)
         print(f" Metrics summary exported to: {summary_csv_path}")
@@ -1176,16 +1208,23 @@ def export_and_upload_results(patient_id=None):
     
     return True
 
-def verify_files():
-    """Verify that all required files exist"""
+def verify_files(patient_id):
+    """Verify that all required files exist for this patient's run.
+
+    Reads the same patient-scoped filenames export_and_upload_results() just
+    wrote — never the bare global 'ecg_results.json', which could be leftover
+    output from a different patient's earlier run.
+    """
     print_step(3, "Verifying Files")
-    
+
+    results_file = f'ecg_results_patient_{patient_id}.json'
+    summary_file = f'ecg_metrics_summary_patient_{patient_id}.csv'
     required_files = [
         'report1.5.html',
-        'ecg_results.json',
-        'ecg_metrics_summary.csv'
+        results_file,
+        summary_file,
     ]
-    
+
     all_exist = True
     for file in required_files:
         if Path(file).exists():
@@ -1193,9 +1232,9 @@ def verify_files():
             print_success(f"{file} ({file_size} bytes)")
         else:
             print_warning(f"{file} not found (may be optional)")
-            if file != 'ecg_metrics_summary.csv':
+            if file != summary_file:
                 all_exist = False
-    
+
     return all_exist
 
 def verify_images():
@@ -1290,11 +1329,11 @@ def verify_images():
     # Return true if we have either the base images or paginated pages
     return len(found_images) > 0 or len(paginated_pages) > 0
 
-def display_summary():
+def display_summary(patient_id):
     print_step(5, "Results Summary")
-    
+
     try:
-        with open('ecg_results.json', 'r') as f:
+        with open(f'ecg_results_patient_{patient_id}.json', 'r') as f:
             data = json.load(f)
         
         metrics = data.get('metrics', {})
@@ -1329,27 +1368,33 @@ def open_report():
 
 # MAIN WORKFLOW
 def main(patient_id=None):
-    
+
     # Get patient_id from command line arguments first
     if len(sys.argv) > 1:
         patient_id = sys.argv[1]
-    
+
     # Then check environment variable
     if not patient_id:
         patient_id = os.environ.get('PATIENT_ID')
-    
+
     # Print workflow header
     print_header("ECG ANALYSIS & CLOUDFLARE R2 UPLOAD")
-    if patient_id:
-        print(f"\n[INFO] PATIENT ID: {patient_id}")
-        print(f"   Results will be saved to: data/patient_{patient_id}/ecg_results.json\n")
-    else:
-        print("\n[WARNING] No patient ID specified - using generic storage")
-        print("   Results will be saved to: data/ecg_results.json\n")
+
+    # A patient_id is required for the whole run — every file this script writes
+    # or uploads is patient-scoped, so there is nothing meaningful (or safe) to
+    # do without one. Refuse rather than silently falling back to shared storage.
+    if not patient_id:
+        print_error("No patient ID specified.")
+        print("   This script requires a patient_id — results are never stored")
+        print("   in a shared/global location.")
         print("   To specify a patient, use:")
         print("   python run_analysis.py 1")
         print("  SET PATIENT_ID=1 && python run_analysis.py\n")
-    
+        return 1
+
+    print(f"\n[INFO] PATIENT ID: {patient_id}")
+    print(f"   Results will be saved to: data/{patient_id}/ECG|ICG|PPG/processed_*.json\n")
+
     # Check Python packages
     print("\n" + "-"*60)
     print("Checking dependencies...")
@@ -1372,28 +1417,25 @@ def main(patient_id=None):
         
         if not export_and_upload_results(patient_id):
             print_warning("Could not export results. Using defaults in report.")
-        
-        verify_files()
+
+        verify_files(patient_id)
         verify_images()
-        display_summary()
-        
-        # Open report with patient_id if available
-        if patient_id:
-            print_header("Report Generated")
-            print(f"\n Report created for Patient #{patient_id}")
-            print(f"\n View Report:")
-            print(f"   Local: file:///report1.5.html?patient_id={patient_id}")
-            print(f"   Web: https://your-domain.com/report1.5.html?patient_id={patient_id}\n")
-        
+        display_summary(patient_id)
+
+        print_header("Report Generated")
+        print(f"\n Report created for Patient #{patient_id}")
+        print(f"\n View Report:")
+        print(f"   Local: file:///report1.5.html?patient_id={patient_id}")
+        print(f"   Web: https://your-domain.com/report1.5.html?patient_id={patient_id}\n")
+
         open_report()
-        
+
         print_header("Setup Complete!")
         print("\n The report has been generated successfully")
-        if patient_id:
-            print(f"\n Data saved for Patient #{patient_id}:")
-            print(f"  Local file: ecg_results_patient_{patient_id}.json")
-            print(f"  Cloudflare R2: data/patient_{patient_id}/ecg_results.json")
-            print(f"  Report URL: report1.5.html?patient_id={patient_id}")
+        print(f"\n Data saved for Patient #{patient_id}:")
+        print(f"  Local file: ecg_results_patient_{patient_id}.json")
+        print(f"  Cloudflare R2: data/{patient_id}/ECG/processed_ecg.json (+ ICG, PPG)")
+        print(f"  Report URL: report1.5.html?patient_id={patient_id}")
         print("\nNext steps:")
         print("  1. Review the report in your browser")
         print("  2. All images and metrics are displayed")

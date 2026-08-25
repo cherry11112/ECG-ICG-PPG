@@ -94,28 +94,29 @@ Still need real values for:
 
 See `.env.example` for the full list with defaults.
 
-## PIPELINE CHANGE NEEDED — R2 key convention
+## R2 key convention — patient-scoped, no shared/global paths
 
-Verified live against the real `signals-result` bucket (using the credentials
-you shared): today the Python biosignal pipeline writes **one global file**,
-`data/ecg_results.json`, with `patientId: null` inside it, combining ECG + PPG +
-ICG in a single object (no PCG). There is nothing at all under a `patients/`
-prefix yet.
-
-`tools/r2.py` expects (and, per your decision, will keep expecting — it does
-**not** fall back to the global file, to avoid ever serving one patient's data
-to another):
+`run_analysis.py` (root of the repo) writes one combined ECG+PPG+ICG result
+object per patient run, and uploads it under each signal's own folder so a
+lookup by `signal_type` finds a patient-scoped file:
 
 ```
-patients/{patient_id}/{signal_type}_results.json
+data/{patient_id}/{SIGNAL}/processed_{signal_type}.json          (current)
+data/{patient_id}/{SIGNAL}/history/{run_timestamp}.json          (archival, never overwritten)
+images/{patient_id}/{filename}.png                                (all PNG/metadata output)
 ```
 
-where `signal_type` is `ecg`, `ppg`, `icg`, or `pcg`, and the JSON body should
-set `patientId` to that same id (the tool double-checks it and refuses to serve
-a mismatch). Until the pipeline writes here, `get_biosignal_result` correctly
-and safely returns `{"ready": false}` for every patient — confirmed by writing
-a real per-patient test fixture to the bucket, fetching it through the tool,
-and deleting it again (see field mapping below).
+`SIGNAL` is the uppercased `signal_type` (`ECG`, `ICG`, `PPG`; `PCG` isn't
+produced by any script yet). `tools/r2.py`'s `R2_KEY_TEMPLATE` only ever reads
+the "current" file, and — same as before — never falls back to a shared/global
+path, to avoid ever serving one patient's data to another. The JSON body also
+has `patientId` set to that same id; the tool double-checks it and refuses to
+serve a mismatch even if the key were somehow wrong.
+
+If the pipeline's script (`run_analysis.py`) is missing `patient_id`, it now
+refuses to process or upload anything rather than falling back to a shared
+path — there is no `data/ecg_results.json` or `images/{filename}.png` global
+location anymore.
 
 **Field names/units the tool reads** (taken directly from the real
 `data/ecg_results.json` schema — the pipeline should keep using these when it
@@ -184,7 +185,7 @@ Shape (field values below are illustrative, not real patient data):
 Fetches the JSON result file from R2 and returns a numeric summary — never the
 raw waveform/signal array — so Claude speaks concise findings instead of
 reciting data. Field names/units below are exactly what the tool emits, taken
-from a real production result object (see PIPELINE CHANGE NEEDED above) — note
+from a real production result object (see "R2 key convention" above) — note
 intervals are in **seconds**, not milliseconds.
 
 ```json
@@ -339,9 +340,9 @@ paid Render plan removes this if it becomes a problem.
   tested until this is fixed.
 - An actual full Daily voice round-trip (needs the real Daily key above, plus a
   Linux runtime — Railway, or WSL2/Docker locally)
-- The Python biosignal pipeline still needs to start writing per-patient files
-  (see PIPELINE CHANGE NEEDED above) before `get_biosignal_result` returns
-  anything but `ready: false`
+- `run_analysis.py` now writes patient-scoped, per-signal files (see "R2 key
+  convention" above) — `get_biosignal_result` returns real data once it's run
+  for a patient; still needs an end-to-end run against a live bucket to confirm
 - `JWT_SECRET` in your local `backend/.env` is a placeholder — must be set to
   the exact value configured on your Vercel project before deployed tokens will
   verify

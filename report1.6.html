@@ -385,33 +385,32 @@
 
           async function loadAdvancedResults() {
             console.log('Loading advanced analysis results...');
-            
-            const r2DataPath = `${CLOUDFLARE_CONFIG.DATA_PREFIX}ecg_results.json`;
+
+            const patientId = getPatientId();
+            if (!patientId) {
+              console.error('No patient_id available — refusing to load biosignal results (no shared/global file to fall back to).');
+              return;
+            }
+
+            // Every biosignal result is stored per-patient — there is no shared
+            // data/ecg_results.json to fall back to.
+            const r2DataPath = `${CLOUDFLARE_CONFIG.DATA_PREFIX}${patientId}/ECG/processed_ecg.json`;
             const r2DataUrl = `${CLOUDFLARE_CONFIG.R2_BUCKET_URL}/${r2DataPath}`;
-            
+
             let ecgData = null;
             try {
               const r2Response = await fetch(r2DataUrl, {
                 mode: 'cors',
                 credentials: 'omit'
               });
-              
+
               if (!r2Response.ok) throw new Error(`HTTP ${r2Response.status}`);
-              
+
               ecgData = await r2Response.json();
               console.log('Data loaded from Cloudflare R2');
             } catch (error) {
               console.error('Could not load from R2:', error);
-              try {
-                const localResponse = await fetch('ecg_results.json');
-                if (localResponse.ok) {
-                  ecgData = await localResponse.json();
-                  console.log('Data loaded from local file');
-                }
-              } catch (e) {
-                console.error('Could not load data:', e);
-                return;
-              }
+              return;
             }
             
             // Load images
@@ -462,7 +461,7 @@
                 if (element && ecgData.images[key]) {
                   const fileName = ecgData.images[key];
                   const encodedFileName = fileName.split('/').map(part => encodeURIComponent(part)).join('/');
-                  const imageUrl = `${CLOUDFLARE_CONFIG.R2_DIRECT_URL}/${CLOUDFLARE_CONFIG.IMAGES_PREFIX}${encodedFileName}`;
+                  const imageUrl = `${CLOUDFLARE_CONFIG.R2_DIRECT_URL}/${CLOUDFLARE_CONFIG.IMAGES_PREFIX}${patientId}/${encodedFileName}`;
                   element.src = imageUrl;
                   element.addEventListener('click', () => window.open(imageUrl, '_blank'));
                   element.onerror = () => {

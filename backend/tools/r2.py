@@ -1,26 +1,18 @@
 """Claude tool: fetch a biosignal result object from Cloudflare R2 and summarize it.
 
-Target key convention (per your explicit decision — patient_id- and signal_type-
-scoped, not the legacy single global file):
+Key convention (patient_id- and signal-type-scoped — never a shared/global file):
 
-    patients/{patient_id}/{signal_type}_results.json
+    data/{patient_id}/{SIGNAL}/processed_{signal_type}.json
 
-signal_type is one of: ecg, ppg, icg, pcg
-
-STATUS AS OF THIS CHECK (verified live against the real "signals-result" bucket):
-nothing exists at `patients/` yet — the Python biosignal pipeline currently writes
-ONE global file at `data/ecg_results.json` with `patientId: null`, combining ECG +
-PPG + ICG (no PCG) in a single object. That means today `get_biosignal_result`
-correctly returns `{"ready": false}` for every patient — which is the safe
-behavior (never guesses whose data it is), but nobody gets real answers until
-the pipeline is updated. See "PIPELINE CHANGE NEEDED" in backend/README.md for
-the exact spec of what the Python side needs to write.
+SIGNAL is the uppercased signal_type (ECG, ICG, PPG, PCG). This matches what
+run_analysis.py now writes: one combined ECG+PPG+ICG result object, uploaded
+under each signal's own folder so a lookup by signal_type finds a patient-scoped
+file. (PCG isn't produced by any script yet — a lookup for it will just find no
+key, same as before.) A `history/{run_timestamp}.json` copy also exists
+alongside each "current" file — this tool only ever reads "current".
 
 The field-mapping below (metrics.ecg_heart_rate, measurements.qrs_width_mean in
-*seconds*, etc.) is taken directly from the real combined file's schema, on the
-assumption the pipeline will keep using the same field names when it starts
-writing one file per patient per signal_type — adjust here (not at call sites)
-if that assumption turns out wrong once real per-patient files start appearing.
+*seconds*, etc.) is taken directly from the combined file's real schema.
 
 Raw signal/waveform data (the `signals.*` arrays, tens of thousands of points
 each) is never forwarded to Claude — only numeric summaries.
@@ -39,7 +31,7 @@ from pipecat.adapters.schemas.function_schema import FunctionSchema
 SIGNAL_TYPES = ("ecg", "ppg", "icg", "pcg")
 
 R2_KEY_TEMPLATE = os.environ.get(
-    "R2_KEY_TEMPLATE", "patients/{patient_id}/{signal_type}_results.json"
+    "R2_KEY_TEMPLATE", "data/{patient_id}/{signal_type_upper}/processed_{signal_type}.json"
 )
 
 _client = None
@@ -116,7 +108,9 @@ async def get_biosignal_result(patient_id: int, signal_type: str) -> dict:
     if signal_type not in SIGNAL_TYPES:
         return {"error": f"Unknown signal_type {signal_type!r}; expected one of {SIGNAL_TYPES}"}
 
-    key = R2_KEY_TEMPLATE.format(patient_id=patient_id, signal_type=signal_type)
+    key = R2_KEY_TEMPLATE.format(
+        patient_id=patient_id, signal_type=signal_type, signal_type_upper=signal_type.upper()
+    )
     bucket = os.environ["R2_BUCKET_NAME"]
 
     try:
