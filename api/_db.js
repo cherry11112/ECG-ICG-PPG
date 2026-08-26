@@ -511,14 +511,25 @@ export async function findUserById(id) {
   return rows[0] || null;
 }
 
+// Login IDs are a random 6-digit number (100000-999999) rather than the
+// default serial sequence, so accounts get short, easy-to-read login IDs.
+function generateSixDigitId() {
+  return Math.floor(100000 + Math.random() * 900000);
+}
+
 export async function createUser({ fullName, username, password, role }) {
   const passwordHash = await bcrypt.hash(password, 10);
-  const { rows } = await sql`
-    INSERT INTO users (full_name, username, password_hash, role)
-    VALUES (${fullName}, ${username}, ${passwordHash}, ${role})
-    RETURNING id, full_name, username, role, created_at
-  `;
-  return rows[0];
+  for (let attempt = 0; attempt < 10; attempt++) {
+    const id = generateSixDigitId();
+    const { rows } = await sql`
+      INSERT INTO users (id, full_name, username, password_hash, role)
+      VALUES (${id}, ${fullName}, ${username}, ${passwordHash}, ${role})
+      ON CONFLICT (id) DO NOTHING
+      RETURNING id, full_name, username, role, created_at
+    `;
+    if (rows[0]) return rows[0];
+  }
+  throw new Error('Could not generate a unique login ID, please try again');
 }
 
 export async function validateUserPassword(user, password) {
