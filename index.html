@@ -92,6 +92,11 @@
       
       <div id="errorMessage" class="text-red-500 text-center hidden mt-4"></div>
       <div id="successMessage" class="text-green-500 text-center hidden mt-4"></div>
+      <div id="newIdBanner" class="hidden mt-4 p-4 border-2 border-blue-500 bg-blue-50 rounded-lg text-center">
+        <p class="text-sm text-gray-700 mb-1">Account created! Your login ID is:</p>
+        <p id="newIdValue" class="text-3xl font-bold text-blue-700"></p>
+        <p class="text-xs text-gray-500 mt-1">Save this — you'll need it to log in.</p>
+      </div>
       <div id="debugInfo" class="text-gray-600 text-sm mt-4 hidden"></div>
     </div>
   </div>
@@ -115,6 +120,7 @@
       document.getElementById('signupTab').classList.remove('text-gray-500');
       document.getElementById('loginTab').classList.remove('text-blue-600', 'border-blue-600');
       document.getElementById('loginTab').classList.add('text-gray-500');
+      document.getElementById('newIdBanner').classList.add('hidden');
     });
 
     // Function to show messages
@@ -142,7 +148,7 @@
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) return { success: false, message: data.error || 'Signup failed' };
-      return { success: true, message: `Account created for ${name}. Your login ID is ${data.id}. Please save it — you'll need it to log in.` };
+      return { success: true, id: data.id, message: `Account created for ${name}.` };
     }
 
     // Login via our API
@@ -222,18 +228,28 @@
       signupBtn.textContent = 'Creating Account...';
       
       const result = await createUser(name, email, password, role);
-      
+
       if (result.success) {
         showMessage(result.message, 'success');
         document.getElementById('signupFormElement').reset();
-        // Switch to login tab after successful signup
+        const banner = document.getElementById('newIdBanner');
+        document.getElementById('newIdValue').textContent = result.id;
+        banner.classList.remove('hidden');
+        // Pre-fill the login form so the ID carries over when the user switches tabs
+        document.getElementById('loginId').value = result.id;
+        document.getElementById('loginRole').value = role;
         setTimeout(() => {
-          document.getElementById('loginTab').click();
+          document.getElementById('loginForm').classList.remove('hidden');
+          document.getElementById('signupForm').classList.add('hidden');
+          document.getElementById('loginTab').classList.add('text-blue-600', 'border-blue-600');
+          document.getElementById('loginTab').classList.remove('text-gray-500');
+          document.getElementById('signupTab').classList.remove('text-blue-600', 'border-blue-600');
+          document.getElementById('signupTab').classList.add('text-gray-500');
         }, 2000);
       } else {
         showMessage(result.message);
       }
-      
+
       signupBtn.disabled = false;
       signupBtn.textContent = 'Create Account';
     });
