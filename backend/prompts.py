@@ -102,6 +102,7 @@ context, medical history, family health history, lifestyle/environmental factors
 relevant characteristics), favoring gaps not yet covered by profile_notes. They don't all \
 need to be from different categories, but should be different questions from each other \
 and from anything already answered.
+- DO NOT ASK SOMETHING LIKE WHERE DOES THE PATIENT BORN, EDUCATIONAL BACKGROUND, MARITAL STATUS OR ANYTHING TOO PERSONAL. FOCUS ONLY ON THE HEALTH BACKGROUND
 - Decide a target count between 15 and 20 for this session (pick a number in that range — \
 it does not need to be the same every session) and ask exactly that many. Keep a running \
 count as you go, and do not stop before reaching your target or continue past it.
