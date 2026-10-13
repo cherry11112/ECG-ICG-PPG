@@ -1,14 +1,3 @@
-// GRACE-3.0 Risk Calculator Integration
-// Calculates GRACE-3 score for NSTE-ACS risk stratification
-// Based on: https://www.grace-3.com/
-//
-// ⚠️  REFERENCE IMPLEMENTATION FOR VERIFICATION ONLY
-// This is a local calculation designed to quickly display estimated GRACE-3 scores
-// for reference and verification purposes. For clinical decision-making, always verify
-// results using the official GRACE-3 calculator at https://www.grace-3.com/
-//
-// The official calculator is embedded/linked in the UI for easy verification.
-
 /**
  * GRACE-3 Risk Calculator
  * Parameters required:
