@@ -313,7 +313,6 @@ function applySafetyChecks(diagnosticData, patientData) {
 }
 
 // ============================================================================
-// ============================================================================
 // CLAUDE DIAGNOSTIC GENERATION 
 // ============================================================================
 
@@ -1771,7 +1770,6 @@ async function handleGenerateDiagnostic(req, res) {
         multiAIAvailable: multiAIResults.multiAIAvailable
       };
 
-      // ALSO set these at the top level of fullReport — saveDiagnosticResult()
       // (api/_db.js) reads gemini_result/claude_result/agreement_score/etc. from
       // the top level of the object it's given, not from a nested
       // multi_ai_diagnostics property. Without this, every diagnostic generated
